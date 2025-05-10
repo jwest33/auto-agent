@@ -4,7 +4,12 @@
 
 #### **1\. Perceive Environment**
 
-Unchanged.
+* Observe grid cells in the local vicinity (vision radius or full map).
+
+* Observe agent’s current position, internal energy level, and cell energy cost.
+
+* Encode this into a belief state: a structured representation of internal and external variables for planning.
+
 
 ### **2\. Infer Current Needs and Goals**
 
