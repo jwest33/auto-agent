@@ -1,222 +1,65 @@
-## **Agent Process Outline (with Cell-Level Surprise Association) ([FEP-Inspired](https://en.wikipedia.org/wiki/Free_energy_principle))**
+# Free Energy Pathfinding Agent
 
-### **Steps**
+**Free Energy Pathfinding Agent** is a desktop playground (built with PyQt 5) that demonstrates a simple agent driven by the *Free‑Energy Principle* (Free Energy). The app lets you watch the agent plan, act, learn, and update its internal model while exploring a grid world. You can step through any number of exploration cycles and view—*in real‑time*—per‑step charts that track the agent’s cost, surprise, and remaining energy. Colored trails and a legend visually tie each cycle’s path to its chart trace.
 
-#### **1\. Perceive Environment**
+---
 
-* Observe grid cells in the local vicinity (vision radius or full map).
+## Conceptual Overview
 
-* Observe agent’s current position, internal energy level, and cell energy cost.
+### The World
 
-* Encode this into a belief state: a structured representation of internal and external variables for planning.
+* A `GridWorld` is generated with integer "shades" (0–9) representing terrain cost.
+* Darker cells cost more energy to enter and are thus *riskier*.
+* Every cycle the world “heals” previously visited cells, rewarding re‑exploration.
 
+### The Agent
 
-### **2\. Infer Current Needs and Goals**
+| Component            | Purpose                                                                                                         |
+| -------------------- | --------------------------------------------------------------------------------------------------------------- |
+| **Perception**       | Reads cell shade and energy feedback on every step.                                                             |
+| **Internal Model**   | Encodes empirical priors on *expected* cost and surprise for each shade.                                        |
+| **Memory**           | Logs a `CellExperience` (position ✓, shade, *expected* cost, *actual* cost, surprise, timestamp) on every move. |
+| **Planner**          | Samples candidate paths, computes *expected free energy* for each, and selects the lowest‑EFE plan.             |
+| **Policy Execution** | Follows the chosen plan until energy is exhausted or home is reached.                                           |
 
-* Compare expected internal energy state with current energy.
+### Free‑Energy Principle (Free Energy)
 
-* If energy is full and the agent is at home, set the goal to **“explore further from origin”**.
+The agent tries to **minimise its (expected) surprise** under an implicit generative model of the world.  In practice, the planner searches paths that trade off:
 
-* If energy is low, goal is automatically **fulfilled** (exploration ends).
+```
+EFE  =  expected_cost   +   expected_surprise
+      (energy budget)     (model prediction error)
+```
 
-* Goal is defined dynamically: **maximize Euclidean distance from origin before depletion**.
+* **Expected Cost** ≈ energy the agent predicts it will spend on the path.
+* **Expected Surprise** ≈ discrepancy the agent *expects* between model‑predicted shade costs and true shade costs along the path.
 
-#### **3\. Retrieve and Evaluate Candidate Policies**
+The chosen path therefore advances the frontier while keeping the agent in familiar, affordable terrain.
 
-* Retrieve prior plans based on full paths or **regionally overlapping sub-paths**.
+---
 
-* Score plans by:
+### Controls
 
-  * **total\_expected\_surprise \= sum(cell.expected\_surprise for cell in plan.steps)**
+| UI Element         | Action                                           |
+| ------------------ | ------------------------------------------------ |
+| **Cycles** spinner | Number of full explore‑return cycles to run.     |
+| **Run Cycles**     | Execute `n` cycles (chart updates in real time). |
+| **Rebuild World**  | Generate a brand‑new grid world (clears charts). |
+| **Reset Memory**   | Wipe the agent’s memory (keeps current world).   |
 
-  * **expected\_energy\_cost \= sum(cell.expected\_energy\_cost for cell in plan.steps)**
+---
 
-  * **expected\_reward \= distance\_from\_origin \- total\_expected\_surprise**
+## Visual Analytics
 
-#### **4\. Plan Generation or Adaptation**
+| Chart             | What it shows                                     |                   |    |
+| ----------------- | ------------------------------------------------- | ----------------- | -- |
+| **Expected Cost** | Per‑step energy predicted before taking the step. |                   |    |
+| **Surprise**      | Per‑step prediction error (                       | expected − actual | ). |
+| **Energy Left**   | Agent’s remaining energy as the plan executes.    |                   |    |
 
-* Newly generated plans should estimate cell-wise surprise using memory.
+* Each cycle is drawn with a unique hue in **both the grid trail and the charts**, making it easy to correlate behaviour and metrics.
+* Lines grow point‑by‑point thanks to the wrapped `Memory.add_experience` callback, which appends metrics and triggers a redraw on every step.
 
-* Each step in the path includes:
+## License
 
-  * (x, y) coordinates
-
-  * expected\_energy\_cost
-
-  * expected\_surprise\_at\_cell (looked up from memory or estimated as 0 if novel)
-
-\`\`\`
-
-`plan.expected_energy_cost = sum(cell.expected_energy_cost for cell in plan.steps)`
-
-`plan.expected_surprise = sum(cell.expected_surprise_at_cell for cell in plan.steps)`
-
-`plan.expected_reward = plan.distance_from_origin - plan.expected_surprise`
-
-\`\`\`
-
-#### **5\. Execute Plan with Continuous Inference**
-
-At each step:
-
-* Deduct energy based on actual cell cost:
-
-  `agent.energy -= actual_cost`  
-* Track:
-
-  * `cell.observed_cost = actual_cost`
-
-  * `cell.surprise = abs(expected_cost - actual_cost)`
-
-* Log each cell visit in an **experience buffer** for memory updates.
-
-Interrupt execution if:
-
-* Agent's energy depletes
-
-#### **6\. Post-Execution Evaluation**
-
-* Teleport home.
-
-* Aggregate:
-
-  * `actual_path_cost = sum(actual_costs)`
-
-  * `total_surprise = sum(cell.surprise for cell in path)`
-
-  * `reward = distance_from_origin - total_surprise`
-
-#### **7\. Memory Update**
-
-#### **For each visited cell:**
-
-* Store:
-
-  * `(x, y)`
-
-  * `shade`
-
-  * `expected_cost`
-
-  * `actual_cost`
-
-  * `surprise`
-
-  #### **For the plan:**
-
-* Store:
-
-  * Path steps
-
-  * Total surprise
-
-  * Context (start state, energy level)
-
-  #### **Update:**
-
-* `Cell Surprise Map`: for future per-cell surprise estimates.
-
-* `Cell Cost Map`: smoothed terrain expectations (average cost).
-
-* `Memory DB`: for plan recall and regional learning.
-
-#### **8\. Core Modules and Components**
-
-### **`Agent` Class**
-
-* `origin` (x, y)
-
-* `energy`
-
-* `max_energy`
-
-* `position`
-
-* `teleport_home()`
-
-* `calculate_distance_reward()`
-
-### **`GridWorld` Class**
-
-Represents the environment.
-
-**Attributes**:
-
-* `grid`: 2D matrix of cells  
-* Each `cell` includes:  
-  * `shade` (0–255)  
-  * `energy_cost`  
-  * `explored` (bool)
-
-**Methods**:
-
-* `get_neighbors(x, y)`  
-* `render(agent_position)`  
-* `calculate_path_cost(path)`  
-  `get_shade(x, y)`  
-* `get_energy_cost(x, y)`  
-* `set_observed_cost(x, y, cost)`
-
-  ### **`Plan` Class**
-
-Stores:
-
-* `steps`: list of (x, y) coordinates
-
-* `expected_energy_cost`
-
-* `expected_surprise`
-
-* `expected_reward` (distance from origin)
-
-
-  ### **`Memory` Class**
-
-  #### **Plan Memory:**
-
-* `plans: List[Plan]`
-
-  #### **Cell Memory:**
-
-* `cell_records: Dict[(x, y), List[CellExperience]]`
-
-
-  #### **`CellExperience` object:**
-
-* `position: (x, y)`
-
-* `shade: int`
-
-* `expected_cost: float`
-
-* `actual_cost: float`
-
-* `surprise: float`
-
-* `timestamp` or `visit_count` (optional for smoothing)
-
-## **GUI Integration Plan (PyQt)**
-
-Will visualize:
-
-* Grid view (grayscale) with agent position
-
-* Step-wise plan animation
-
-* Energy bar
-
-* Cell surprise overlay / heatmap
-
-* Memory viewer (plans \+ cell stats)
-
-* Summary of distance, reward, surprise
-
-## **Data Structures**
-
-* `World grid`: 2D NumPy array or list-of-lists
-
-* `Agent state`: `position`, `energy`, `memory`
-
-* `Memory DB`: TinyDB, JSON, or in-memory dict
-
-* `Plans`: stored with context hash and cell annotations
+This project is released under the MIT License. See [LICENSE](LICENSE) for details.

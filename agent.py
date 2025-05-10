@@ -1,10 +1,9 @@
 from __future__ import annotations
-from dataclasses import dataclass, field, asdict
+from dataclasses import dataclass, field
 from typing import Dict, List, Tuple, Optional
 import math
 import random
 import time
-import json
 import os
 import numpy as np
 from PyQt5 import QtWidgets
@@ -15,7 +14,7 @@ from world import GridWorld
 
 BASE_CELL_COST = 1.0
 Coord = Tuple[int, int]
-MEMORY_PATH = "save/memory.json"
+MEMORY_PATH = "save/memory.npy"
 
 def euclidean(a: Coord, b: Coord) -> float:
     return math.hypot(a[0] - b[0], a[1] - b[1])
@@ -58,9 +57,64 @@ class Plan:
         self._cached_costs_surprises = values
 
 class Memory:
+    """Stores cell experiences and plans using a NumPy structured array on disk."""
+
+    _dtype = np.dtype([
+        ("x", "i4"),
+        ("y", "i4"),
+        ("shade", "i4"),
+        ("expected_cost", "f4"),
+        ("actual_cost", "f4"),
+        ("surprise", "f4"),
+        ("timestamp", "f8"),
+    ])
+
     def __init__(self):
         self.plans: List[Plan] = []
+        # Dict["x,y" -> List[CellExperience]] kept for in‑memory access speed
         self.cell_records: Dict[str, List[CellExperience]] = {}
+
+    def _experiences_to_array(self) -> np.ndarray:
+        """Flatten ``cell_records`` into a structured NumPy array."""
+        rows = []
+        for key, experiences in self.cell_records.items():
+            x_str, y_str = key.split(",")
+            x, y = int(x_str), int(y_str)
+            for e in experiences:
+                rows.append((
+                    x, y, e.shade, e.expected_cost, e.actual_cost, e.surprise, e.timestamp
+                ))
+        if not rows:
+            return np.empty((0,), dtype=self._dtype)
+        return np.array(rows, dtype=self._dtype)
+
+    def _array_to_experiences(self, arr: np.ndarray):
+        """Populate ``cell_records`` from a structured array."""
+        self.cell_records.clear()
+        for rec in arr:
+            coord = (int(rec["x"]), int(rec["y"]))
+            key = f"{coord[0]},{coord[1]}"
+            exp = CellExperience(
+                position=coord,
+                shade=int(rec["shade"]),
+                expected_cost=float(rec["expected_cost"]),
+                actual_cost=float(rec["actual_cost"]),
+                surprise=float(rec["surprise"]),
+                timestamp=float(rec["timestamp"]),
+            )
+            self.cell_records.setdefault(key, []).append(exp)
+
+    def save_to_file(self):
+        os.makedirs(os.path.dirname(MEMORY_PATH), exist_ok=True)
+        arr = self._experiences_to_array()
+        np.save(MEMORY_PATH, arr)
+
+    def load_from_file(self):
+        if os.path.exists(MEMORY_PATH):
+            arr: np.ndarray = np.load(MEMORY_PATH, allow_pickle=False)
+            self._array_to_experiences(arr)
+
+    # ────────────────────────────── API ────────────────────────────── #
 
     def add_experience(self, exp: CellExperience):
         key = f"{exp.position[0]},{exp.position[1]}"
@@ -82,18 +136,6 @@ class Memory:
 
     def retrieve_candidate_plans(self, current_pos: Coord, energy: float) -> List[Plan]:
         return [p for p in self.plans if p.steps and p.steps[0] == current_pos and p.expected_energy_cost <= energy]
-
-    def save_to_file(self):
-        data = {k: [asdict(e) for e in v] for k, v in self.cell_records.items()}
-        with open(MEMORY_PATH, "w") as f:
-            json.dump(data, f, indent=2)
-
-    def load_from_file(self):
-        if os.path.exists(MEMORY_PATH):
-            with open(MEMORY_PATH, "r") as f:
-                raw = json.load(f)
-            for k, entries in raw.items():
-                self.cell_records[k] = [CellExperience(**e) for e in entries]
 
 class Agent:
     def __init__(self, origin: Coord, max_energy: float = 100.0):
@@ -143,7 +185,9 @@ class Agent:
         full_plan_steps = []
         full_costs_surprises = []
 
-        while self.energy > 0:
+        while self.energy >= BASE_CELL_COST:
+            if not plan.steps:
+                break
             for (x, y), (exp_cost, _) in zip(plan.steps, plan._cached_costs_surprises):
                 cost, restore = world.transition(self._prev_pos, (x, y))
                 actual_cost = 0.0 if restore else cost
@@ -151,7 +195,6 @@ class Agent:
 
                 if restore:
                     self.energy = self.max_energy
-                    print(f"Restored at {(x, y)}")
                 else:
                     self.energy -= cost
 
@@ -173,23 +216,27 @@ class Agent:
                     repaint_cb()
                     QtWidgets.QApplication.processEvents()
 
-                if self.energy <= 0:
+                if self.energy < BASE_CELL_COST:
                     break
-
                 # Track executed steps
                 full_plan_steps.append((x, y))
                 full_costs_surprises.append((exp_cost, surprise))
 
-            if self.energy > 0:
+            if self.energy >= BASE_CELL_COST:
+                print(f'Energy remaining is {self.energy}, generating new plan')
                 plan = self._generate_plan(world)
 
         # Save the full composite plan
+        print(f'Completing final plan')
         final_plan = Plan(full_plan_steps)
+        print(f'Caching cost surprises')
         final_plan.cache_costs_surprises(full_costs_surprises)
+        print(f'Recalulating metrics')
         final_plan.recalc_metrics(self.origin, self.memory)
+        print(f'Storing plan')
         self.memory.store_plan(final_plan)
 
         # Reset after depletion
+        print('Teleporting home')
         self.teleport_home()
-        print(f'Teleporting home')
         self.energy = self.max_energy

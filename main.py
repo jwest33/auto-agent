@@ -8,6 +8,10 @@ from PyQt5 import QtWidgets, QtGui, QtCore
 from world import GridWorld, Coord, WORLD_PATH
 from agent import Agent, Memory, Plan, MEMORY_PATH, euclidean
 
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+import colorsys
+
 # --- Constants ---
 DEFAULT_SIZE = 150
 DEFAULT_SEED = None
@@ -54,7 +58,7 @@ QHeaderView::section {
 class AgentWindow(QtWidgets.QMainWindow):
     def __init__(self, grid_size: int, seed: Optional[int]):
         super().__init__()
-        self.setWindowTitle("FEP Agent Explorer")
+        self.setWindowTitle("Free Energy Agent Explorer")
         self.resize(1200, 800)
         self.central = QtWidgets.QWidget()
         self.setCentralWidget(self.central)
@@ -65,137 +69,96 @@ class AgentWindow(QtWidgets.QMainWindow):
         self.agent = Agent((0, 0))
         self.cycles_run = 0
         self.current_plan: Optional[Plan] = None
-        self.cycle_history = []  # List of dicts with stats
+        self.cycle_history = []
         self.load_cycle_history()
+
         # Layouts
         main_layout = QtWidgets.QHBoxLayout(self.central)
-
-        # --- Left: Grid View ---
+        # Left: grid
         self.canvas = QtWidgets.QLabel()
-        self.canvas.setFixedSize(grid_size * 5, grid_size * 5)
+        self.canvas.setFixedSize(grid_size*5, grid_size*5)
         self.canvas.setFrameStyle(QtWidgets.QFrame.Box)
         main_layout.addWidget(self.canvas, stretch=3)
 
-        # --- Right: Controls & Analysis ---
+        # Right: controls + analysis
         right_panel = QtWidgets.QVBoxLayout()
         main_layout.addLayout(right_panel, stretch=2)
-
-        # Control Buttons and cycle input
+        # Controls
         ctrl_group = QtWidgets.QGroupBox("Controls")
         ctrl_layout = QtWidgets.QHBoxLayout()
         ctrl_group.setLayout(ctrl_layout)
-        self.spin_cycles = QtWidgets.QSpinBox()
-        self.spin_cycles.setMinimum(1)
-        self.spin_cycles.setValue(1)
-        self.spin_cycles.setPrefix("Cycles: ")
-        self.run_btn = QtWidgets.QPushButton("Run Cycles")
-        self.run_btn.clicked.connect(self.on_run_cycles)
-        self.reset_world_btn = QtWidgets.QPushButton("Rebuild World")
-        self.reset_world_btn.clicked.connect(self.on_rebuild_world)
-        self.reset_mem_btn = QtWidgets.QPushButton("Reset Memory")
-        self.reset_mem_btn.clicked.connect(self.on_reset_memory)
-        ctrl_layout.addWidget(self.spin_cycles)
-        ctrl_layout.addWidget(self.run_btn)
-        ctrl_layout.addWidget(self.reset_world_btn)
-        ctrl_layout.addWidget(self.reset_mem_btn)
+        self.spin_cycles = QtWidgets.QSpinBox(); self.spin_cycles.setMinimum(1); self.spin_cycles.setValue(1); self.spin_cycles.setPrefix("Cycles: ")
+        self.run_btn = QtWidgets.QPushButton("Run Cycles"); self.run_btn.clicked.connect(self.on_run_cycles)
+        self.reset_world_btn = QtWidgets.QPushButton("Rebuild World"); self.reset_world_btn.clicked.connect(self.on_rebuild_world)
+        self.reset_mem_btn = QtWidgets.QPushButton("Reset Memory"); self.reset_mem_btn.clicked.connect(self.on_reset_memory)
+        for w in (self.spin_cycles, self.run_btn, self.reset_world_btn, self.reset_mem_btn):
+            ctrl_layout.addWidget(w)
         right_panel.addWidget(ctrl_group)
 
-        # Analysis Group
-        self.analysis_group = QtWidgets.QGroupBox("Agent Analysis")
-        analysis_layout = QtWidgets.QFormLayout()
-        self.lbl_cycles = QtWidgets.QLabel("0")
-        self.lbl_exp_reward = QtWidgets.QLabel("N/A")
-        self.lbl_exp_cost = QtWidgets.QLabel("N/A")
-        self.lbl_exp_surprise = QtWidgets.QLabel("N/A")
-        self.lbl_energy = QtWidgets.QLabel("N/A")
-        self.lbl_reward_trend = QtWidgets.QLabel("N/A")
-        self.lbl_cost_trend = QtWidgets.QLabel("N/A")
-        self.lbl_surprise_trend = QtWidgets.QLabel("N/A")
-        analysis_layout.addRow("Cycles Run:", self.lbl_cycles)
-        analysis_layout.addRow("Exp. Reward:", self.lbl_exp_reward)
-        analysis_layout.addRow("Reward Trend:", self.lbl_reward_trend)
-        analysis_layout.addRow("Exp. Cost:", self.lbl_exp_cost)
-        analysis_layout.addRow("Cost Trend:", self.lbl_cost_trend)
-        analysis_layout.addRow("Exp. Surprise:", self.lbl_exp_surprise)
-        analysis_layout.addRow("Surprise Trend:", self.lbl_surprise_trend)
-        analysis_layout.addRow("Energy Left:", self.lbl_energy)
-        self.analysis_group.setLayout(analysis_layout)
-        right_panel.addWidget(self.analysis_group)
-
-        # Cycle History Table
+        # History table
         history_group = QtWidgets.QGroupBox("Cycle History")
-        history_layout = QtWidgets.QVBoxLayout()
-        history_group.setLayout(history_layout)
-        self.table = QtWidgets.QTableWidget(0, 5)
-        self.table.setHorizontalHeaderLabels(["Cycle", "Reward", "Cost", "Surprise", "Energy"])
-        self.table.horizontalHeader().setStretchLastSection(True)
-        history_layout.addWidget(self.table)
+        hist_layout = QtWidgets.QVBoxLayout(); history_group.setLayout(hist_layout)
+        self.table = QtWidgets.QTableWidget(0,5)
+        self.table.setHorizontalHeaderLabels(["#","Reward","Cost","Surprise","Energy"])
+        hist_layout.addWidget(self.table)
         right_panel.addWidget(history_group)
-        right_panel.addStretch()
-        
-        self.trail: List[Coord] = []
 
-        # Timer for refreshing view
+        # Charts
+        charts = QtWidgets.QGroupBox("Analytics Charts")
+        ch_layout = QtWidgets.QVBoxLayout(); charts.setLayout(ch_layout)
+        self.figure = plt.Figure()
+        self.canvas_chart = FigureCanvas(self.figure)
+        self.ax_cost, self.ax_surprise, self.ax_energy = [self.figure.add_subplot(3,1,i+1)
+                                                         for i in range(3)]
+        ch_layout.addWidget(self.canvas_chart)
+        right_panel.addWidget(charts)
+        right_panel.addStretch()
+
+        # Data
+        self.trails = []             # coords per cycle
+        self.step_history = []       # list of dicts per cycle
+
+        # Timer triggers canvas redraw
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.update_canvas)
         self.timer.start(200)
 
         self.update_canvas()
-            
+        self.update_charts()
+
+    def repaint_and_update_charts(self):
+        self.update_canvas()
+        self.update_charts()
+
     def load_cycle_history(self):
         if os.path.exists(CYCLE_HISTORY_PATH):
-            with open(CYCLE_HISTORY_PATH, "r") as f:
+            with open(CYCLE_HISTORY_PATH,'r') as f:
                 self.cycle_history = json.load(f)
-                for stats in self.cycle_history:
-                    self.add_history_row(stats)
+                for s in self.cycle_history:
+                    self.add_history_row(s)
                 if self.cycle_history:
                     self.cycles_run = self.cycle_history[-1]['cycle']
 
     def save_cycle_history(self):
-        with open(CYCLE_HISTORY_PATH, "w") as f:
-            json.dump(self.cycle_history, f, indent=2)
+        os.makedirs(os.path.dirname(CYCLE_HISTORY_PATH),exist_ok=True)
+        with open(CYCLE_HISTORY_PATH,'w') as f:
+            json.dump(self.cycle_history,f,indent=2)
+
+    def add_history_row(self, stats):
+        r = self.table.rowCount()
+        self.table.insertRow(r)
+        self.table.setItem(r,0,QtWidgets.QTableWidgetItem(str(stats['cycle'])))
+        self.table.setItem(r,1,QtWidgets.QTableWidgetItem(f"{stats['reward']:.2f}"))
+        self.table.setItem(r,2,QtWidgets.QTableWidgetItem(f"{stats['cost']:.2f}"))
+        self.table.setItem(r,3,QtWidgets.QTableWidgetItem(f"{stats['surprise']:.2f}"))
+        self.table.setItem(r,4,QtWidgets.QTableWidgetItem(f"{stats['energy']:.2f}"))
 
     def on_run_cycles(self):
-        self.trail.clear()
-        self.pending_cycles = self.spin_cycles.value()
+        # reset data
+        self.trails.clear(); self.step_history.clear()
+        self.pending = self.spin_cycles.value()
         self.run_next_cycle()
-
-    def run_next_cycle(self):
-        if self.pending_cycles <= 0:
-            self.update_summary()
-            self.save_cycle_history()
-            return
-
-        self.world.reset_cycle()
-        old_explored = self.world.explored.copy()
-
-        self.current_plan = self.agent.choose_plan(self.world)
-        self.agent.execute_plan(
-            self.current_plan,
-            self.world,
-            repaint_cb=self.update_canvas
-        )
-        self.cycles_run += 1
-
-        # compute actual reward
-        new_cells = int((~old_explored & self.world.explored).sum())
-        dist = euclidean(self.agent.origin, self.agent.position)
-        actual_reward = dist + new_cells
-
-        stats = {
-            'cycle': self.cycles_run,
-            'reward': actual_reward,
-            'cost': self.current_plan.expected_energy_cost,
-            'surprise': self.current_plan.expected_surprise,
-            'energy': self.agent.energy
-        }
-        self.cycle_history.append(stats)
-        self.add_history_row(stats)
-
-        # Defer next cycle to avoid blocking
-        self.pending_cycles -= 1
-        QtCore.QTimer.singleShot(100, self.run_next_cycle)
-
+        
     def add_history_row(self, stats):
         row = self.table.rowCount()
         self.table.insertRow(row)
@@ -222,6 +185,113 @@ class AgentWindow(QtWidgets.QMainWindow):
             self.lbl_cost_trend.setText("N/A")
             self.lbl_surprise_trend.setText("N/A")
 
+    def run_next_cycle(self):
+        if self.pending<=0:
+            self.save_cycle_history(); return
+        # new cycle containers
+        self.trails.append([])
+        self.step_history.append([])
+        self.world.reset_cycle()
+        old = self.world.explored.copy()
+        self.current_plan = self.agent.choose_plan(self.world)
+
+        # wrap add_experience to capture per-step metrics
+        orig_add = self.agent.memory.add_experience
+        def wrapped(exp):
+            orig_add(exp)
+            self.step_history[-1].append({
+                'expected_cost': exp.expected_cost,
+                'actual_cost':   exp.actual_cost,
+                'surprise':      exp.surprise,
+                'energy':        self.agent.energy
+            })
+        self.agent.memory.add_experience = wrapped
+
+        # run with full canvas + chart repaint each step
+        self.agent.execute_plan(
+            self.current_plan,
+            self.world,
+            repaint_cb=self.repaint_and_update_charts
+        )
+        # restore
+        self.agent.memory.add_experience = orig_add
+
+        # finish cycle stats
+        self.cycles_run +=1
+        new_cells = int((~old & self.world.explored).sum())
+        dist = euclidean(self.agent.origin,self.agent.position)
+        reward = dist + new_cells
+        stats = {'cycle':self.cycles_run,'reward':reward,
+                 'cost':self.current_plan.expected_energy_cost,
+                 'surprise':self.current_plan.expected_surprise,
+                 'energy':self.agent.energy}
+        self.cycle_history.append(stats)
+        self.add_history_row(stats)
+        self.update_charts()
+
+        self.pending-=1
+        QtCore.QTimer.singleShot(100,self.run_next_cycle)
+
+    def update_canvas(self):
+        sz = self.world.width*5
+        pm = QtGui.QPixmap(sz,sz); pm.fill(QtGui.QColor('#f0f0f0'))
+        p = QtGui.QPainter(pm); csize=5
+        # record for latest trail
+        if self.trails:
+            self.trails[-1].append(self.agent.position)
+        # draw cells
+        for y in range(self.world.height):
+            for x in range(self.world.width):
+                # shade brightness as int (QColor needs ints)
+                cell_val = int(self.world.grid[y, x])
+                bright = int(255 - (cell_val / 9.0) * 195)
+                if self.world.explored[y, x]:
+                    col = QtGui.QColor(bright, bright, bright, 180)
+                else:
+                    col = QtGui.QColor(bright, bright, bright)
+                p.fillRect(x * csize, y * csize, csize, csize, col)
+        # draw trails & legend
+        n = len(self.trails)
+        for i, trail in enumerate(self.trails):
+            if len(trail) < 2:
+                continue
+            hue = (i * 360 / n) / 360.0
+            rgb = colorsys.hsv_to_rgb(hue, 1, 0.78)
+            pen = QtGui.QPen(QtGui.QColor(*[int(c * 255) for c in rgb], 120))
+            pen.setWidth(2)
+            p.setPen(pen)
+            for a, b in zip(trail, trail[1:]):
+                p.drawLine(
+                    int((a[0] + 0.5) * csize), int((a[1] + 0.5) * csize),
+                    int((b[0] + 0.5) * csize), int((b[1] + 0.5) * csize)
+                )
+        # agent dot
+        p.setPen(QtCore.Qt.NoPen)
+        p.setBrush(QtGui.QColor(220, 20, 60))
+        ax, ay = self.agent.position
+        p.drawEllipse(ax * csize, ay * csize, csize, csize)
+        p.end()
+        self.canvas.setPixmap(pm)
+
+    def update_charts(self):
+        # clear
+        for ax in (self.ax_cost,self.ax_surprise,self.ax_energy): ax.clear()
+        # plot each cycle's steps
+        n=len(self.step_history)
+        for idx,hist in enumerate(self.step_history):
+            if not hist: continue
+            hue=(idx*360/n)/360.0; rgb=colorsys.hsv_to_rgb(hue,1,0.78)
+            cols=[[d['expected_cost'] for d in hist],
+                  [d['surprise'] for d in hist],
+                  [d['energy'] for d in hist]]
+            xs=list(range(len(hist)))
+            for ax,dat in zip((self.ax_cost,self.ax_surprise,self.ax_energy),cols):
+                ax.plot(xs,dat,color=rgb)
+        self.ax_cost.set_title("Expected Cost per Step")
+        self.ax_surprise.set_title("Surprise per Step")
+        self.ax_energy.set_title("Energy Left per Step")
+        self.figure.tight_layout(); self.canvas_chart.draw()
+        
     @staticmethod
     def format_trend(delta: float) -> str:
         if delta > 0:
@@ -262,59 +332,10 @@ class AgentWindow(QtWidgets.QMainWindow):
         self.lbl_surprise_trend.setText("N/A")
         self.lbl_energy.setText("N/A")
 
-    def update_canvas(self):
-        size = self.world.width * 5
-        pixmap = QtGui.QPixmap(size, size)
-        pixmap.fill(QtGui.QColor('#f0f0f0'))
-        painter = QtGui.QPainter(pixmap)
-        cell = 5
-
-        # ← NEW: record current position
-        self.trail.append(self.agent.position)
-
-        # draw grid background and explored/restored cells
-        for y in range(self.world.height):
-            for x in range(self.world.width):
-                val = int(self.world.grid[y, x])
-                brightness = int(255 - (val / 9.0) * 195)
-                if self.world.explored[y, x]:
-                    color = QtGui.QColor(brightness, brightness, brightness, 180)
-                else:
-                    color = QtGui.QColor(brightness, brightness, brightness)
-                painter.fillRect(x*cell, y*cell, cell, cell, color)
-
-                if (x, y) in self.world.get_restored_cells():
-                    pen = QtGui.QPen(QtGui.QColor(30, 144, 255))  # DodgerBlue
-                    pen.setWidth(1)
-                    painter.setPen(pen)
-                    painter.drawRect(x*cell, y*cell, cell, cell)
-
-        # ← NEW: draw the trail as a semi-transparent red line
-        if len(self.trail) > 1:
-            pen = QtGui.QPen(QtGui.QColor(255, 0, 0, 120))
-            pen.setWidth(2)
-            painter.setPen(pen)
-            for (x1, y1), (x2, y2) in zip(self.trail, self.trail[1:]):
-                # draw from center of one cell to the next
-                painter.drawLine(
-                    int((x1 + 0.5) * cell), int((y1 + 0.5) * cell),
-                    int((x2 + 0.5) * cell), int((y2 + 0.5) * cell)
-                )
-
-        # draw agent on top
-        painter.setPen(QtCore.Qt.NoPen)
-        painter.setBrush(QtGui.QColor(220, 20, 60))
-        ax, ay = self.agent.position
-        painter.drawEllipse(ax*cell, ay*cell, cell, cell)
-
-        painter.end()
-        self.canvas.setPixmap(pixmap)
-
 def main():
     app = QtWidgets.QApplication(sys.argv)
     win = AgentWindow(grid_size=DEFAULT_SIZE, seed=DEFAULT_SEED)
-    win.show()
-    sys.exit(app.exec_())
+    win.show(); sys.exit(app.exec_())
 
-if __name__ == '__main__':
+if __name__=='__main__':
     main()
