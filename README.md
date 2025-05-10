@@ -53,11 +53,11 @@ The chosen path therefore advances the frontier while keeping the agent in famil
 
 ## Visual Analytics
 
-| Chart             | What it shows                                     |                   |    |
-| ----------------- | ------------------------------------------------- | ----------------- | -- |
-| **Expected Cost** | Per‑step energy predicted before taking the step. |                   |    |
-| **Surprise**      | Per‑step prediction error (                       | expected − actual | ). |
-| **Energy Left**   | Agent’s remaining energy as the plan executes.    |                   |    |
+| Chart             | What it shows                                     |
+| ----------------- | ------------------------------------------------- |
+| **Expected Cost** | Per‑step energy predicted before taking the step. |
+| **Surprise**      | Per‑step prediction error ( expected − actual).   |
+| **Energy Left**   | Agent’s remaining energy as the plan executes.    |
 
 * Each cycle is drawn with a unique hue in **both the grid trail and the charts**, making it easy to correlate behaviour and metrics.
 * Lines grow point‑by‑point thanks to the wrapped `Memory.add_experience` callback, which appends metrics and triggers a redraw on every step.
