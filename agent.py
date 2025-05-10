@@ -191,4 +191,5 @@ class Agent:
 
         # Reset after depletion
         self.teleport_home()
+        print(f'Teleporting home')
         self.energy = self.max_energy

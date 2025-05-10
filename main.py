@@ -1,5 +1,6 @@
 import sys
 import os
+import json
 import random
 from typing import Optional, List
 
@@ -10,6 +11,8 @@ from agent import Agent, Memory, Plan, MEMORY_PATH, euclidean
 # --- Constants ---
 DEFAULT_SIZE = 150
 DEFAULT_SEED = None
+
+CYCLE_HISTORY_PATH = "save/cycle_history.json"
 
 APP_STYLES = """
 QWidget {
@@ -63,7 +66,7 @@ class AgentWindow(QtWidgets.QMainWindow):
         self.cycles_run = 0
         self.current_plan: Optional[Plan] = None
         self.cycle_history = []  # List of dicts with stats
-
+        self.load_cycle_history()
         # Layouts
         main_layout = QtWidgets.QHBoxLayout(self.central)
 
@@ -138,39 +141,60 @@ class AgentWindow(QtWidgets.QMainWindow):
         self.timer.start(200)
 
         self.update_canvas()
+            
+    def load_cycle_history(self):
+        if os.path.exists(CYCLE_HISTORY_PATH):
+            with open(CYCLE_HISTORY_PATH, "r") as f:
+                self.cycle_history = json.load(f)
+                for stats in self.cycle_history:
+                    self.add_history_row(stats)
+                if self.cycle_history:
+                    self.cycles_run = self.cycle_history[-1]['cycle']
+
+    def save_cycle_history(self):
+        with open(CYCLE_HISTORY_PATH, "w") as f:
+            json.dump(self.cycle_history, f, indent=2)
 
     def on_run_cycles(self):
         self.trail.clear()
-        n = self.spin_cycles.value()
-        for _ in range(n):
-            # snapshot pre-explored grid
-            self.world.reset_cycle()
-            old_explored = self.world.explored.copy()
+        self.pending_cycles = self.spin_cycles.value()
+        self.run_next_cycle()
 
-            # plan and execute
-            self.current_plan = self.agent.choose_plan(self.world)
-            self.agent.execute_plan(
-                self.current_plan,
-                self.world,
-                repaint_cb=self.update_canvas
-            )
-            self.cycles_run += 1
+    def run_next_cycle(self):
+        if self.pending_cycles <= 0:
+            self.update_summary()
+            self.save_cycle_history()
+            return
 
-            # compute actual reward: distance + new cells explored
-            new_cells = int((~old_explored & self.world.explored).sum())
-            dist = euclidean(self.agent.origin, self.agent.position)
-            actual_reward = dist + new_cells
+        self.world.reset_cycle()
+        old_explored = self.world.explored.copy()
 
-            stats = {
-                'cycle': self.cycles_run,
-                'reward': actual_reward,
-                'cost': self.current_plan.expected_energy_cost,
-                'surprise': self.current_plan.expected_surprise,
-                'energy': self.agent.energy
-            }
-            self.cycle_history.append(stats)
-            self.add_history_row(stats)
-        self.update_summary()
+        self.current_plan = self.agent.choose_plan(self.world)
+        self.agent.execute_plan(
+            self.current_plan,
+            self.world,
+            repaint_cb=self.update_canvas
+        )
+        self.cycles_run += 1
+
+        # compute actual reward
+        new_cells = int((~old_explored & self.world.explored).sum())
+        dist = euclidean(self.agent.origin, self.agent.position)
+        actual_reward = dist + new_cells
+
+        stats = {
+            'cycle': self.cycles_run,
+            'reward': actual_reward,
+            'cost': self.current_plan.expected_energy_cost,
+            'surprise': self.current_plan.expected_surprise,
+            'energy': self.agent.energy
+        }
+        self.cycle_history.append(stats)
+        self.add_history_row(stats)
+
+        # Defer next cycle to avoid blocking
+        self.pending_cycles -= 1
+        QtCore.QTimer.singleShot(100, self.run_next_cycle)
 
     def add_history_row(self, stats):
         row = self.table.rowCount()
@@ -209,12 +233,14 @@ class AgentWindow(QtWidgets.QMainWindow):
 
     def on_rebuild_world(self):
         if os.path.exists(WORLD_PATH): os.remove(WORLD_PATH)
+        if os.path.exists(CYCLE_HISTORY_PATH): os.remove(CYCLE_HISTORY_PATH)
         self.world = GridWorld(self.world.width, self.world.height)
         self.reset_all()
         self.update_canvas()
 
     def on_reset_memory(self):
         if os.path.exists(MEMORY_PATH): os.remove(MEMORY_PATH)
+        if os.path.exists(CYCLE_HISTORY_PATH): os.remove(CYCLE_HISTORY_PATH)
         self.agent.memory = Memory()
         self.reset_all()
         self.update_canvas()

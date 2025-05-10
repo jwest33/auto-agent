@@ -1,0 +1,7319 @@
+{
+  "0,1": [
+    {
+      "position": [
+        0,
+        1
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891059.2780297
+    },
+    {
+      "position": [
+        0,
+        1
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891059.36618
+    },
+    {
+      "position": [
+        0,
+        1
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891355.570951
+    },
+    {
+      "position": [
+        0,
+        1
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 0.0,
+      "surprise": 1.0,
+      "timestamp": 1746891368.6903205
+    },
+    {
+      "position": [
+        0,
+        1
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 0.0,
+      "surprise": 1.0,
+      "timestamp": 1746891368.9671984
+    },
+    {
+      "position": [
+        0,
+        1
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891369.0657983
+    },
+    {
+      "position": [
+        0,
+        1
+      ],
+      "shade": 0,
+      "expected_cost": 0.6666666666666666,
+      "actual_cost": 0.0,
+      "surprise": 0.6666666666666666,
+      "timestamp": 1746891371.712355
+    }
+  ],
+  "0,0": [
+    {
+      "position": [
+        0,
+        0
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 0.0,
+      "surprise": 5.0,
+      "timestamp": 1746891059.3222208
+    },
+    {
+      "position": [
+        0,
+        0
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 0.0,
+      "surprise": 5.0,
+      "timestamp": 1746891060.2062573
+    },
+    {
+      "position": [
+        0,
+        0
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 5.0,
+      "surprise": 0.0,
+      "timestamp": 1746891369.1547496
+    }
+  ],
+  "0,2": [
+    {
+      "position": [
+        0,
+        2
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891059.4522579
+    },
+    {
+      "position": [
+        0,
+        2
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891355.6150157
+    },
+    {
+      "position": [
+        0,
+        2
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891368.7783916
+    },
+    {
+      "position": [
+        0,
+        2
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 0.0,
+      "surprise": 2.7777777777777777,
+      "timestamp": 1746891368.8759248
+    },
+    {
+      "position": [
+        0,
+        2
+      ],
+      "shade": 4,
+      "expected_cost": 2.083333333333333,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.6944444444444446,
+      "timestamp": 1746891371.2935843
+    },
+    {
+      "position": [
+        0,
+        2
+      ],
+      "shade": 4,
+      "expected_cost": 2.083333333333333,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.6944444444444446,
+      "timestamp": 1746891372.7403953
+    }
+  ],
+  "1,2": [
+    {
+      "position": [
+        1,
+        2
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891059.4958618
+    },
+    {
+      "position": [
+        1,
+        2
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891061.703068
+    },
+    {
+      "position": [
+        1,
+        2
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891371.2456076
+    },
+    {
+      "position": [
+        1,
+        2
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 0.0,
+      "surprise": 2.333333333333333,
+      "timestamp": 1746891371.3817518
+    },
+    {
+      "position": [
+        1,
+        2
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891371.853952
+    },
+    {
+      "position": [
+        1,
+        2
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891371.9941125
+    },
+    {
+      "position": [
+        1,
+        2
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891372.3234224
+    },
+    {
+      "position": [
+        1,
+        2
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891372.5558195
+    },
+    {
+      "position": [
+        1,
+        2
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891372.6920028
+    }
+  ],
+  "1,1": [
+    {
+      "position": [
+        1,
+        1
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 0.0,
+      "surprise": 4.555555555555555,
+      "timestamp": 1746891059.5394773
+    },
+    {
+      "position": [
+        1,
+        1
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 0.0,
+      "surprise": 4.555555555555555,
+      "timestamp": 1746891059.6703382
+    },
+    {
+      "position": [
+        1,
+        1
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 0.0,
+      "surprise": 4.555555555555555,
+      "timestamp": 1746891061.5339365
+    },
+    {
+      "position": [
+        1,
+        1
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 4.555555555555555,
+      "surprise": 0.0,
+      "timestamp": 1746891061.6218204
+    },
+    {
+      "position": [
+        1,
+        1
+      ],
+      "shade": 8,
+      "expected_cost": 1.1388888888888888,
+      "actual_cost": 0.0,
+      "surprise": 1.1388888888888888,
+      "timestamp": 1746891369.016544
+    },
+    {
+      "position": [
+        1,
+        1
+      ],
+      "shade": 8,
+      "expected_cost": 0.9111111111111111,
+      "actual_cost": 4.555555555555555,
+      "surprise": 3.6444444444444444,
+      "timestamp": 1746891371.6641023
+    },
+    {
+      "position": [
+        1,
+        1
+      ],
+      "shade": 8,
+      "expected_cost": 0.9111111111111111,
+      "actual_cost": 0.0,
+      "surprise": 0.9111111111111111,
+      "timestamp": 1746891371.8041334
+    },
+    {
+      "position": [
+        1,
+        1
+      ],
+      "shade": 8,
+      "expected_cost": 0.9111111111111111,
+      "actual_cost": 4.555555555555555,
+      "surprise": 3.6444444444444444,
+      "timestamp": 1746891372.04279
+    },
+    {
+      "position": [
+        1,
+        1
+      ],
+      "shade": 8,
+      "expected_cost": 0.9111111111111111,
+      "actual_cost": 0.0,
+      "surprise": 0.9111111111111111,
+      "timestamp": 1746891372.2744741
+    },
+    {
+      "position": [
+        1,
+        1
+      ],
+      "shade": 8,
+      "expected_cost": 0.9111111111111111,
+      "actual_cost": 4.555555555555555,
+      "surprise": 3.6444444444444444,
+      "timestamp": 1746891372.4122558
+    },
+    {
+      "position": [
+        1,
+        1
+      ],
+      "shade": 8,
+      "expected_cost": 0.9111111111111111,
+      "actual_cost": 4.555555555555555,
+      "surprise": 3.6444444444444444,
+      "timestamp": 1746891372.5073037
+    }
+  ],
+  "2,1": [
+    {
+      "position": [
+        2,
+        1
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 0.0,
+      "surprise": 5.0,
+      "timestamp": 1746891059.5830634
+    },
+    {
+      "position": [
+        2,
+        1
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 5.0,
+      "surprise": 0.0,
+      "timestamp": 1746891059.7143967
+    },
+    {
+      "position": [
+        2,
+        1
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 5.0,
+      "surprise": 0.0,
+      "timestamp": 1746891059.8002827
+    },
+    {
+      "position": [
+        2,
+        1
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 5.0,
+      "surprise": 0.0,
+      "timestamp": 1746891060.068957
+    },
+    {
+      "position": [
+        2,
+        1
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 5.0,
+      "surprise": 0.0,
+      "timestamp": 1746891060.5063608
+    },
+    {
+      "position": [
+        2,
+        1
+      ],
+      "shade": 9,
+      "expected_cost": 4.0,
+      "actual_cost": 5.0,
+      "surprise": 1.0,
+      "timestamp": 1746891061.578313
+    },
+    {
+      "position": [
+        2,
+        1
+      ],
+      "shade": 9,
+      "expected_cost": 4.166666666666667,
+      "actual_cost": 0.0,
+      "surprise": 4.166666666666667,
+      "timestamp": 1746891369.4288774
+    },
+    {
+      "position": [
+        2,
+        1
+      ],
+      "shade": 9,
+      "expected_cost": 4.166666666666667,
+      "actual_cost": 5.0,
+      "surprise": 0.833333333333333,
+      "timestamp": 1746891369.8965304
+    },
+    {
+      "position": [
+        2,
+        1
+      ],
+      "shade": 9,
+      "expected_cost": 4.166666666666667,
+      "actual_cost": 5.0,
+      "surprise": 0.833333333333333,
+      "timestamp": 1746891370.1711483
+    },
+    {
+      "position": [
+        2,
+        1
+      ],
+      "shade": 9,
+      "expected_cost": 4.166666666666667,
+      "actual_cost": 0.0,
+      "surprise": 4.166666666666667,
+      "timestamp": 1746891370.2687628
+    },
+    {
+      "position": [
+        2,
+        1
+      ],
+      "shade": 9,
+      "expected_cost": 4.166666666666667,
+      "actual_cost": 5.0,
+      "surprise": 0.833333333333333,
+      "timestamp": 1746891370.4055307
+    },
+    {
+      "position": [
+        2,
+        1
+      ],
+      "shade": 9,
+      "expected_cost": 4.166666666666667,
+      "actual_cost": 5.0,
+      "surprise": 0.833333333333333,
+      "timestamp": 1746891370.4995763
+    },
+    {
+      "position": [
+        2,
+        1
+      ],
+      "shade": 9,
+      "expected_cost": 3.75,
+      "actual_cost": 5.0,
+      "surprise": 1.25,
+      "timestamp": 1746891371.6157622
+    },
+    {
+      "position": [
+        2,
+        1
+      ],
+      "shade": 9,
+      "expected_cost": 3.75,
+      "actual_cost": 5.0,
+      "surprise": 1.25,
+      "timestamp": 1746891372.091214
+    }
+  ],
+  "3,1": [
+    {
+      "position": [
+        3,
+        1
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891059.7581666
+    },
+    {
+      "position": [
+        3,
+        1
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 0.0,
+      "surprise": 2.7777777777777777,
+      "timestamp": 1746891059.8894546
+    },
+    {
+      "position": [
+        3,
+        1
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 0.0,
+      "surprise": 2.7777777777777777,
+      "timestamp": 1746891060.5498729
+    },
+    {
+      "position": [
+        3,
+        1
+      ],
+      "shade": 4,
+      "expected_cost": 0.9259259259259259,
+      "actual_cost": 0.0,
+      "surprise": 0.9259259259259259,
+      "timestamp": 1746891369.3815854
+    },
+    {
+      "position": [
+        3,
+        1
+      ],
+      "shade": 4,
+      "expected_cost": 0.9259259259259259,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 1.8518518518518516,
+      "timestamp": 1746891369.6163738
+    },
+    {
+      "position": [
+        3,
+        1
+      ],
+      "shade": 4,
+      "expected_cost": 0.9259259259259259,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 1.8518518518518516,
+      "timestamp": 1746891369.7528052
+    },
+    {
+      "position": [
+        3,
+        1
+      ],
+      "shade": 4,
+      "expected_cost": 0.9259259259259259,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 1.8518518518518516,
+      "timestamp": 1746891369.985029
+    },
+    {
+      "position": [
+        3,
+        1
+      ],
+      "shade": 4,
+      "expected_cost": 0.9259259259259259,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 1.8518518518518516,
+      "timestamp": 1746891370.0827775
+    },
+    {
+      "position": [
+        3,
+        1
+      ],
+      "shade": 4,
+      "expected_cost": 0.9259259259259259,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 1.8518518518518516,
+      "timestamp": 1746891370.3581665
+    }
+  ],
+  "3,0": [
+    {
+      "position": [
+        3,
+        0
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891059.9401903
+    },
+    {
+      "position": [
+        3,
+        0
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891060.3805594
+    },
+    {
+      "position": [
+        3,
+        0
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891061.148301
+    },
+    {
+      "position": [
+        3,
+        0
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 0.0,
+      "surprise": 2.333333333333333,
+      "timestamp": 1746891061.2359905
+    },
+    {
+      "position": [
+        3,
+        0
+      ],
+      "shade": 3,
+      "expected_cost": 1.7499999999999998,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.5833333333333333,
+      "timestamp": 1746891358.7577605
+    },
+    {
+      "position": [
+        3,
+        0
+      ],
+      "shade": 3,
+      "expected_cost": 1.8666666666666665,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.46666666666666656,
+      "timestamp": 1746891369.334521
+    },
+    {
+      "position": [
+        3,
+        0
+      ],
+      "shade": 3,
+      "expected_cost": 1.8666666666666665,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.46666666666666656,
+      "timestamp": 1746891369.5684273
+    },
+    {
+      "position": [
+        3,
+        0
+      ],
+      "shade": 3,
+      "expected_cost": 1.8666666666666665,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.46666666666666656,
+      "timestamp": 1746891369.800405
+    },
+    {
+      "position": [
+        3,
+        0
+      ],
+      "shade": 3,
+      "expected_cost": 1.8666666666666665,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.46666666666666656,
+      "timestamp": 1746891370.0339034
+    }
+  ],
+  "2,0": [
+    {
+      "position": [
+        2,
+        0
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891059.9847133
+    },
+    {
+      "position": [
+        2,
+        0
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 0.0,
+      "surprise": 1.4444444444444444,
+      "timestamp": 1746891060.1173544
+    },
+    {
+      "position": [
+        2,
+        0
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891060.3371098
+    },
+    {
+      "position": [
+        2,
+        0
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891060.464368
+    },
+    {
+      "position": [
+        2,
+        0
+      ],
+      "shade": 1,
+      "expected_cost": 1.0833333333333333,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.36111111111111116,
+      "timestamp": 1746891061.191281
+    },
+    {
+      "position": [
+        2,
+        0
+      ],
+      "shade": 1,
+      "expected_cost": 1.0833333333333333,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.36111111111111116,
+      "timestamp": 1746891061.3211937
+    },
+    {
+      "position": [
+        2,
+        0
+      ],
+      "shade": 1,
+      "expected_cost": 1.0833333333333333,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.36111111111111116,
+      "timestamp": 1746891061.40712
+    },
+    {
+      "position": [
+        2,
+        0
+      ],
+      "shade": 1,
+      "expected_cost": 1.238095238095238,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.2063492063492065,
+      "timestamp": 1746891369.248547
+    },
+    {
+      "position": [
+        2,
+        0
+      ],
+      "shade": 1,
+      "expected_cost": 1.238095238095238,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.2063492063492065,
+      "timestamp": 1746891369.477376
+    },
+    {
+      "position": [
+        2,
+        0
+      ],
+      "shade": 1,
+      "expected_cost": 1.238095238095238,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.2063492063492065,
+      "timestamp": 1746891369.8483348
+    },
+    {
+      "position": [
+        2,
+        0
+      ],
+      "shade": 1,
+      "expected_cost": 1.238095238095238,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.2063492063492065,
+      "timestamp": 1746891370.4522903
+    },
+    {
+      "position": [
+        2,
+        0
+      ],
+      "shade": 1,
+      "expected_cost": 1.3131313131313131,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.13131313131313127,
+      "timestamp": 1746891372.1392727
+    }
+  ],
+  "1,0": [
+    {
+      "position": [
+        1,
+        0
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891060.1619525
+    },
+    {
+      "position": [
+        1,
+        0
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 0.0,
+      "surprise": 3.2222222222222223,
+      "timestamp": 1746891060.2934995
+    },
+    {
+      "position": [
+        1,
+        0
+      ],
+      "shade": 5,
+      "expected_cost": 1.6111111111111112,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 1.6111111111111112,
+      "timestamp": 1746891061.364403
+    },
+    {
+      "position": [
+        1,
+        0
+      ],
+      "shade": 5,
+      "expected_cost": 1.6111111111111112,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 1.6111111111111112,
+      "timestamp": 1746891061.4907389
+    },
+    {
+      "position": [
+        1,
+        0
+      ],
+      "shade": 5,
+      "expected_cost": 2.416666666666667,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.8055555555555554,
+      "timestamp": 1746891369.2024467
+    },
+    {
+      "position": [
+        1,
+        0
+      ],
+      "shade": 5,
+      "expected_cost": 2.577777777777778,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.6444444444444444,
+      "timestamp": 1746891372.2273586
+    },
+    {
+      "position": [
+        1,
+        0
+      ],
+      "shade": 5,
+      "expected_cost": 2.577777777777778,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.6444444444444444,
+      "timestamp": 1746891372.459519
+    }
+  ],
+  "3,2": [
+    {
+      "position": [
+        3,
+        2
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891060.5940964
+    },
+    {
+      "position": [
+        3,
+        2
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891370.87082
+    },
+    {
+      "position": [
+        3,
+        2
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 0.0,
+      "surprise": 4.111111111111111,
+      "timestamp": 1746891371.009585
+    },
+    {
+      "position": [
+        3,
+        2
+      ],
+      "shade": 7,
+      "expected_cost": 2.7407407407407405,
+      "actual_cost": 4.111111111111111,
+      "surprise": 1.3703703703703702,
+      "timestamp": 1746891371.4799998
+    }
+  ],
+  "4,2": [
+    {
+      "position": [
+        4,
+        2
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891060.6787837
+    },
+    {
+      "position": [
+        4,
+        2
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 0.0,
+      "surprise": 3.6666666666666665,
+      "timestamp": 1746891060.977177
+    },
+    {
+      "position": [
+        4,
+        2
+      ],
+      "shade": 6,
+      "expected_cost": 1.8333333333333333,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 1.8333333333333333,
+      "timestamp": 1746891062.3763928
+    },
+    {
+      "position": [
+        4,
+        2
+      ],
+      "shade": 6,
+      "expected_cost": 1.8333333333333333,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 1.8333333333333333,
+      "timestamp": 1746891062.7081656
+    },
+    {
+      "position": [
+        4,
+        2
+      ],
+      "shade": 6,
+      "expected_cost": 2.75,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.9166666666666665,
+      "timestamp": 1746891360.794625
+    }
+  ],
+  "4,3": [
+    {
+      "position": [
+        4,
+        3
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891060.7211292
+    },
+    {
+      "position": [
+        4,
+        3
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891060.8071113
+    },
+    {
+      "position": [
+        4,
+        3
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891060.9335048
+    },
+    {
+      "position": [
+        4,
+        3
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891062.3343823
+    },
+    {
+      "position": [
+        4,
+        3
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891360.4815772
+    },
+    {
+      "position": [
+        4,
+        3
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891360.6154323
+    },
+    {
+      "position": [
+        4,
+        3
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891360.708579
+    },
+    {
+      "position": [
+        4,
+        3
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891376.376142
+    }
+  ],
+  "4,4": [
+    {
+      "position": [
+        4,
+        4
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891060.7647176
+    },
+    {
+      "position": [
+        4,
+        4
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891062.2921906
+    },
+    {
+      "position": [
+        4,
+        4
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891358.2222838
+    },
+    {
+      "position": [
+        4,
+        4
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 0.0,
+      "surprise": 2.7777777777777777,
+      "timestamp": 1746891358.3554666
+    },
+    {
+      "position": [
+        4,
+        4
+      ],
+      "shade": 4,
+      "expected_cost": 2.083333333333333,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.6944444444444446,
+      "timestamp": 1746891360.5275133
+    },
+    {
+      "position": [
+        4,
+        4
+      ],
+      "shade": 4,
+      "expected_cost": 2.083333333333333,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.6944444444444446,
+      "timestamp": 1746891360.6617253
+    },
+    {
+      "position": [
+        4,
+        4
+      ],
+      "shade": 4,
+      "expected_cost": 2.314814814814815,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.4629629629629628,
+      "timestamp": 1746891373.2582848
+    },
+    {
+      "position": [
+        4,
+        4
+      ],
+      "shade": 4,
+      "expected_cost": 2.314814814814815,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.4629629629629628,
+      "timestamp": 1746891373.3539245
+    },
+    {
+      "position": [
+        4,
+        4
+      ],
+      "shade": 4,
+      "expected_cost": 2.4305555555555554,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.3472222222222223,
+      "timestamp": 1746891381.0751896
+    }
+  ],
+  "3,3": [
+    {
+      "position": [
+        3,
+        3
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891060.8907738
+    },
+    {
+      "position": [
+        3,
+        3
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891370.6850073
+    },
+    {
+      "position": [
+        3,
+        3
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 0.0,
+      "surprise": 3.6666666666666665,
+      "timestamp": 1746891370.8221993
+    },
+    {
+      "position": [
+        3,
+        3
+      ],
+      "shade": 6,
+      "expected_cost": 2.444444444444444,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 1.2222222222222223,
+      "timestamp": 1746891371.0595043
+    },
+    {
+      "position": [
+        3,
+        3
+      ],
+      "shade": 6,
+      "expected_cost": 2.75,
+      "actual_cost": 0.0,
+      "surprise": 2.75,
+      "timestamp": 1746891376.326494
+    },
+    {
+      "position": [
+        3,
+        3
+      ],
+      "shade": 6,
+      "expected_cost": 2.75,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.9166666666666665,
+      "timestamp": 1746891376.4265487
+    },
+    {
+      "position": [
+        3,
+        3
+      ],
+      "shade": 6,
+      "expected_cost": 2.444444444444444,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 1.2222222222222223,
+      "timestamp": 1746891380.933372
+    }
+  ],
+  "4,1": [
+    {
+      "position": [
+        4,
+        1
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891061.0207958
+    },
+    {
+      "position": [
+        4,
+        1
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891358.6254632
+    },
+    {
+      "position": [
+        4,
+        1
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891358.8489034
+    },
+    {
+      "position": [
+        4,
+        1
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777772,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 4.440892098500626e-16,
+      "timestamp": 1746891369.6650999
+    }
+  ],
+  "4,0": [
+    {
+      "position": [
+        4,
+        0
+      ],
+      "shade": 2,
+      "expected_cost": 1.8888888888888888,
+      "actual_cost": 1.8888888888888888,
+      "surprise": 0.0,
+      "timestamp": 1746891061.105689
+    },
+    {
+      "position": [
+        4,
+        0
+      ],
+      "shade": 2,
+      "expected_cost": 1.8888888888888888,
+      "actual_cost": 1.8888888888888888,
+      "surprise": 0.0,
+      "timestamp": 1746891358.671196
+    },
+    {
+      "position": [
+        4,
+        0
+      ],
+      "shade": 2,
+      "expected_cost": 1.8888888888888888,
+      "actual_cost": 1.8888888888888888,
+      "surprise": 0.0,
+      "timestamp": 1746891358.8032634
+    },
+    {
+      "position": [
+        4,
+        0
+      ],
+      "shade": 2,
+      "expected_cost": 1.8888888888888888,
+      "actual_cost": 1.8888888888888888,
+      "surprise": 0.0,
+      "timestamp": 1746891359.0290642
+    }
+  ],
+  "1,3": [
+    {
+      "position": [
+        1,
+        3
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891061.7447414
+    },
+    {
+      "position": [
+        1,
+        3
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891061.8286927
+    },
+    {
+      "position": [
+        1,
+        3
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891355.7427402
+    },
+    {
+      "position": [
+        1,
+        3
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222228,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 4.440892098500626e-16,
+      "timestamp": 1746891371.9034867
+    },
+    {
+      "position": [
+        1,
+        3
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891380.3071458
+    }
+  ],
+  "0,3": [
+    {
+      "position": [
+        0,
+        3
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891061.78597
+    },
+    {
+      "position": [
+        0,
+        3
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891355.697511
+    },
+    {
+      "position": [
+        0,
+        3
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891368.827027
+    },
+    {
+      "position": [
+        0,
+        3
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891372.8288224
+    }
+  ],
+  "1,4": [
+    {
+      "position": [
+        1,
+        4
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 0.0,
+      "surprise": 4.111111111111111,
+      "timestamp": 1746891061.9116213
+    },
+    {
+      "position": [
+        1,
+        4
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 0.0,
+      "surprise": 4.111111111111111,
+      "timestamp": 1746891061.9976184
+    },
+    {
+      "position": [
+        1,
+        4
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891062.1228974
+    },
+    {
+      "position": [
+        1,
+        4
+      ],
+      "shade": 7,
+      "expected_cost": 1.3703703703703702,
+      "actual_cost": 0.0,
+      "surprise": 1.3703703703703702,
+      "timestamp": 1746891355.7874532
+    },
+    {
+      "position": [
+        1,
+        4
+      ],
+      "shade": 7,
+      "expected_cost": 1.3703703703703702,
+      "actual_cost": 4.111111111111111,
+      "surprise": 2.7407407407407405,
+      "timestamp": 1746891356.4484928
+    },
+    {
+      "position": [
+        1,
+        4
+      ],
+      "shade": 7,
+      "expected_cost": 1.3703703703703702,
+      "actual_cost": 4.111111111111111,
+      "surprise": 2.7407407407407405,
+      "timestamp": 1746891356.8014274
+    },
+    {
+      "position": [
+        1,
+        4
+      ],
+      "shade": 7,
+      "expected_cost": 1.3703703703703702,
+      "actual_cost": 0.0,
+      "surprise": 1.3703703703703702,
+      "timestamp": 1746891356.9361384
+    },
+    {
+      "position": [
+        1,
+        4
+      ],
+      "shade": 7,
+      "expected_cost": 1.3703703703703702,
+      "actual_cost": 4.111111111111111,
+      "surprise": 2.7407407407407405,
+      "timestamp": 1746891357.0277371
+    }
+  ],
+  "0,4": [
+    {
+      "position": [
+        0,
+        4
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 5.0,
+      "surprise": 0.0,
+      "timestamp": 1746891061.9540496
+    },
+    {
+      "position": [
+        0,
+        4
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 5.0,
+      "surprise": 0.0,
+      "timestamp": 1746891062.0408728
+    },
+    {
+      "position": [
+        0,
+        4
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 5.0,
+      "surprise": 0.0,
+      "timestamp": 1746891355.8747947
+    },
+    {
+      "position": [
+        0,
+        4
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 5.0,
+      "surprise": 0.0,
+      "timestamp": 1746891356.7561476
+    },
+    {
+      "position": [
+        0,
+        4
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 0.0,
+      "surprise": 5.0,
+      "timestamp": 1746891356.8471005
+    },
+    {
+      "position": [
+        0,
+        4
+      ],
+      "shade": 9,
+      "expected_cost": 4.0,
+      "actual_cost": 5.0,
+      "surprise": 1.0,
+      "timestamp": 1746891372.8785126
+    }
+  ],
+  "2,4": [
+    {
+      "position": [
+        2,
+        4
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 0.0,
+      "surprise": 1.0,
+      "timestamp": 1746891062.1647558
+    },
+    {
+      "position": [
+        2,
+        4
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891358.1318667
+    },
+    {
+      "position": [
+        2,
+        4
+      ],
+      "shade": 0,
+      "expected_cost": 0.5,
+      "actual_cost": 0.0,
+      "surprise": 0.5,
+      "timestamp": 1746891373.119641
+    },
+    {
+      "position": [
+        2,
+        4
+      ],
+      "shade": 0,
+      "expected_cost": 0.3333333333333333,
+      "actual_cost": 1.0,
+      "surprise": 0.6666666666666667,
+      "timestamp": 1746891380.208102
+    },
+    {
+      "position": [
+        2,
+        4
+      ],
+      "shade": 0,
+      "expected_cost": 0.3333333333333333,
+      "actual_cost": 0.0,
+      "surprise": 0.3333333333333333,
+      "timestamp": 1746891380.5463858
+    },
+    {
+      "position": [
+        2,
+        4
+      ],
+      "shade": 0,
+      "expected_cost": 0.3333333333333333,
+      "actual_cost": 1.0,
+      "surprise": 0.6666666666666667,
+      "timestamp": 1746891380.6905565
+    },
+    {
+      "position": [
+        2,
+        4
+      ],
+      "shade": 0,
+      "expected_cost": 0.3333333333333333,
+      "actual_cost": 1.0,
+      "surprise": 0.6666666666666667,
+      "timestamp": 1746891380.8329756
+    }
+  ],
+  "3,4": [
+    {
+      "position": [
+        3,
+        4
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891062.208825
+    },
+    {
+      "position": [
+        3,
+        4
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891358.1766055
+    },
+    {
+      "position": [
+        3,
+        4
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891370.7737396
+    },
+    {
+      "position": [
+        3,
+        4
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891373.2106361
+    },
+    {
+      "position": [
+        3,
+        4
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891376.2782047
+    },
+    {
+      "position": [
+        3,
+        4
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891376.5164378
+    },
+    {
+      "position": [
+        3,
+        4
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891380.8826814
+    },
+    {
+      "position": [
+        3,
+        4
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891381.0243013
+    }
+  ],
+  "5,2": [
+    {
+      "position": [
+        5,
+        2
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 4.555555555555555,
+      "surprise": 0.0,
+      "timestamp": 1746891062.4185321
+    },
+    {
+      "position": [
+        5,
+        2
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 4.555555555555555,
+      "surprise": 0.0,
+      "timestamp": 1746891062.6271734
+    },
+    {
+      "position": [
+        5,
+        2
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 4.555555555555555,
+      "surprise": 0.0,
+      "timestamp": 1746891062.7499332
+    },
+    {
+      "position": [
+        5,
+        2
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 4.555555555555555,
+      "surprise": 0.0,
+      "timestamp": 1746891358.4956443
+    },
+    {
+      "position": [
+        5,
+        2
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 4.555555555555555,
+      "surprise": 0.0,
+      "timestamp": 1746891360.2513094
+    },
+    {
+      "position": [
+        5,
+        2
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 0.0,
+      "surprise": 4.555555555555555,
+      "timestamp": 1746891360.8404279
+    }
+  ],
+  "5,3": [
+    {
+      "position": [
+        5,
+        3
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891062.4990687
+    },
+    {
+      "position": [
+        5,
+        3
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891063.0042582
+    },
+    {
+      "position": [
+        5,
+        3
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891358.449015
+    },
+    {
+      "position": [
+        5,
+        3
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891360.4336014
+    },
+    {
+      "position": [
+        5,
+        3
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 0.0,
+      "surprise": 3.6666666666666665,
+      "timestamp": 1746891360.8886461
+    }
+  ],
+  "6,3": [
+    {
+      "position": [
+        6,
+        3
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 0.0,
+      "surprise": 1.0,
+      "timestamp": 1746891062.540921
+    },
+    {
+      "position": [
+        6,
+        3
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891062.8356664
+    },
+    {
+      "position": [
+        6,
+        3
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891062.961517
+    },
+    {
+      "position": [
+        6,
+        3
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 0.0,
+      "surprise": 1.0,
+      "timestamp": 1746891063.26299
+    },
+    {
+      "position": [
+        6,
+        3
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891063.3893783
+    },
+    {
+      "position": [
+        6,
+        3
+      ],
+      "shade": 0,
+      "expected_cost": 0.6,
+      "actual_cost": 1.0,
+      "surprise": 0.4,
+      "timestamp": 1746891359.7958272
+    },
+    {
+      "position": [
+        6,
+        3
+      ],
+      "shade": 0,
+      "expected_cost": 0.6,
+      "actual_cost": 0.0,
+      "surprise": 0.6,
+      "timestamp": 1746891360.3866858
+    },
+    {
+      "position": [
+        6,
+        3
+      ],
+      "shade": 0,
+      "expected_cost": 0.6,
+      "actual_cost": 1.0,
+      "surprise": 0.4,
+      "timestamp": 1746891360.9794405
+    },
+    {
+      "position": [
+        6,
+        3
+      ],
+      "shade": 0,
+      "expected_cost": 0.6,
+      "actual_cost": 0.0,
+      "surprise": 0.6,
+      "timestamp": 1746891361.2956982
+    },
+    {
+      "position": [
+        6,
+        3
+      ],
+      "shade": 0,
+      "expected_cost": 0.5555555555555556,
+      "actual_cost": 0.0,
+      "surprise": 0.5555555555555556,
+      "timestamp": 1746891361.5223887
+    },
+    {
+      "position": [
+        6,
+        3
+      ],
+      "shade": 0,
+      "expected_cost": 0.5,
+      "actual_cost": 1.0,
+      "surprise": 0.5,
+      "timestamp": 1746891373.9162483
+    },
+    {
+      "position": [
+        6,
+        3
+      ],
+      "shade": 0,
+      "expected_cost": 0.5,
+      "actual_cost": 1.0,
+      "surprise": 0.5,
+      "timestamp": 1746891374.054657
+    },
+    {
+      "position": [
+        6,
+        3
+      ],
+      "shade": 0,
+      "expected_cost": 0.5,
+      "actual_cost": 1.0,
+      "surprise": 0.5,
+      "timestamp": 1746891374.1525295
+    }
+  ],
+  "6,2": [
+    {
+      "position": [
+        6,
+        2
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891062.5843148
+    },
+    {
+      "position": [
+        6,
+        2
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891062.7922478
+    },
+    {
+      "position": [
+        6,
+        2
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891062.919278
+    },
+    {
+      "position": [
+        6,
+        2
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222228,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 4.440892098500626e-16,
+      "timestamp": 1746891359.254935
+    },
+    {
+      "position": [
+        6,
+        2
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891359.6189253
+    },
+    {
+      "position": [
+        6,
+        2
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891359.7108645
+    },
+    {
+      "position": [
+        6,
+        2
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891359.841769
+    },
+    {
+      "position": [
+        6,
+        2
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891360.2054803
+    },
+    {
+      "position": [
+        6,
+        2
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891360.298697
+    }
+  ],
+  "5,4": [
+    {
+      "position": [
+        5,
+        4
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891063.0477688
+    },
+    {
+      "position": [
+        5,
+        4
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891358.4026
+    },
+    {
+      "position": [
+        5,
+        4
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891361.0724797
+    },
+    {
+      "position": [
+        5,
+        4
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891373.3062377
+    },
+    {
+      "position": [
+        5,
+        4
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891373.5381315
+    }
+  ],
+  "6,4": [
+    {
+      "position": [
+        6,
+        4
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891063.1312096
+    },
+    {
+      "position": [
+        6,
+        4
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891063.2185328
+    },
+    {
+      "position": [
+        6,
+        4
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891361.026017
+    },
+    {
+      "position": [
+        6,
+        4
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891361.118175
+    },
+    {
+      "position": [
+        6,
+        4
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891361.6098332
+    },
+    {
+      "position": [
+        6,
+        4
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 0.0,
+      "surprise": 2.333333333333333,
+      "timestamp": 1746891373.7273738
+    },
+    {
+      "position": [
+        6,
+        4
+      ],
+      "shade": 3,
+      "expected_cost": 1.944444444444444,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.38888888888888906,
+      "timestamp": 1746891373.8679628
+    },
+    {
+      "position": [
+        6,
+        4
+      ],
+      "shade": 3,
+      "expected_cost": 1.944444444444444,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.38888888888888906,
+      "timestamp": 1746891374.1031578
+    },
+    {
+      "position": [
+        6,
+        4
+      ],
+      "shade": 3,
+      "expected_cost": 1.944444444444444,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.38888888888888906,
+      "timestamp": 1746891374.2407467
+    }
+  ],
+  "6,5": [
+    {
+      "position": [
+        6,
+        5
+      ],
+      "shade": 2,
+      "expected_cost": 1.8888888888888888,
+      "actual_cost": 1.8888888888888888,
+      "surprise": 0.0,
+      "timestamp": 1746891063.174529
+    },
+    {
+      "position": [
+        6,
+        5
+      ],
+      "shade": 2,
+      "expected_cost": 1.8888888888888888,
+      "actual_cost": 1.8888888888888888,
+      "surprise": 0.0,
+      "timestamp": 1746891361.6568496
+    },
+    {
+      "position": [
+        6,
+        5
+      ],
+      "shade": 2,
+      "expected_cost": 1.8888888888888888,
+      "actual_cost": 1.8888888888888888,
+      "surprise": 0.0,
+      "timestamp": 1746891373.676975
+    },
+    {
+      "position": [
+        6,
+        5
+      ],
+      "shade": 2,
+      "expected_cost": 1.8888888888888886,
+      "actual_cost": 0.0,
+      "surprise": 1.8888888888888886,
+      "timestamp": 1746891373.776924
+    },
+    {
+      "position": [
+        6,
+        5
+      ],
+      "shade": 2,
+      "expected_cost": 1.8888888888888886,
+      "actual_cost": 1.8888888888888888,
+      "surprise": 2.220446049250313e-16,
+      "timestamp": 1746891374.2889583
+    }
+  ],
+  "7,3": [
+    {
+      "position": [
+        7,
+        3
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891063.3471014
+    },
+    {
+      "position": [
+        7,
+        3
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891063.4323485
+    },
+    {
+      "position": [
+        7,
+        3
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891361.2492673
+    },
+    {
+      "position": [
+        7,
+        3
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891361.3429878
+    },
+    {
+      "position": [
+        7,
+        3
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891361.4754877
+    },
+    {
+      "position": [
+        7,
+        3
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891373.9646583
+    }
+  ],
+  "7,2": [
+    {
+      "position": [
+        7,
+        2
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 5.0,
+      "surprise": 0.0,
+      "timestamp": 1746891063.4738102
+    },
+    {
+      "position": [
+        7,
+        2
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 5.0,
+      "surprise": 0.0,
+      "timestamp": 1746891359.5726414
+    },
+    {
+      "position": [
+        7,
+        2
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 5.0,
+      "surprise": 0.0,
+      "timestamp": 1746891359.887878
+    },
+    {
+      "position": [
+        7,
+        2
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 5.0,
+      "surprise": 0.0,
+      "timestamp": 1746891360.1165051
+    },
+    {
+      "position": [
+        7,
+        2
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 5.0,
+      "surprise": 0.0,
+      "timestamp": 1746891361.430037
+    }
+  ],
+  "8,2": [
+    {
+      "position": [
+        8,
+        2
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 0.0,
+      "surprise": 1.0,
+      "timestamp": 1746891063.5543935
+    }
+  ],
+  "8,1": [
+    {
+      "position": [
+        8,
+        1
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891063.5979087
+    },
+    {
+      "position": [
+        8,
+        1
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891063.7219934
+    },
+    {
+      "position": [
+        8,
+        1
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891063.8070614
+    }
+  ],
+  "9,1": [
+    {
+      "position": [
+        9,
+        1
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 4.555555555555555,
+      "surprise": 0.0,
+      "timestamp": 1746891063.6403544
+    },
+    {
+      "position": [
+        9,
+        1
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 4.555555555555555,
+      "surprise": 0.0,
+      "timestamp": 1746891063.8500106
+    }
+  ],
+  "7,1": [
+    {
+      "position": [
+        7,
+        1
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 4.555555555555555,
+      "surprise": 0.0,
+      "timestamp": 1746891063.7644434
+    },
+    {
+      "position": [
+        7,
+        1
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 4.555555555555555,
+      "surprise": 0.0,
+      "timestamp": 1746891359.3893878
+    },
+    {
+      "position": [
+        7,
+        1
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 0.0,
+      "surprise": 4.555555555555555,
+      "timestamp": 1746891359.4833143
+    },
+    {
+      "position": [
+        7,
+        1
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 4.555555555555555,
+      "surprise": 0.0,
+      "timestamp": 1746891359.9740345
+    },
+    {
+      "position": [
+        7,
+        1
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 4.555555555555555,
+      "surprise": 0.0,
+      "timestamp": 1746891360.0681164
+    }
+  ],
+  "9,2": [
+    {
+      "position": [
+        9,
+        2
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891063.9320235
+    }
+  ],
+  "9,3": [
+    {
+      "position": [
+        9,
+        3
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891063.9752357
+    }
+  ],
+  "9,4": [
+    {
+      "position": [
+        9,
+        4
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891064.0181193
+    },
+    {
+      "position": [
+        9,
+        4
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891064.145469
+    },
+    {
+      "position": [
+        9,
+        4
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891064.232641
+    }
+  ],
+  "9,5": [
+    {
+      "position": [
+        9,
+        5
+      ],
+      "shade": 2,
+      "expected_cost": 1.8888888888888888,
+      "actual_cost": 1.8888888888888888,
+      "surprise": 0.0,
+      "timestamp": 1746891064.0608127
+    }
+  ],
+  "10,4": [
+    {
+      "position": [
+        10,
+        4
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 0.0,
+      "surprise": 3.6666666666666665,
+      "timestamp": 1746891064.1885793
+    },
+    {
+      "position": [
+        10,
+        4
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891064.3179293
+    },
+    {
+      "position": [
+        10,
+        4
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891064.4031153
+    },
+    {
+      "position": [
+        10,
+        4
+      ],
+      "shade": 6,
+      "expected_cost": 2.444444444444444,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 1.2222222222222223,
+      "timestamp": 1746891066.2247896
+    }
+  ],
+  "10,3": [
+    {
+      "position": [
+        10,
+        3
+      ],
+      "shade": 2,
+      "expected_cost": 1.8888888888888888,
+      "actual_cost": 1.8888888888888888,
+      "surprise": 0.0,
+      "timestamp": 1746891064.3597388
+    },
+    {
+      "position": [
+        10,
+        3
+      ],
+      "shade": 2,
+      "expected_cost": 1.8888888888888888,
+      "actual_cost": 0.0,
+      "surprise": 1.8888888888888888,
+      "timestamp": 1746891064.44581
+    },
+    {
+      "position": [
+        10,
+        3
+      ],
+      "shade": 2,
+      "expected_cost": 0.9444444444444444,
+      "actual_cost": 1.8888888888888888,
+      "surprise": 0.9444444444444444,
+      "timestamp": 1746891066.1800587
+    }
+  ],
+  "10,2": [
+    {
+      "position": [
+        10,
+        2
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891064.5277593
+    },
+    {
+      "position": [
+        10,
+        2
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891064.6118364
+    },
+    {
+      "position": [
+        10,
+        2
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891066.097022
+    }
+  ],
+  "11,2": [
+    {
+      "position": [
+        11,
+        2
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891064.5696135
+    },
+    {
+      "position": [
+        11,
+        2
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891065.1991868
+    },
+    {
+      "position": [
+        11,
+        2
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891065.9664724
+    },
+    {
+      "position": [
+        11,
+        2
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891066.0528197
+    }
+  ],
+  "10,1": [
+    {
+      "position": [
+        10,
+        1
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891064.6541944
+    },
+    {
+      "position": [
+        10,
+        1
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891064.7758121
+    }
+  ],
+  "10,0": [
+    {
+      "position": [
+        10,
+        0
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891064.734013
+    },
+    {
+      "position": [
+        10,
+        0
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891064.8181005
+    }
+  ],
+  "11,0": [
+    {
+      "position": [
+        11,
+        0
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891064.8610492
+    }
+  ],
+  "12,0": [
+    {
+      "position": [
+        12,
+        0
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891064.9437525
+    },
+    {
+      "position": [
+        12,
+        0
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891065.0314322
+    },
+    {
+      "position": [
+        12,
+        0
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891065.3671753
+    },
+    {
+      "position": [
+        12,
+        0
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891065.5802774
+    }
+  ],
+  "12,1": [
+    {
+      "position": [
+        12,
+        1
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 0.0,
+      "surprise": 3.6666666666666665,
+      "timestamp": 1746891064.9869435
+    },
+    {
+      "position": [
+        12,
+        1
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891065.074766
+    },
+    {
+      "position": [
+        12,
+        1
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891065.2857604
+    },
+    {
+      "position": [
+        12,
+        1
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891065.8382072
+    }
+  ],
+  "12,2": [
+    {
+      "position": [
+        12,
+        2
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891065.156721
+    },
+    {
+      "position": [
+        12,
+        2
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891065.241719
+    },
+    {
+      "position": [
+        12,
+        2
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891065.8823783
+    }
+  ],
+  "13,0": [
+    {
+      "position": [
+        13,
+        0
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891065.4102068
+    },
+    {
+      "position": [
+        13,
+        0
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891065.5381236
+    },
+    {
+      "position": [
+        13,
+        0
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891065.6231456
+    }
+  ],
+  "13,1": [
+    {
+      "position": [
+        13,
+        1
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891065.4550304
+    },
+    {
+      "position": [
+        13,
+        1
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891065.6669748
+    },
+    {
+      "position": [
+        13,
+        1
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891065.7942193
+    }
+  ],
+  "14,1": [
+    {
+      "position": [
+        14,
+        1
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 5.0,
+      "surprise": 0.0,
+      "timestamp": 1746891065.7507918
+    }
+  ],
+  "11,1": [
+    {
+      "position": [
+        11,
+        1
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891066.009163
+    }
+  ],
+  "11,4": [
+    {
+      "position": [
+        11,
+        4
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891066.2684517
+    },
+    {
+      "position": [
+        11,
+        4
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891066.4875634
+    }
+  ],
+  "11,3": [
+    {
+      "position": [
+        11,
+        3
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 0.0,
+      "surprise": 1.0,
+      "timestamp": 1746891066.3536015
+    }
+  ],
+  "12,3": [
+    {
+      "position": [
+        12,
+        3
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 4.555555555555555,
+      "surprise": 0.0,
+      "timestamp": 1746891066.3981583
+    }
+  ],
+  "12,4": [
+    {
+      "position": [
+        12,
+        4
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891066.4432535
+    },
+    {
+      "position": [
+        12,
+        4
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891066.5705717
+    }
+  ],
+  "13,4": [
+    {
+      "position": [
+        13,
+        4
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891066.6137688
+    }
+  ],
+  "13,5": [
+    {
+      "position": [
+        13,
+        5
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891066.6559181
+    }
+  ],
+  "13,6": [
+    {
+      "position": [
+        13,
+        6
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891066.6984613
+    }
+  ],
+  "13,7": [
+    {
+      "position": [
+        13,
+        7
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 0.0,
+      "surprise": 3.2222222222222223,
+      "timestamp": 1746891066.780285
+    }
+  ],
+  "14,7": [
+    {
+      "position": [
+        14,
+        7
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891066.8245275
+    }
+  ],
+  "14,6": [
+    {
+      "position": [
+        14,
+        6
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891066.868585
+    }
+  ],
+  "15,6": [
+    {
+      "position": [
+        15,
+        6
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 4.555555555555555,
+      "surprise": 0.0,
+      "timestamp": 1746891066.9126072
+    },
+    {
+      "position": [
+        15,
+        6
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 4.555555555555555,
+      "surprise": 0.0,
+      "timestamp": 1746891068.3375874
+    }
+  ],
+  "15,7": [
+    {
+      "position": [
+        15,
+        7
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891066.9956446
+    }
+  ],
+  "16,7": [
+    {
+      "position": [
+        16,
+        7
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891067.0399334
+    },
+    {
+      "position": [
+        16,
+        7
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891067.1690502
+    }
+  ],
+  "16,6": [
+    {
+      "position": [
+        16,
+        6
+      ],
+      "shade": 2,
+      "expected_cost": 1.8888888888888888,
+      "actual_cost": 0.0,
+      "surprise": 1.8888888888888888,
+      "timestamp": 1746891067.0832403
+    },
+    {
+      "position": [
+        16,
+        6
+      ],
+      "shade": 2,
+      "expected_cost": 1.8888888888888888,
+      "actual_cost": 1.8888888888888888,
+      "surprise": 0.0,
+      "timestamp": 1746891068.2042925
+    },
+    {
+      "position": [
+        16,
+        6
+      ],
+      "shade": 2,
+      "expected_cost": 0.9444444444444444,
+      "actual_cost": 1.8888888888888888,
+      "surprise": 0.9444444444444444,
+      "timestamp": 1746891068.4232547
+    }
+  ],
+  "17,7": [
+    {
+      "position": [
+        17,
+        7
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 5.0,
+      "surprise": 0.0,
+      "timestamp": 1746891067.211712
+    },
+    {
+      "position": [
+        17,
+        7
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 5.0,
+      "surprise": 0.0,
+      "timestamp": 1746891067.6383522
+    },
+    {
+      "position": [
+        17,
+        7
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 5.0,
+      "surprise": 0.0,
+      "timestamp": 1746891067.7263227
+    },
+    {
+      "position": [
+        17,
+        7
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 5.0,
+      "surprise": 0.0,
+      "timestamp": 1746891067.9846876
+    }
+  ],
+  "17,8": [
+    {
+      "position": [
+        17,
+        8
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891067.254717
+    },
+    {
+      "position": [
+        17,
+        8
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891067.382501
+    },
+    {
+      "position": [
+        17,
+        8
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891067.4696703
+    },
+    {
+      "position": [
+        17,
+        8
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891067.5948722
+    },
+    {
+      "position": [
+        17,
+        8
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891067.682878
+    }
+  ],
+  "17,9": [
+    {
+      "position": [
+        17,
+        9
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 5.0,
+      "surprise": 0.0,
+      "timestamp": 1746891067.2987475
+    }
+  ],
+  "16,8": [
+    {
+      "position": [
+        16,
+        8
+      ],
+      "shade": 2,
+      "expected_cost": 1.8888888888888888,
+      "actual_cost": 1.8888888888888888,
+      "surprise": 0.0,
+      "timestamp": 1746891067.42591
+    },
+    {
+      "position": [
+        16,
+        8
+      ],
+      "shade": 2,
+      "expected_cost": 1.8888888888888888,
+      "actual_cost": 1.8888888888888888,
+      "surprise": 0.0,
+      "timestamp": 1746891067.5130606
+    }
+  ],
+  "17,6": [
+    {
+      "position": [
+        17,
+        6
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891067.8108568
+    },
+    {
+      "position": [
+        17,
+        6
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891067.8992803
+    },
+    {
+      "position": [
+        17,
+        6
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891068.1195438
+    },
+    {
+      "position": [
+        17,
+        6
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891068.467648
+    }
+  ],
+  "17,5": [
+    {
+      "position": [
+        17,
+        5
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891067.8556745
+    }
+  ],
+  "18,7": [
+    {
+      "position": [
+        18,
+        7
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891068.0298347
+    }
+  ],
+  "18,6": [
+    {
+      "position": [
+        18,
+        6
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891068.074878
+    },
+    {
+      "position": [
+        18,
+        6
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891068.512017
+    },
+    {
+      "position": [
+        18,
+        6
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891068.6375487
+    }
+  ],
+  "16,5": [
+    {
+      "position": [
+        16,
+        5
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891068.2484267
+    }
+  ],
+  "15,5": [
+    {
+      "position": [
+        15,
+        5
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891068.2932298
+    }
+  ],
+  "18,5": [
+    {
+      "position": [
+        18,
+        5
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891068.5943046
+    }
+  ],
+  "19,6": [
+    {
+      "position": [
+        19,
+        6
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891068.6804473
+    }
+  ],
+  "20,6": [
+    {
+      "position": [
+        20,
+        6
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891068.7240145
+    }
+  ],
+  "0,5": [
+    {
+      "position": [
+        0,
+        5
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 5.0,
+      "surprise": 0.0,
+      "timestamp": 1746891355.9206288
+    },
+    {
+      "position": [
+        0,
+        5
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 0.0,
+      "surprise": 5.0,
+      "timestamp": 1746891356.356884
+    },
+    {
+      "position": [
+        0,
+        5
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 5.0,
+      "surprise": 0.0,
+      "timestamp": 1746891356.7105339
+    },
+    {
+      "position": [
+        0,
+        5
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 5.0,
+      "surprise": 0.0,
+      "timestamp": 1746891357.4705894
+    },
+    {
+      "position": [
+        0,
+        5
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 5.0,
+      "surprise": 0.0,
+      "timestamp": 1746891357.690868
+    },
+    {
+      "position": [
+        0,
+        5
+      ],
+      "shade": 9,
+      "expected_cost": 4.0,
+      "actual_cost": 0.0,
+      "surprise": 4.0,
+      "timestamp": 1746891372.9281378
+    },
+    {
+      "position": [
+        0,
+        5
+      ],
+      "shade": 9,
+      "expected_cost": 3.3333333333333335,
+      "actual_cost": 5.0,
+      "surprise": 1.6666666666666665,
+      "timestamp": 1746891375.7641506
+    },
+    {
+      "position": [
+        0,
+        5
+      ],
+      "shade": 9,
+      "expected_cost": 3.5714285714285716,
+      "actual_cost": 5.0,
+      "surprise": 1.4285714285714284,
+      "timestamp": 1746891377.2295623
+    },
+    {
+      "position": [
+        0,
+        5
+      ],
+      "shade": 9,
+      "expected_cost": 3.5714285714285716,
+      "actual_cost": 5.0,
+      "surprise": 1.4285714285714284,
+      "timestamp": 1746891377.3666403
+    }
+  ],
+  "0,6": [
+    {
+      "position": [
+        0,
+        6
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891355.9655018
+    },
+    {
+      "position": [
+        0,
+        6
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891357.3333585
+    },
+    {
+      "position": [
+        0,
+        6
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891357.4244027
+    },
+    {
+      "position": [
+        0,
+        6
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891375.7137222
+    },
+    {
+      "position": [
+        0,
+        6
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891375.8134797
+    },
+    {
+      "position": [
+        0,
+        6
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891377.17988
+    },
+    {
+      "position": [
+        0,
+        6
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891377.415524
+    },
+    {
+      "position": [
+        0,
+        6
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891377.9403164
+    }
+  ],
+  "1,6": [
+    {
+      "position": [
+        1,
+        6
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891356.0094247
+    },
+    {
+      "position": [
+        1,
+        6
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891356.2274926
+    },
+    {
+      "position": [
+        1,
+        6
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891356.5792456
+    },
+    {
+      "position": [
+        1,
+        6
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891357.2463713
+    },
+    {
+      "position": [
+        1,
+        6
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 0.0,
+      "surprise": 2.333333333333333,
+      "timestamp": 1746891357.378265
+    },
+    {
+      "position": [
+        1,
+        6
+      ],
+      "shade": 3,
+      "expected_cost": 1.8666666666666665,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.46666666666666656,
+      "timestamp": 1746891375.9043486
+    },
+    {
+      "position": [
+        1,
+        6
+      ],
+      "shade": 3,
+      "expected_cost": 1.944444444444444,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.38888888888888906,
+      "timestamp": 1746891377.1304727
+    },
+    {
+      "position": [
+        1,
+        6
+      ],
+      "shade": 3,
+      "expected_cost": 1.944444444444444,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.38888888888888906,
+      "timestamp": 1746891377.8481226
+    }
+  ],
+  "2,6": [
+    {
+      "position": [
+        2,
+        6
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 0.0,
+      "surprise": 1.0,
+      "timestamp": 1746891356.0938115
+    },
+    {
+      "position": [
+        2,
+        6
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891356.1845472
+    },
+    {
+      "position": [
+        2,
+        6
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 0.0,
+      "surprise": 1.0,
+      "timestamp": 1746891357.201043
+    },
+    {
+      "position": [
+        2,
+        6
+      ],
+      "shade": 0,
+      "expected_cost": 0.3333333333333333,
+      "actual_cost": 0.0,
+      "surprise": 0.3333333333333333,
+      "timestamp": 1746891357.999798
+    },
+    {
+      "position": [
+        2,
+        6
+      ],
+      "shade": 0,
+      "expected_cost": 0.25,
+      "actual_cost": 1.0,
+      "surprise": 0.75,
+      "timestamp": 1746891375.95281
+    },
+    {
+      "position": [
+        2,
+        6
+      ],
+      "shade": 0,
+      "expected_cost": 0.4,
+      "actual_cost": 1.0,
+      "surprise": 0.6,
+      "timestamp": 1746891376.6616566
+    },
+    {
+      "position": [
+        2,
+        6
+      ],
+      "shade": 0,
+      "expected_cost": 0.5,
+      "actual_cost": 0.0,
+      "surprise": 0.5,
+      "timestamp": 1746891376.9388764
+    },
+    {
+      "position": [
+        2,
+        6
+      ],
+      "shade": 0,
+      "expected_cost": 0.5,
+      "actual_cost": 1.0,
+      "surprise": 0.5,
+      "timestamp": 1746891377.04088
+    }
+  ],
+  "3,6": [
+    {
+      "position": [
+        3,
+        6
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891356.1391604
+    },
+    {
+      "position": [
+        3,
+        6
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891376.0025606
+    },
+    {
+      "position": [
+        3,
+        6
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891379.631676
+    },
+    {
+      "position": [
+        3,
+        6
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891379.7746851
+    },
+    {
+      "position": [
+        3,
+        6
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891380.0177574
+    }
+  ],
+  "1,5": [
+    {
+      "position": [
+        1,
+        5
+      ],
+      "shade": 2,
+      "expected_cost": 1.8888888888888888,
+      "actual_cost": 1.8888888888888888,
+      "surprise": 0.0,
+      "timestamp": 1746891356.3124685
+    },
+    {
+      "position": [
+        1,
+        5
+      ],
+      "shade": 2,
+      "expected_cost": 1.8888888888888888,
+      "actual_cost": 0.0,
+      "surprise": 1.8888888888888888,
+      "timestamp": 1746891356.4024076
+    },
+    {
+      "position": [
+        1,
+        5
+      ],
+      "shade": 2,
+      "expected_cost": 1.8888888888888888,
+      "actual_cost": 1.8888888888888888,
+      "surprise": 0.0,
+      "timestamp": 1746891356.5354102
+    },
+    {
+      "position": [
+        1,
+        5
+      ],
+      "shade": 2,
+      "expected_cost": 1.8888888888888888,
+      "actual_cost": 1.8888888888888888,
+      "surprise": 0.0,
+      "timestamp": 1746891356.6244788
+    },
+    {
+      "position": [
+        1,
+        5
+      ],
+      "shade": 2,
+      "expected_cost": 1.8888888888888888,
+      "actual_cost": 1.8888888888888888,
+      "surprise": 0.0,
+      "timestamp": 1746891356.9817996
+    },
+    {
+      "position": [
+        1,
+        5
+      ],
+      "shade": 2,
+      "expected_cost": 1.8888888888888888,
+      "actual_cost": 1.8888888888888888,
+      "surprise": 0.0,
+      "timestamp": 1746891357.072733
+    },
+    {
+      "position": [
+        1,
+        5
+      ],
+      "shade": 2,
+      "expected_cost": 1.8888888888888888,
+      "actual_cost": 1.8888888888888888,
+      "surprise": 0.0,
+      "timestamp": 1746891357.556219
+    },
+    {
+      "position": [
+        1,
+        5
+      ],
+      "shade": 2,
+      "expected_cost": 1.8888888888888888,
+      "actual_cost": 1.8888888888888888,
+      "surprise": 0.0,
+      "timestamp": 1746891357.6464667
+    },
+    {
+      "position": [
+        1,
+        5
+      ],
+      "shade": 2,
+      "expected_cost": 1.6527777777777777,
+      "actual_cost": 1.8888888888888888,
+      "surprise": 0.23611111111111116,
+      "timestamp": 1746891357.7762308
+    },
+    {
+      "position": [
+        1,
+        5
+      ],
+      "shade": 2,
+      "expected_cost": 1.6790123456790123,
+      "actual_cost": 1.8888888888888888,
+      "surprise": 0.2098765432098766,
+      "timestamp": 1746891373.0212767
+    },
+    {
+      "position": [
+        1,
+        5
+      ],
+      "shade": 2,
+      "expected_cost": 1.7,
+      "actual_cost": 1.8888888888888888,
+      "surprise": 0.18888888888888888,
+      "timestamp": 1746891377.318458
+    }
+  ],
+  "2,5": [
+    {
+      "position": [
+        2,
+        5
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891357.1568809
+    },
+    {
+      "position": [
+        2,
+        5
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891357.6010478
+    },
+    {
+      "position": [
+        2,
+        5
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891357.821842
+    },
+    {
+      "position": [
+        2,
+        5
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 0.0,
+      "surprise": 3.2222222222222223,
+      "timestamp": 1746891357.9535367
+    },
+    {
+      "position": [
+        2,
+        5
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891358.0468626
+    },
+    {
+      "position": [
+        2,
+        5
+      ],
+      "shade": 5,
+      "expected_cost": 2.577777777777778,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.6444444444444444,
+      "timestamp": 1746891373.0705068
+    },
+    {
+      "position": [
+        2,
+        5
+      ],
+      "shade": 5,
+      "expected_cost": 2.685185185185185,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.5370370370370372,
+      "timestamp": 1746891376.6130354
+    },
+    {
+      "position": [
+        2,
+        5
+      ],
+      "shade": 5,
+      "expected_cost": 2.7619047619047623,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.46031746031746,
+      "timestamp": 1746891380.11884
+    },
+    {
+      "position": [
+        2,
+        5
+      ],
+      "shade": 5,
+      "expected_cost": 2.7619047619047623,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.46031746031746,
+      "timestamp": 1746891380.7417345
+    }
+  ],
+  "3,5": [
+    {
+      "position": [
+        3,
+        5
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891357.867092
+    },
+    {
+      "position": [
+        3,
+        5
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891376.1896381
+    },
+    {
+      "position": [
+        3,
+        5
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891376.5646226
+    },
+    {
+      "position": [
+        3,
+        5
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891380.068613
+    }
+  ],
+  "4,5": [
+    {
+      "position": [
+        4,
+        5
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 0.0,
+      "surprise": 1.0,
+      "timestamp": 1746891358.2672763
+    },
+    {
+      "position": [
+        4,
+        5
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891373.4430902
+    },
+    {
+      "position": [
+        4,
+        5
+      ],
+      "shade": 0,
+      "expected_cost": 0.5,
+      "actual_cost": 1.0,
+      "surprise": 0.5,
+      "timestamp": 1746891376.1411126
+    },
+    {
+      "position": [
+        4,
+        5
+      ],
+      "shade": 0,
+      "expected_cost": 0.6666666666666666,
+      "actual_cost": 1.0,
+      "surprise": 0.33333333333333337,
+      "timestamp": 1746891379.489852
+    },
+    {
+      "position": [
+        4,
+        5
+      ],
+      "shade": 0,
+      "expected_cost": 0.6666666666666666,
+      "actual_cost": 1.0,
+      "surprise": 0.33333333333333337,
+      "timestamp": 1746891381.1270416
+    }
+  ],
+  "5,1": [
+    {
+      "position": [
+        5,
+        1
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 5.0,
+      "surprise": 0.0,
+      "timestamp": 1746891358.5799785
+    },
+    {
+      "position": [
+        5,
+        1
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 5.0,
+      "surprise": 0.0,
+      "timestamp": 1746891358.8955054
+    }
+  ],
+  "5,0": [
+    {
+      "position": [
+        5,
+        0
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891358.982745
+    },
+    {
+      "position": [
+        5,
+        0
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891359.075236
+    }
+  ],
+  "6,0": [
+    {
+      "position": [
+        6,
+        0
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891359.1618543
+    }
+  ],
+  "6,1": [
+    {
+      "position": [
+        6,
+        1
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891359.2082808
+    },
+    {
+      "position": [
+        6,
+        1
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 0.0,
+      "surprise": 1.4444444444444444,
+      "timestamp": 1746891359.3007393
+    },
+    {
+      "position": [
+        6,
+        1
+      ],
+      "shade": 1,
+      "expected_cost": 0.7222222222222222,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.7222222222222222,
+      "timestamp": 1746891359.6653893
+    }
+  ],
+  "7,0": [
+    {
+      "position": [
+        7,
+        0
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 0.0,
+      "surprise": 2.7777777777777777,
+      "timestamp": 1746891359.4365559
+    },
+    {
+      "position": [
+        7,
+        0
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891360.0203507
+    }
+  ],
+  "7,4": [
+    {
+      "position": [
+        7,
+        4
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891361.2035706
+    }
+  ],
+  "5,5": [
+    {
+      "position": [
+        5,
+        5
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891361.7026865
+    },
+    {
+      "position": [
+        5,
+        5
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891373.4901185
+    },
+    {
+      "position": [
+        5,
+        5
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 0.0,
+      "surprise": 1.4444444444444444,
+      "timestamp": 1746891373.6273088
+    },
+    {
+      "position": [
+        5,
+        5
+      ],
+      "shade": 1,
+      "expected_cost": 0.9629629629629629,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.4814814814814815,
+      "timestamp": 1746891374.3374217
+    },
+    {
+      "position": [
+        5,
+        5
+      ],
+      "shade": 1,
+      "expected_cost": 1.0833333333333333,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.36111111111111116,
+      "timestamp": 1746891381.2203083
+    }
+  ],
+  "5,6": [
+    {
+      "position": [
+        5,
+        6
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 0.0,
+      "surprise": 4.555555555555555,
+      "timestamp": 1746891361.749621
+    },
+    {
+      "position": [
+        5,
+        6
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 0.0,
+      "surprise": 4.555555555555555,
+      "timestamp": 1746891374.428276
+    },
+    {
+      "position": [
+        5,
+        6
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 4.555555555555555,
+      "surprise": 0.0,
+      "timestamp": 1746891374.668521
+    },
+    {
+      "position": [
+        5,
+        6
+      ],
+      "shade": 8,
+      "expected_cost": 1.5185185185185184,
+      "actual_cost": 4.555555555555555,
+      "surprise": 3.037037037037037,
+      "timestamp": 1746891381.2718563
+    },
+    {
+      "position": [
+        5,
+        6
+      ],
+      "shade": 8,
+      "expected_cost": 1.5185185185185184,
+      "actual_cost": 4.555555555555555,
+      "surprise": 3.037037037037037,
+      "timestamp": 1746891381.4162126
+    }
+  ],
+  "6,6": [
+    {
+      "position": [
+        6,
+        6
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891361.8391664
+    }
+  ],
+  "7,6": [
+    {
+      "position": [
+        7,
+        6
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 4.555555555555555,
+      "surprise": 0.0,
+      "timestamp": 1746891361.884522
+    }
+  ],
+  "8,6": [
+    {
+      "position": [
+        8,
+        6
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891361.9300895
+    }
+  ],
+  "9,6": [
+    {
+      "position": [
+        9,
+        6
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891362.016927
+    },
+    {
+      "position": [
+        9,
+        6
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891362.9213157
+    }
+  ],
+  "9,7": [
+    {
+      "position": [
+        9,
+        7
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891362.0630426
+    },
+    {
+      "position": [
+        9,
+        7
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891362.5127099
+    },
+    {
+      "position": [
+        9,
+        7
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891362.9687912
+    }
+  ],
+  "9,8": [
+    {
+      "position": [
+        9,
+        8
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 0.0,
+      "surprise": 3.6666666666666665,
+      "timestamp": 1746891362.109179
+    },
+    {
+      "position": [
+        9,
+        8
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891362.4668334
+    },
+    {
+      "position": [
+        9,
+        8
+      ],
+      "shade": 6,
+      "expected_cost": 1.8333333333333333,
+      "actual_cost": 0.0,
+      "surprise": 1.8333333333333333,
+      "timestamp": 1746891363.3734694
+    },
+    {
+      "position": [
+        9,
+        8
+      ],
+      "shade": 6,
+      "expected_cost": 1.8333333333333333,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 1.8333333333333333,
+      "timestamp": 1746891363.5082679
+    }
+  ],
+  "8,8": [
+    {
+      "position": [
+        8,
+        8
+      ],
+      "shade": 2,
+      "expected_cost": 1.8888888888888888,
+      "actual_cost": 1.8888888888888888,
+      "surprise": 0.0,
+      "timestamp": 1746891362.1557941
+    },
+    {
+      "position": [
+        8,
+        8
+      ],
+      "shade": 2,
+      "expected_cost": 1.8888888888888888,
+      "actual_cost": 1.8888888888888888,
+      "surprise": 0.0,
+      "timestamp": 1746891362.4210856
+    },
+    {
+      "position": [
+        8,
+        8
+      ],
+      "shade": 2,
+      "expected_cost": 1.8888888888888888,
+      "actual_cost": 1.8888888888888888,
+      "surprise": 0.0,
+      "timestamp": 1746891363.4615395
+    }
+  ],
+  "7,8": [
+    {
+      "position": [
+        7,
+        8
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891362.2418716
+    }
+  ],
+  "7,9": [
+    {
+      "position": [
+        7,
+        9
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 0.0,
+      "surprise": 2.7777777777777777,
+      "timestamp": 1746891362.2873964
+    }
+  ],
+  "8,9": [
+    {
+      "position": [
+        8,
+        9
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891362.3337536
+    }
+  ],
+  "10,7": [
+    {
+      "position": [
+        10,
+        7
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891362.5587983
+    },
+    {
+      "position": [
+        10,
+        7
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891363.0565188
+    }
+  ],
+  "11,7": [
+    {
+      "position": [
+        11,
+        7
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 4.555555555555555,
+      "surprise": 0.0,
+      "timestamp": 1746891362.6451974
+    }
+  ],
+  "12,7": [
+    {
+      "position": [
+        12,
+        7
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891362.6911545
+    }
+  ],
+  "12,6": [
+    {
+      "position": [
+        12,
+        6
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891362.737968
+    }
+  ],
+  "11,6": [
+    {
+      "position": [
+        11,
+        6
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 0.0,
+      "surprise": 1.0,
+      "timestamp": 1746891362.824994
+    }
+  ],
+  "10,6": [
+    {
+      "position": [
+        10,
+        6
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891362.8734884
+    }
+  ],
+  "10,8": [
+    {
+      "position": [
+        10,
+        8
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891363.1028786
+    },
+    {
+      "position": [
+        10,
+        8
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891363.2341638
+    }
+  ],
+  "11,8": [
+    {
+      "position": [
+        11,
+        8
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891363.1488323
+    }
+  ],
+  "10,9": [
+    {
+      "position": [
+        10,
+        9
+      ],
+      "shade": 2,
+      "expected_cost": 1.8888888888888888,
+      "actual_cost": 1.8888888888888888,
+      "surprise": 0.0,
+      "timestamp": 1746891363.27999
+    },
+    {
+      "position": [
+        10,
+        9
+      ],
+      "shade": 2,
+      "expected_cost": 1.8888888888888888,
+      "actual_cost": 1.8888888888888888,
+      "surprise": 0.0,
+      "timestamp": 1746891363.6021411
+    }
+  ],
+  "9,9": [
+    {
+      "position": [
+        9,
+        9
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891363.3258379
+    },
+    {
+      "position": [
+        9,
+        9
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891363.5550013
+    }
+  ],
+  "10,10": [
+    {
+      "position": [
+        10,
+        10
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891363.6898472
+    }
+  ],
+  "10,11": [
+    {
+      "position": [
+        10,
+        11
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 4.555555555555555,
+      "surprise": 0.0,
+      "timestamp": 1746891363.7367916
+    },
+    {
+      "position": [
+        10,
+        11
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 4.555555555555555,
+      "surprise": 0.0,
+      "timestamp": 1746891363.869582
+    }
+  ],
+  "11,11": [
+    {
+      "position": [
+        11,
+        11
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891363.7828617
+    }
+  ],
+  "10,12": [
+    {
+      "position": [
+        10,
+        12
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891363.918058
+    }
+  ],
+  "9,12": [
+    {
+      "position": [
+        9,
+        12
+      ],
+      "shade": 2,
+      "expected_cost": 1.8888888888888888,
+      "actual_cost": 1.8888888888888888,
+      "surprise": 0.0,
+      "timestamp": 1746891363.9668283
+    }
+  ],
+  "9,13": [
+    {
+      "position": [
+        9,
+        13
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891364.0563333
+    }
+  ],
+  "9,14": [
+    {
+      "position": [
+        9,
+        14
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891364.1036708
+    }
+  ],
+  "8,14": [
+    {
+      "position": [
+        8,
+        14
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891364.1518862
+    }
+  ],
+  "8,15": [
+    {
+      "position": [
+        8,
+        15
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891364.1994882
+    }
+  ],
+  "9,15": [
+    {
+      "position": [
+        9,
+        15
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 0.0,
+      "surprise": 2.333333333333333,
+      "timestamp": 1746891364.288859
+    }
+  ],
+  "10,15": [
+    {
+      "position": [
+        10,
+        15
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891364.3369932
+    }
+  ],
+  "11,15": [
+    {
+      "position": [
+        11,
+        15
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891364.3854063
+    }
+  ],
+  "11,16": [
+    {
+      "position": [
+        11,
+        16
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891364.4729202
+    },
+    {
+      "position": [
+        11,
+        16
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891364.566432
+    }
+  ],
+  "12,16": [
+    {
+      "position": [
+        12,
+        16
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891364.519507
+    }
+  ],
+  "11,17": [
+    {
+      "position": [
+        11,
+        17
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891364.6534185
+    },
+    {
+      "position": [
+        11,
+        17
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891364.7490232
+    },
+    {
+      "position": [
+        11,
+        17
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891365.3453338
+    }
+  ],
+  "11,18": [
+    {
+      "position": [
+        11,
+        18
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891364.7016377
+    },
+    {
+      "position": [
+        11,
+        18
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891364.7964075
+    },
+    {
+      "position": [
+        11,
+        18
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891365.5287635
+    },
+    {
+      "position": [
+        11,
+        18
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891365.8980415
+    }
+  ],
+  "10,18": [
+    {
+      "position": [
+        10,
+        18
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 0.0,
+      "surprise": 3.6666666666666665,
+      "timestamp": 1746891364.885657
+    },
+    {
+      "position": [
+        10,
+        18
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891364.9837525
+    },
+    {
+      "position": [
+        10,
+        18
+      ],
+      "shade": 6,
+      "expected_cost": 1.8333333333333333,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 1.8333333333333333,
+      "timestamp": 1746891365.9459534
+    }
+  ],
+  "10,19": [
+    {
+      "position": [
+        10,
+        19
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891364.934564
+    }
+  ],
+  "10,17": [
+    {
+      "position": [
+        10,
+        17
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891365.0725892
+    },
+    {
+      "position": [
+        10,
+        17
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891365.166414
+    },
+    {
+      "position": [
+        10,
+        17
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891365.2987921
+    }
+  ],
+  "9,17": [
+    {
+      "position": [
+        9,
+        17
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891365.1191025
+    },
+    {
+      "position": [
+        9,
+        17
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891366.0842135
+    }
+  ],
+  "10,16": [
+    {
+      "position": [
+        10,
+        16
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891365.2132301
+    }
+  ],
+  "12,17": [
+    {
+      "position": [
+        12,
+        17
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891365.3922763
+    }
+  ],
+  "12,18": [
+    {
+      "position": [
+        12,
+        18
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891365.4810648
+    }
+  ],
+  "11,19": [
+    {
+      "position": [
+        11,
+        19
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891365.5772636
+    },
+    {
+      "position": [
+        11,
+        19
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891365.8102622
+    }
+  ],
+  "12,19": [
+    {
+      "position": [
+        12,
+        19
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891365.665359
+    },
+    {
+      "position": [
+        12,
+        19
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891365.762386
+    }
+  ],
+  "13,19": [
+    {
+      "position": [
+        13,
+        19
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 4.555555555555555,
+      "surprise": 0.0,
+      "timestamp": 1746891365.713897
+    }
+  ],
+  "9,18": [
+    {
+      "position": [
+        9,
+        18
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891365.994621
+    }
+  ],
+  "8,17": [
+    {
+      "position": [
+        8,
+        17
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891366.1316047
+    },
+    {
+      "position": [
+        8,
+        17
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891366.226772
+    }
+  ],
+  "7,17": [
+    {
+      "position": [
+        7,
+        17
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891366.1790416
+    },
+    {
+      "position": [
+        7,
+        17
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891366.3155477
+    },
+    {
+      "position": [
+        7,
+        17
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891366.4098194
+    }
+  ],
+  "7,16": [
+    {
+      "position": [
+        7,
+        16
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891366.3624728
+    }
+  ],
+  "6,17": [
+    {
+      "position": [
+        6,
+        17
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891366.4559965
+    }
+  ],
+  "5,17": [
+    {
+      "position": [
+        5,
+        17
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 5.0,
+      "surprise": 0.0,
+      "timestamp": 1746891366.5436761
+    }
+  ],
+  "5,18": [
+    {
+      "position": [
+        5,
+        18
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891366.5903075
+    }
+  ],
+  "4,18": [
+    {
+      "position": [
+        4,
+        18
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891366.6382282
+    }
+  ],
+  "4,17": [
+    {
+      "position": [
+        4,
+        17
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891366.7246926
+    }
+  ],
+  "4,16": [
+    {
+      "position": [
+        4,
+        16
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891366.7717247
+    }
+  ],
+  "5,16": [
+    {
+      "position": [
+        5,
+        16
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891366.8202212
+    }
+  ],
+  "6,16": [
+    {
+      "position": [
+        6,
+        16
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 5.0,
+      "surprise": 0.0,
+      "timestamp": 1746891366.9078722
+    }
+  ],
+  "2,2": [
+    {
+      "position": [
+        2,
+        2
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891370.2192693
+    },
+    {
+      "position": [
+        2,
+        2
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 0.0,
+      "surprise": 4.111111111111111,
+      "timestamp": 1746891370.5876057
+    },
+    {
+      "position": [
+        2,
+        2
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891370.9204774
+    },
+    {
+      "position": [
+        2,
+        2
+      ],
+      "shade": 7,
+      "expected_cost": 2.7407407407407405,
+      "actual_cost": 4.111111111111111,
+      "surprise": 1.3703703703703702,
+      "timestamp": 1746891371.197738
+    },
+    {
+      "position": [
+        2,
+        2
+      ],
+      "shade": 7,
+      "expected_cost": 2.7407407407407405,
+      "actual_cost": 4.111111111111111,
+      "surprise": 1.3703703703703702,
+      "timestamp": 1746891371.4312382
+    },
+    {
+      "position": [
+        2,
+        2
+      ],
+      "shade": 7,
+      "expected_cost": 2.7407407407407405,
+      "actual_cost": 4.111111111111111,
+      "surprise": 1.3703703703703702,
+      "timestamp": 1746891371.5273564
+    },
+    {
+      "position": [
+        2,
+        2
+      ],
+      "shade": 7,
+      "expected_cost": 2.7407407407407405,
+      "actual_cost": 4.111111111111111,
+      "surprise": 1.3703703703703702,
+      "timestamp": 1746891372.6436567
+    },
+    {
+      "position": [
+        2,
+        2
+      ],
+      "shade": 7,
+      "expected_cost": 3.5238095238095233,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.5873015873015874,
+      "timestamp": 1746891380.446232
+    }
+  ],
+  "2,3": [
+    {
+      "position": [
+        2,
+        3
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891370.6363075
+    },
+    {
+      "position": [
+        2,
+        3
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891371.1097746
+    },
+    {
+      "position": [
+        2,
+        3
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891380.257756
+    },
+    {
+      "position": [
+        2,
+        3
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891380.3972547
+    },
+    {
+      "position": [
+        2,
+        3
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891380.496591
+    },
+    {
+      "position": [
+        2,
+        3
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891380.6395626
+    }
+  ],
+  "5,7": [
+    {
+      "position": [
+        5,
+        7
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 5.0,
+      "surprise": 0.0,
+      "timestamp": 1746891374.4778407
+    },
+    {
+      "position": [
+        5,
+        7
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 5.0,
+      "surprise": 0.0,
+      "timestamp": 1746891374.7177868
+    },
+    {
+      "position": [
+        5,
+        7
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 5.0,
+      "surprise": 0.0,
+      "timestamp": 1746891381.467373
+    }
+  ],
+  "4,7": [
+    {
+      "position": [
+        4,
+        7
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 0.0,
+      "surprise": 1.0,
+      "timestamp": 1746891374.5281916
+    },
+    {
+      "position": [
+        4,
+        7
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891379.1019418
+    },
+    {
+      "position": [
+        4,
+        7
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891379.3870847
+    },
+    {
+      "position": [
+        4,
+        7
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891379.8761988
+    },
+    {
+      "position": [
+        4,
+        7
+      ],
+      "shade": 0,
+      "expected_cost": 0.75,
+      "actual_cost": 1.0,
+      "surprise": 0.25,
+      "timestamp": 1746891381.518454
+    }
+  ],
+  "4,6": [
+    {
+      "position": [
+        4,
+        6
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891374.5775611
+    },
+    {
+      "position": [
+        4,
+        6
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891376.0925999
+    },
+    {
+      "position": [
+        4,
+        6
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891379.4385211
+    },
+    {
+      "position": [
+        4,
+        6
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891379.5807426
+    },
+    {
+      "position": [
+        4,
+        6
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891379.6819813
+    },
+    {
+      "position": [
+        4,
+        6
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891379.9675403
+    },
+    {
+      "position": [
+        4,
+        6
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891381.3228738
+    }
+  ],
+  "6,7": [
+    {
+      "position": [
+        6,
+        7
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891374.7667952
+    }
+  ],
+  "6,8": [
+    {
+      "position": [
+        6,
+        8
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891374.855861
+    }
+  ],
+  "6,9": [
+    {
+      "position": [
+        6,
+        9
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891374.903811
+    }
+  ],
+  "5,9": [
+    {
+      "position": [
+        5,
+        9
+      ],
+      "shade": 2,
+      "expected_cost": 1.8888888888888888,
+      "actual_cost": 1.8888888888888888,
+      "surprise": 0.0,
+      "timestamp": 1746891374.9533854
+    }
+  ],
+  "4,9": [
+    {
+      "position": [
+        4,
+        9
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891375.0435915
+    },
+    {
+      "position": [
+        4,
+        9
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891378.7573552
+    },
+    {
+      "position": [
+        4,
+        9
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891381.9082415
+    }
+  ],
+  "3,9": [
+    {
+      "position": [
+        3,
+        9
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891375.0937984
+    },
+    {
+      "position": [
+        3,
+        9
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891378.9503045
+    },
+    {
+      "position": [
+        3,
+        9
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891381.8563364
+    }
+  ],
+  "3,8": [
+    {
+      "position": [
+        3,
+        8
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891375.1442957
+    },
+    {
+      "position": [
+        3,
+        8
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 0.0,
+      "surprise": 1.0,
+      "timestamp": 1746891378.6144266
+    },
+    {
+      "position": [
+        3,
+        8
+      ],
+      "shade": 0,
+      "expected_cost": 0.5,
+      "actual_cost": 1.0,
+      "surprise": 0.5,
+      "timestamp": 1746891379.00066
+    },
+    {
+      "position": [
+        3,
+        8
+      ],
+      "shade": 0,
+      "expected_cost": 0.5,
+      "actual_cost": 1.0,
+      "surprise": 0.5,
+      "timestamp": 1746891379.2442005
+    }
+  ],
+  "2,8": [
+    {
+      "position": [
+        2,
+        8
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891375.1948657
+    },
+    {
+      "position": [
+        2,
+        8
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891376.8000863
+    },
+    {
+      "position": [
+        2,
+        8
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891381.712557
+    }
+  ],
+  "1,8": [
+    {
+      "position": [
+        1,
+        8
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891375.2850575
+    },
+    {
+      "position": [
+        1,
+        8
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891377.6056528
+    },
+    {
+      "position": [
+        1,
+        8
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891377.7466977
+    },
+    {
+      "position": [
+        1,
+        8
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891378.2346919
+    }
+  ],
+  "1,9": [
+    {
+      "position": [
+        1,
+        9
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 4.555555555555555,
+      "surprise": 0.0,
+      "timestamp": 1746891375.3337045
+    },
+    {
+      "position": [
+        1,
+        9
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 4.555555555555555,
+      "surprise": 0.0,
+      "timestamp": 1746891375.4747686
+    }
+  ],
+  "0,9": [
+    {
+      "position": [
+        0,
+        9
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891375.3841884
+    },
+    {
+      "position": [
+        0,
+        9
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891375.5236387
+    }
+  ],
+  "0,8": [
+    {
+      "position": [
+        0,
+        8
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891375.5733569
+    },
+    {
+      "position": [
+        0,
+        8
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891377.6555583
+    },
+    {
+      "position": [
+        0,
+        8
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891378.0411708
+    }
+  ],
+  "0,7": [
+    {
+      "position": [
+        0,
+        7
+      ],
+      "shade": 2,
+      "expected_cost": 1.8888888888888888,
+      "actual_cost": 1.8888888888888888,
+      "surprise": 0.0,
+      "timestamp": 1746891375.664167
+    },
+    {
+      "position": [
+        0,
+        7
+      ],
+      "shade": 2,
+      "expected_cost": 1.8888888888888888,
+      "actual_cost": 1.8888888888888888,
+      "surprise": 0.0,
+      "timestamp": 1746891377.4639416
+    },
+    {
+      "position": [
+        0,
+        7
+      ],
+      "shade": 2,
+      "expected_cost": 1.8888888888888888,
+      "actual_cost": 1.8888888888888888,
+      "surprise": 0.0,
+      "timestamp": 1746891377.9907176
+    },
+    {
+      "position": [
+        0,
+        7
+      ],
+      "shade": 2,
+      "expected_cost": 1.8888888888888888,
+      "actual_cost": 1.8888888888888888,
+      "surprise": 0.0,
+      "timestamp": 1746891378.1336176
+    }
+  ],
+  "2,7": [
+    {
+      "position": [
+        2,
+        7
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891376.751191
+    },
+    {
+      "position": [
+        2,
+        7
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891376.848925
+    },
+    {
+      "position": [
+        2,
+        7
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891376.9903512
+    },
+    {
+      "position": [
+        2,
+        7
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891378.374939
+    },
+    {
+      "position": [
+        2,
+        7
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891378.4743788
+    },
+    {
+      "position": [
+        2,
+        7
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891381.6618373
+    }
+  ],
+  "1,7": [
+    {
+      "position": [
+        1,
+        7
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891377.555958
+    },
+    {
+      "position": [
+        1,
+        7
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891377.7976706
+    },
+    {
+      "position": [
+        1,
+        7
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891378.183753
+    },
+    {
+      "position": [
+        1,
+        7
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891378.28557
+    }
+  ],
+  "3,7": [
+    {
+      "position": [
+        3,
+        7
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 4.555555555555555,
+      "surprise": 0.0,
+      "timestamp": 1746891378.4249024
+    },
+    {
+      "position": [
+        3,
+        7
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 4.555555555555555,
+      "surprise": 0.0,
+      "timestamp": 1746891378.564785
+    },
+    {
+      "position": [
+        3,
+        7
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 4.555555555555555,
+      "surprise": 0.0,
+      "timestamp": 1746891379.051607
+    },
+    {
+      "position": [
+        3,
+        7
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 4.555555555555555,
+      "surprise": 0.0,
+      "timestamp": 1746891379.8260055
+    },
+    {
+      "position": [
+        3,
+        7
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 4.555555555555555,
+      "surprise": 0.0,
+      "timestamp": 1746891381.569449
+    }
+  ],
+  "4,8": [
+    {
+      "position": [
+        4,
+        8
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891378.6663952
+    },
+    {
+      "position": [
+        4,
+        8
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891379.1936517
+    },
+    {
+      "position": [
+        4,
+        8
+      ],
+      "shade": 6,
+      "expected_cost": 3.6666666666666665,
+      "actual_cost": 3.6666666666666665,
+      "surprise": 0.0,
+      "timestamp": 1746891379.2946808
+    }
+  ],
+  "4,10": [
+    {
+      "position": [
+        4,
+        10
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891378.8080328
+    },
+    {
+      "position": [
+        4,
+        10
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891381.9588513
+    },
+    {
+      "position": [
+        4,
+        10
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891382.1018395
+    },
+    {
+      "position": [
+        4,
+        10
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891382.2474911
+    }
+  ],
+  "3,10": [
+    {
+      "position": [
+        3,
+        10
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 5.0,
+      "surprise": 0.0,
+      "timestamp": 1746891378.8581216
+    },
+    {
+      "position": [
+        3,
+        10
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 5.0,
+      "surprise": 0.0,
+      "timestamp": 1746891382.3002377
+    }
+  ],
+  "2,9": [
+    {
+      "position": [
+        2,
+        9
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891381.804946
+    }
+  ],
+  "4,11": [
+    {
+      "position": [
+        4,
+        11
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891382.0510452
+    },
+    {
+      "position": [
+        4,
+        11
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 0.0,
+      "surprise": 3.2222222222222223,
+      "timestamp": 1746891382.1540532
+    },
+    {
+      "position": [
+        4,
+        11
+      ],
+      "shade": 5,
+      "expected_cost": 1.6111111111111112,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 1.6111111111111112,
+      "timestamp": 1746891384.5990627
+    }
+  ],
+  "3,11": [
+    {
+      "position": [
+        3,
+        11
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891382.35195
+    },
+    {
+      "position": [
+        3,
+        11
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891383.1296287
+    },
+    {
+      "position": [
+        3,
+        11
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891384.4078
+    }
+  ],
+  "2,11": [
+    {
+      "position": [
+        2,
+        11
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 5.0,
+      "surprise": 0.0,
+      "timestamp": 1746891382.4437964
+    },
+    {
+      "position": [
+        2,
+        11
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 5.0,
+      "surprise": 0.0,
+      "timestamp": 1746891383.1827674
+    },
+    {
+      "position": [
+        2,
+        11
+      ],
+      "shade": 9,
+      "expected_cost": 5.0,
+      "actual_cost": 5.0,
+      "surprise": 0.0,
+      "timestamp": 1746891383.5766003
+    }
+  ],
+  "2,12": [
+    {
+      "position": [
+        2,
+        12
+      ],
+      "shade": 3,
+      "expected_cost": 2.333333333333333,
+      "actual_cost": 2.333333333333333,
+      "surprise": 0.0,
+      "timestamp": 1746891382.4927604
+    }
+  ],
+  "1,12": [
+    {
+      "position": [
+        1,
+        12
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891382.5427794
+    },
+    {
+      "position": [
+        1,
+        12
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891383.3294895
+    },
+    {
+      "position": [
+        1,
+        12
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891383.4744
+    },
+    {
+      "position": [
+        1,
+        12
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891383.71657
+    }
+  ],
+  "1,13": [
+    {
+      "position": [
+        1,
+        13
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 4.555555555555555,
+      "surprise": 0.0,
+      "timestamp": 1746891382.6326056
+    },
+    {
+      "position": [
+        1,
+        13
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 4.555555555555555,
+      "surprise": 0.0,
+      "timestamp": 1746891382.7353618
+    }
+  ],
+  "1,14": [
+    {
+      "position": [
+        1,
+        14
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 4.555555555555555,
+      "surprise": 0.0,
+      "timestamp": 1746891382.6837718
+    },
+    {
+      "position": [
+        1,
+        14
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 4.555555555555555,
+      "surprise": 0.0,
+      "timestamp": 1746891384.1072125
+    }
+  ],
+  "2,13": [
+    {
+      "position": [
+        2,
+        13
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 4.555555555555555,
+      "surprise": 0.0,
+      "timestamp": 1746891382.8286774
+    },
+    {
+      "position": [
+        2,
+        13
+      ],
+      "shade": 8,
+      "expected_cost": 4.555555555555555,
+      "actual_cost": 4.555555555555555,
+      "surprise": 0.0,
+      "timestamp": 1746891384.2110305
+    }
+  ],
+  "3,13": [
+    {
+      "position": [
+        3,
+        13
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891382.8795946
+    },
+    {
+      "position": [
+        3,
+        13
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891382.9839761
+    },
+    {
+      "position": [
+        3,
+        13
+      ],
+      "shade": 1,
+      "expected_cost": 1.4444444444444444,
+      "actual_cost": 1.4444444444444444,
+      "surprise": 0.0,
+      "timestamp": 1746891384.30436
+    }
+  ],
+  "3,14": [
+    {
+      "position": [
+        3,
+        14
+      ],
+      "shade": 7,
+      "expected_cost": 4.111111111111111,
+      "actual_cost": 4.111111111111111,
+      "surprise": 0.0,
+      "timestamp": 1746891382.9315405
+    }
+  ],
+  "3,12": [
+    {
+      "position": [
+        3,
+        12
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891383.0765522
+    },
+    {
+      "position": [
+        3,
+        12
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891384.3556247
+    },
+    {
+      "position": [
+        3,
+        12
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891384.4989357
+    }
+  ],
+  "1,11": [
+    {
+      "position": [
+        1,
+        11
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891383.2772255
+    },
+    {
+      "position": [
+        1,
+        11
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891383.5251658
+    },
+    {
+      "position": [
+        1,
+        11
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891383.6672335
+    }
+  ],
+  "0,12": [
+    {
+      "position": [
+        0,
+        12
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891383.3812773
+    },
+    {
+      "position": [
+        0,
+        12
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891383.767201
+    }
+  ],
+  "0,13": [
+    {
+      "position": [
+        0,
+        13
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891383.8595977
+    }
+  ],
+  "0,14": [
+    {
+      "position": [
+        0,
+        14
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891383.9109492
+    },
+    {
+      "position": [
+        0,
+        14
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891384.0153608
+    }
+  ],
+  "0,15": [
+    {
+      "position": [
+        0,
+        15
+      ],
+      "shade": 0,
+      "expected_cost": 1.0,
+      "actual_cost": 1.0,
+      "surprise": 0.0,
+      "timestamp": 1746891383.9620497
+    }
+  ],
+  "2,14": [
+    {
+      "position": [
+        2,
+        14
+      ],
+      "shade": 5,
+      "expected_cost": 3.2222222222222223,
+      "actual_cost": 3.2222222222222223,
+      "surprise": 0.0,
+      "timestamp": 1746891384.1589434
+    }
+  ],
+  "4,12": [
+    {
+      "position": [
+        4,
+        12
+      ],
+      "shade": 4,
+      "expected_cost": 2.7777777777777777,
+      "actual_cost": 2.7777777777777777,
+      "surprise": 0.0,
+      "timestamp": 1746891384.5486774
+    }
+  ]
+}
