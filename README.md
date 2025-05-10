@@ -3,7 +3,7 @@
 **Free Energy Pathfinding Agent** is a desktop playground (built with PyQt 5) that demonstrates a simple agent driven by the *Free‑Energy Principle* (Free Energy). The app lets you watch the agent plan, act, learn, and update its internal model while exploring a grid world. You can step through any number of exploration cycles and view—*in real‑time*—per‑step charts that track the agent’s cost, surprise, and remaining energy. Colored trails and a legend visually tie each cycle’s path to its chart trace.
 
 
-![App example](app-example.png)
+![App example](app-example.jpg)
 
 ---
 
