@@ -1,7 +1,6 @@
 # Free Energy Pathfinding Agent
 
-**Free Energy Pathfinding Agent** is a desktop playground (built with PyQt 5) that demonstrates a simple agent driven by the *Free‑Energy Principle* (Free Energy). The app lets you watch the agent plan, act, learn, and update its internal model while exploring a grid world. You can step through any number of exploration cycles and view—*in real‑time*—per‑step charts that track the agent’s cost, surprise, and remaining energy. Colored trails and a legend visually tie each cycle’s path to its chart trace.
-
+**Free Energy Pathfinding Agent** is a desktop playground (built with PyQt 5) that demonstrates a simple agent driven by the *Free‑Energy Principle* (Free Energy). The app lets you watch the agent plan, act, learn, and update its internal model while exploring a grid world. You can step through any number of exploration cycles and view real-time charts that track the agent’s cost, surprise, and remaining energy.
 
 ![App example](app-example.jpg)
 
@@ -12,8 +11,8 @@
 ### The World
 
 * A `GridWorld` is generated with integer "shades" (0–9) representing terrain cost.
-* Darker cells cost more energy to enter and are thus *riskier*.
-* Every cycle the world “heals” previously visited cells, rewarding re‑exploration.
+* Darker cells cost more energy to enter and are *riskier*.
+* Every cycle the world resets previously visited cells, rewarding re‑exploration.
 
 ### The Agent
 
