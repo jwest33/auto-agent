@@ -32,6 +32,7 @@ class GridWorld:
 
     def reset_cycle(self):
         self._restored_pairs.clear()
+        self.explored.fill(False)
 
     def get_energy_cost(self, x: int, y: int) -> float:
         return value_to_cost(int(self.grid[y, x]))
