@@ -63,16 +63,13 @@ class Plan:
 
 
 class Memory:
-    """Stores per‑cell experiences and per‑cycle summaries with structure‑aware Hopfield keys."""
-
-    # ─────────────────────────── ctor & basic IO ──────────────────────────── #
+    """Stores per-cell experiences and per-cycle summaries with structure-aware Hopfield keys."""
     def __init__(self, key_dim: int = 10, hop_capacity: int = 1024):
         self.plans: List[Plan] = []
         self.cell_records: Dict[str, List[CellExperience]] = {}
         self.cycles: List[CycleSummary] = []
         self.hopfield = HopfieldMemory(key_dim, value_dim=1, capacity=hop_capacity)
 
-    # numpy serialization helpers unchanged …
     _cell_dtype = np.dtype([
         ("x", "i4"), ("y", "i4"), ("shade", "i4"),
         ("expected_cost", "f4"), ("actual_cost", "f4"), ("surprise", "f4"), ("timestamp", "f8")
@@ -119,7 +116,6 @@ class Memory:
         if os.path.exists(CYCLE_PATH):
             self._array_to_cycles(np.load(CYCLE_PATH, allow_pickle=False))
 
-    # ───────────────────────── path‑structure helpers ──────────────────────── #
     @staticmethod
     def _path_shape_features(steps: List[Coord]) -> Tuple[float, float]:
         if not steps:
@@ -140,7 +136,6 @@ class Memory:
         var = sum((v - mean) ** 2 for v in vals) / len(vals)
         return mean, var
 
-    # ───────────────────────── key encoders ──────────────────────────────── #
     @staticmethod
     def _encode_cycle(summary: "CycleSummary", world: GridWorld) -> torch.Tensor:
         steps = summary.steps
@@ -160,7 +155,6 @@ class Memory:
             len(steps), net_disp, eff, neigh_mean, neigh_var, cost, surprise, energy_left, 0.0, 0.0
         ], dtype=torch.float32)
 
-    # ───────────────────────── experience helpers ─────────────────────────── #
     def add_experience(self, exp: CellExperience):
         key = f"{exp.position[0]},{exp.position[1]}"
         self.cell_records.setdefault(key, []).append(exp)
@@ -174,7 +168,6 @@ class Memory:
         recs = self.cell_records.get(f"{coord[0]},{coord[1]}")
         return sum(r.surprise for r in recs) / len(recs) if recs else None
 
-    # ───────────────────────── cycle helpers ─────────────────────────────── #
     def add_cycle(self, summary: CycleSummary, world: GridWorld):
         self.cycles.append(summary)
         self.hopfield.write(self._encode_cycle(summary, world), torch.tensor([summary.reward]))
@@ -183,7 +176,6 @@ class Memory:
     def estimate_reward_from_hopfield(self, steps: List[Coord], cost: float, surprise: float, energy_left: float, world: GridWorld) -> float:
         return self.hopfield(self._encode_partial(steps, cost, surprise, energy_left, world)).item()
 
-    # ───────────────────────── plan persistence ──────────────────────────── #
     def store_plan(self, plan: Plan):
         self.plans.append(plan)
 
