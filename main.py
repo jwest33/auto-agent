@@ -7,7 +7,7 @@ from typing import List, Optional
 import colorsys
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-from agent import Agent, Plan, Memory, euclidean, MEMORY_PATH
+from agent import Agent, Plan, Memory, euclidean, MEMORY_PATH, StepExperience
 from world import GridWorld, WORLD_PATH, BASE_CELL_COST, Coord
 
 import matplotlib.pyplot as plt
@@ -95,35 +95,70 @@ class AgentWindow(QtWidgets.QMainWindow):
         self.trails.clear(); self.step_history.clear(); self.pending = self.spin_cycles.value(); self.run_next_cycle()
 
     def run_next_cycle(self):
+        # 1. Finished?
         if self.pending <= 0:
-            self.save_cycle_history(); return
-        self.trails.append([]); self.step_history.append([])
-        self.world.reset_cycle(); self.agent.start_cycle()
+            self.save_cycle_history()
+            return
+
+        # 2. Prepare UI / agent for a fresh cycle
+        self.trails.append([])            # store coloured segments
+        self.step_history.append([])      # per‑step stats for charts
+        self.world.reset_cycle()
+        self.agent.start_cycle()
         old_explored = self.world.explored.copy()
+
+        # 3. Choose a plan
         self.current_plan = self.agent.choose_plan(self.world)
-        # collect per‑step
+
+        # 4. Wrap Memory.add_experience so we can tap each StepExperience
         orig_add = self.agent.memory.add_experience
-        def wrapped(exp):
+
+        def wrapped(exp: StepExperience):
+            # Forward to the real recorder
             orig_add(exp)
-            self.step_history[-1].append({"expected_cost": exp.expected_cost, "actual_cost": exp.actual_cost, "surprise": exp.surprise, "energy": self.agent.energy})
+
+            # Log data the charts need
+            self.step_history[-1].append(
+                {
+                    "expected_cost": exp.expected_cost,
+                    "actual_cost":   exp.actual_cost,
+                    "surprise":      exp.surprise,
+                    "energy":        self.agent.energy,
+                }
+            )
+
         self.agent.memory.add_experience = wrapped
-        self.agent.execute_plan(self.current_plan, self.world, repaint_cb=self.repaint_and_update_charts)
-        self.agent.memory.add_experience = orig_add  # restore
-        # summary row
+
+        # 5. Execute the plan (updates UI via repaint_cb)
+        self.agent.execute_plan(
+            self.current_plan,
+            self.world,
+            repaint_cb=self.repaint_and_update_charts,
+        )
+
+        # 6. Restore original method
+        self.agent.memory.add_experience = orig_add
+
+        # 7. Summarise the cycle
         self.cycles_run += 1
         new_cells = int((~old_explored & self.world.explored).sum())
-        dist = euclidean(self.agent.origin, self.agent.position)
-        reward = dist + new_cells
+        dist       = euclidean(self.agent.origin, self.agent.position)
+        reward     = dist + new_cells
+
         stats = {
-            "cycle": self.cycles_run,
-            "reward": reward,
-            "cost": self.current_plan.expected_energy_cost,
+            "cycle":    self.cycles_run,
+            "reward":   reward,
+            "cost":     self.current_plan.expected_energy_cost,
             "surprise": self.current_plan.expected_surprise,
-            "energy": self.agent.energy,
+            "energy":   self.agent.energy,
         }
-        self.cycle_history.append(stats); self.add_history_row(stats); self.update_charts()
-        self.pending -= 1; QtCore.QTimer.singleShot(100, self.run_next_cycle)
-        
+        self.cycle_history.append(stats)
+        self.add_history_row(stats)
+        self.update_charts()
+
+        # 8. Queue the next cycle
+        self.pending -= 1
+        QtCore.QTimer.singleShot(100, self.run_next_cycle)
         
     @staticmethod
     def format_trend(delta: float) -> str:

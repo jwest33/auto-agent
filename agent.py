@@ -6,6 +6,7 @@ import random
 import time
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple
+from collections import defaultdict
 
 import numpy as np
 import torch
@@ -18,7 +19,7 @@ from world import BASE_CELL_COST, GridWorld, WORLD_PATH
 Coord = Tuple[int, int]
 MEMORY_PATH = "save/memory.npy"
 CYCLE_PATH = "save/cycles.npy"
-
+ALPHA = 1.0
 
 def euclidean(a: Coord, b: Coord) -> float:
     return math.hypot(a[0] - b[0], a[1] - b[1])
@@ -30,9 +31,7 @@ class CellExperience:
     expected_cost: float
     actual_cost: float
     surprise: float
-    timestamp: float = field(default_factory=time.time)
-
-
+    
 @dataclass
 class CycleSummary:
     reward: float
@@ -40,6 +39,22 @@ class CycleSummary:
     surprise: float
     energy_left: float
     steps: List[Coord]
+    timestamp: float = field(default_factory=time.time)
+    
+@dataclass
+class CellStats:
+    visits: int = 0
+    exp_cost: float = 0.0
+    exp_surprise: float = 0.0
+    exp_reward: float = 0.0
+
+@dataclass
+class StepExperience:
+    position: Coord
+    shade: int
+    expected_cost: float
+    actual_cost: float
+    surprise: float
     timestamp: float = field(default_factory=time.time)
 
 
@@ -69,36 +84,71 @@ class Memory:
         self.cell_records: Dict[str, List[CellExperience]] = {}
         self.cycles: List[CycleSummary] = []
         self.hopfield = HopfieldMemory(key_dim, value_dim=1, capacity=hop_capacity)
-
-    _cell_dtype = np.dtype([
-        ("x", "i4"), ("y", "i4"), ("shade", "i4"),
-        ("expected_cost", "f4"), ("actual_cost", "f4"), ("surprise", "f4"), ("timestamp", "f8")
-    ])
+        
+        self._cells: Dict[Coord, CellStats] = defaultdict(CellStats)
+        self._raw_steps: List[StepExperience] = []
+        
     _cycle_dtype = np.dtype([
         ("reward", "f4"), ("cost", "f4"), ("surprise", "f4"),
         ("energy_left", "f4"), ("timestamp", "f8")
     ])
+    
+    _step_dtype = np.dtype([
+        ("x",            "i4"),
+        ("y",            "i4"),
+        ("shade",        "i4"),
+        ("expected_cost","f4"),
+        ("actual_cost",  "f4"),
+        ("surprise",     "f4"),
+        ("timestamp",    "f8"),
+    ])
 
     def _experiences_to_array(self) -> np.ndarray:
-        rows = []
-        for key, exps in self.cell_records.items():
-            x_str, y_str = key.split(",")
-            x, y = int(x_str), int(y_str)
-            for e in exps:
-                rows.append((x, y, e.shade, e.expected_cost, e.actual_cost, e.surprise, e.timestamp))
-        return np.array(rows, dtype=self._cell_dtype) if rows else np.empty((0,), dtype=self._cell_dtype)
+        rows = [
+            (exp.position[0], exp.position[1], exp.shade,
+             exp.expected_cost, exp.actual_cost,
+             exp.surprise, exp.timestamp)
+            for exp in self._raw_steps
+        ]
+        return (
+            np.array(rows, dtype=self._step_dtype)
+            if rows else np.empty((0,), dtype=self._step_dtype)
+        )
+
+    def _array_to_experiences(self, arr: np.ndarray) -> None:
+        self._raw_steps.clear()
+        for rec in arr:
+            self._raw_steps.append(
+                StepExperience(
+                    position       =(int(rec["x"]), int(rec["y"])),
+                    shade          = int(rec["shade"]),
+                    expected_cost  = float(rec["expected_cost"]),
+                    actual_cost    = float(rec["actual_cost"]),
+                    surprise       = float(rec["surprise"]),
+                    timestamp      = float(rec["timestamp"]),
+                )
+            )
+    
+    def add_step(self, coord: Coord, cost: float, surprise: float):
+        c = self._cells[coord]
+        c.visits += 1
+        c.exp_cost     += (cost     - c.exp_cost)     / c.visits
+        c.exp_surprise += (surprise - c.exp_surprise) / c.visits
+        
+    def add_experience(self, exp: StepExperience) -> None:
+        self._raw_steps.append(exp)
+        # also funnel the data into the running per‑cell stats
+        self.add_step(exp.position, exp.actual_cost, exp.surprise)
+
+    def add_cycle_reward(self, path: list[Coord], reward: float):
+        for coord in set(path):
+            c = self._cells[coord]
+            n = c.visits
+            c.exp_reward += (reward - c.exp_reward) / n
 
     def _cycles_to_array(self) -> np.ndarray:
         rows = [(c.reward, c.cost, c.surprise, c.energy_left, c.timestamp) for c in self.cycles]
         return np.array(rows, dtype=self._cycle_dtype) if rows else np.empty((0,), dtype=self._cycle_dtype)
-
-    def _array_to_experiences(self, arr: np.ndarray):
-        self.cell_records.clear()
-        for rec in arr:
-            coord = (int(rec["x"]), int(rec["y"]))
-            key = f"{coord[0]},{coord[1]}"
-            exp = CellExperience(coord, int(rec["shade"]), float(rec["expected_cost"]), float(rec["actual_cost"]), float(rec["surprise"]), float(rec["timestamp"]))
-            self.cell_records.setdefault(key, []).append(exp)
 
     def _array_to_cycles(self, arr: np.ndarray):
         self.cycles.clear()
@@ -155,18 +205,14 @@ class Memory:
             len(steps), net_disp, eff, neigh_mean, neigh_var, cost, surprise, energy_left, 0.0, 0.0
         ], dtype=torch.float32)
 
-    def add_experience(self, exp: CellExperience):
-        key = f"{exp.position[0]},{exp.position[1]}"
-        self.cell_records.setdefault(key, []).append(exp)
-        self.save_to_file()
-
     def get_expected_cost(self, coord: Coord) -> Optional[float]:
-        recs = self.cell_records.get(f"{coord[0]},{coord[1]}")
-        return sum(r.actual_cost for r in recs) / len(recs) if recs else None
+        return self._cells.get(coord).exp_cost if coord in self._cells else None
 
     def get_expected_surprise(self, coord: Coord) -> Optional[float]:
-        recs = self.cell_records.get(f"{coord[0]},{coord[1]}")
-        return sum(r.surprise for r in recs) / len(recs) if recs else None
+        return self._cells.get(coord).exp_surprise if coord in self._cells else None
+
+    def get_expected_reward(self, coord: Coord) -> Optional[float]:
+        return self._cells.get(coord).exp_reward if coord in self._cells else None
 
     def add_cycle(self, summary: CycleSummary, world: GridWorld):
         self.cycles.append(summary)
@@ -205,6 +251,7 @@ class Agent:
 
     def end_cycle(self, world):
         reward = euclidean(self.origin, self.position) + len(self._cycle_steps)
+        self.memory.add_cycle_reward(self._cycle_steps, reward)
         summary = CycleSummary(reward, self._cycle_cost, self._cycle_surprise, self.energy, self._cycle_steps.copy())
         self.memory.add_cycle(summary,world)
         # reset for next cycle
@@ -223,39 +270,51 @@ class Agent:
         if candidates:
             return max(candidates, key=lambda p: p.expected_reward)
         return self._generate_plan(world)
-    
-    def _choose_weighted_neighbour(self, world: GridWorld, x: int, y: int) -> Coord:
+        
+    def _choose_neighbour(self, world, x, y, visited):
         neighbours = world.get_neighbors(x, y)
-        scored, unknown = [], []
+        best_score = float("inf")
+        best       = []
+
         for nx, ny in neighbours:
-            exp_cost = self.memory.get_expected_cost((nx, ny))
-            exp_surprise = self.memory.get_expected_surprise((nx, ny))
-            if exp_cost is None:
-                unknown.append((nx, ny))
-            else:
-                efe = exp_cost + (exp_surprise or 0.0)
-                scored.append((efe, (nx, ny)))
-        if scored:
-            best_efe = min(efe for efe, _ in scored)
-            best = [coord for efe, coord in scored if math.isclose(efe, best_efe, rel_tol=1e-6)]
-            return random.choice(best) # tie‑break randomly
-        return random.choice(unknown)
+            if (nx, ny) in visited:
+                continue
+
+            # Fall back to immediate model cost if we have no memory yet
+            cost     = self.memory.get_expected_cost((nx, ny))
+            if cost is None:
+                cost = world.get_energy_cost(nx, ny)      # <‑‑ change
+            surprise = self.memory.get_expected_surprise((nx, ny)) or 0.0
+            reward   = self.memory.get_expected_reward((nx, ny))    or 0.0
+
+            efe   = cost + surprise
+            score = efe - ALPHA * reward
+
+            if score < best_score - 1e-9:
+                best_score, best = score, [(nx, ny)]
+            elif math.isclose(score, best_score, rel_tol=1e-6):
+                best.append((nx, ny))
+
+        # If several ties remain, pick one at random
+        return random.choice(best) if best else random.choice(neighbours)
 
     def _generate_plan(self, world: GridWorld) -> Plan:
         steps: List[Coord] = []
         costs: List[Tuple[float, float]] = []  # (cost, surprise)
         x, y = self.position
+        visited = {(x, y)}
         while self.energy - sum(c for c, _ in costs) >= BASE_CELL_COST:
             neighbors = world.get_neighbors(x, y)
             if not neighbors:
                 break
-            nx, ny = self._choose_weighted_neighbour(world, x, y)
+            nx, ny = self._choose_neighbour(world, x, y, visited)
             model_cost = world.get_energy_cost(nx, ny)
             exp_cost = self.memory.get_expected_cost((nx, ny)) or model_cost
             exp_surp = self.memory.get_expected_surprise((nx, ny)) or 0.0
             if sum(c for c, _ in costs) + exp_cost > self.energy:
                 break
             steps.append((nx, ny))
+            visited.add((nx, ny))
             costs.append((exp_cost, exp_surp))
             x, y = nx, ny
         plan = Plan(steps)
@@ -273,10 +332,16 @@ class Agent:
                     self.energy = self.max_energy
                 else:
                     self.energy -= cost
-                # record experience
-                self.memory.add_experience(CellExperience((x, y), int(world.grid[y, x]), exp_cost, actual_cost, surprise))
                 # cycle accumulators
                 self.record_step((x, y), cost, surprise)
+                exp = StepExperience(
+                    position      = (x, y),
+                    shade         = int(world.grid[y, x]),
+                    expected_cost = exp_cost,
+                    actual_cost   = actual_cost,
+                    surprise      = surprise,
+                )
+                self.memory.add_experience(exp)   # <- this now activates the GUI wrapper
                 # move agent
                 self._prev_pos = self.position
                 self.position = (x, y)
