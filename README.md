@@ -1,67 +1,93 @@
-# Free Energy Pathfinding Agent
+# Hop to it! Hopfield Free‑Energy Pathfinder
 
-**Free Energy Pathfinding Agent** is a desktop playground (built with PyQt 5) that demonstrates a simple agent driven by the *Free‑Energy Principle* (Free Energy). The app lets you watch the agent plan, act, learn, and update its internal model while exploring a grid world. You can step through any number of exploration cycles and view real-time charts that track the agent’s cost, surprise, and remaining energy.
+**Hopfield Free‑Energy Pathfinder** is an interactive desktop playground (PyQt 5) where a single agent explores a procedurally generated grid world by minimising *Expected Free Energy (EFE)*. Watch the agent learn the environment, form plans, and refine a Hopfield associative memory — all visualised in real time.
 
 ![App example](app-example.jpg)
 
 ---
 
-## Conceptual Overview
+## Quick Start
 
-### The World
-
-* A `GridWorld` is generated with integer "shades" (0–9) representing terrain cost.
-* Darker cells cost more energy to enter and are *riskier*.
-* Every cycle the world resets previously visited cells, rewarding re‑exploration.
-
-### The Agent
-
-| Component            | Purpose                                                                                                         |
-| -------------------- | --------------------------------------------------------------------------------------------------------------- |
-| **Perception**       | Reads cell shade and energy feedback on every step.                                                             |
-| **Internal Model**   | Encodes empirical priors on *expected* cost and surprise for each shade.                                        |
-| **Memory**           | Logs a `CellExperience` (position ✓, shade, *expected* cost, *actual* cost, surprise, timestamp) on every move. |
-| **Planner**          | Samples candidate paths, computes *expected free energy* for each, and selects the lowest‑EFE plan.             |
-| **Policy Execution** | Follows the chosen plan until energy is exhausted or home is reached.                                           |
-
-### Free‑Energy Principle (Free Energy)
-
-The agent tries to **minimise its (expected) surprise** under an implicit generative model of the world.  In practice, the planner searches paths that trade off:
-
-```
-EFE  =  expected_cost   +   expected_surprise
-      (energy budget)     (model prediction error)
+```bash
+python -m venv venv && source venv/bin/activate
+pip install -r requirements.txt
+python main.py
 ```
 
-* **Expected Cost** ≈ energy the agent predicts it will spend on the path.
-* **Expected Surprise** ≈ discrepancy the agent *expects* between model‑predicted shade costs and true shade costs along the path.
-
-The chosen path therefore advances the frontier while keeping the agent in familiar, affordable terrain.
+| Requirement | Tested Version |
+| ----------- | -------------- |
+| PyQt5       |  5.15          |
+| torch       |  2.2           |
+| numpy       |  1.26          |
+| matplotlib  |  3.9           |
 
 ---
 
-### Controls
+## What You See
 
-| UI Element         | Action                                           |
-| ------------------ | ------------------------------------------------ |
-| **Cycles** spinner | Number of full explore‑return cycles to run.     |
-| **Run Cycles**     | Execute `n` cycles (chart updates in real time). |
-| **Rebuild World**  | Generate a brand‑new grid world (clears charts). |
-| **Reset Memory**   | Wipe the agent’s memory (keeps current world).   |
+| Pane / Widget        | Description                                                                                             |
+| -------------------- | ------------------------------------------------------------------------------------------------------- |
+| **World View**       | 5×‑scaled grid (default 150 × 150). Cell shade 0–9 → entry cost 1–5. Trails are colour‑coded per cycle. |
+| **Controls**         | *Cycles* spinner, **Run Cycles**, **Rebuild World**, **Reset Memory**.                                  |
+| **Cycle History**    | Table of *reward*, *cost*, *surprise*, *energy* for every completed cycle.                              |
+| **Analytics Charts** | Live Matplotlib plots: *Expected Cost*, *Surprise*, *Energy Left* per step.                             |
+
+A single click on **Run Cycles** steps the agent through *n* explore‑return cycles, updating the world‑view and charts as each move is taken.
 
 ---
 
-## Visual Analytics
+## How It Works
 
-| Chart             | What it shows                                     |
-| ----------------- | ------------------------------------------------- |
-| **Expected Cost** | Per‑step energy predicted before taking the step. |
-| **Surprise**      | Per‑step prediction error ( expected − actual).   |
-| **Energy Left**   | Agent’s remaining energy as the plan executes.    |
+### 1. GridWorld (`world.py`)
 
-* Each cycle is drawn with a unique hue in **both the grid trail and the charts**, making it easy to correlate behaviour and metrics.
-* Lines grow point‑by‑point thanks to the wrapped `Memory.add_experience` callback, which appends metrics and triggers a redraw on every step.
+* **Shades 0–9** map linearly to an energy cost of **1 – 5 units**.
+* Moving from shade \* a -> b\* restores full energy **once per unique divisible pair** (*b % a == 0*).
+* The grid is persisted to `save/world.npy`; delete it (or click **Rebuild World**) to generate a new world.
+
+### 2. Agent (`agent.py`)
+
+| Module           | Role                                                                                                     |
+| ---------------- | -------------------------------------------------------------------------------------------------------- |
+| `Memory`         | Stores `CellExperience` & `CycleSummary`, serialised to `.npy`.                                          |
+| `HopfieldMemory` | Fixed‑capacity, dot‑product associative memory predicting **future reward** from partial trajectories.   |
+| Planner          | Retrieves *cached* plans that still fit current energy or synthesises a new plan via random‑greedy walk. |
+| Executor         | Follows the plan, logs experiences, updates energy, and paints the UI.                                   |
+
+> **Expected Free Energy**
+> *EFE = expected\_cost + expected\_surprise*
+> The planner favours paths that balance energy consumption with epistemic gain.
+
+### 3. GUI (`main.py`)
+
+PyQt 5 + Matplotlib embed provide:
+
+* Timed repaint every 200 ms for animation.
+* Live chart updates via a wrapped `Memory.add_experience` callback.
+* Persistent `cycle_history.json` analytics.
+
+---
+
+## Data & Persistence
+
+| File / Dir                | Purpose                          |
+| ------------------------- | -------------------------------- |
+| `save/world.npy`          | Current grid world.              |
+| `save/memory.npy`         | Per‑cell experiences.            |
+| `save/cycles.npy`         | Cycle summaries (Hopfield keys). |
+| `save/cycle_history.json` | GUI table cache.                 |
+
+---
+
+## Configuration
+
+| Env Var / Arg | Default | Meaning                            |
+| ------------- | ------- | ---------------------------------- |
+| `GRID_SIZE`   |  150    | Width = Height (square world).     |
+| `WORLD_SEED`  | random  | RNG seed for deterministic worlds. |
+| `MAX_ENERGY`  |  100    | Agent’s starting energy per cycle. |
+
+---
 
 ## License
 
-This project is released under the MIT License. See [LICENSE](LICENSE) for details.
+MIT © jwest33. See [`LICENSE`](LICENSE) for details.

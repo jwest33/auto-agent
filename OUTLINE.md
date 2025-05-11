@@ -1,4 +1,4 @@
-## **Agent Process Outline (with Cell-Level Surprise Association) ([FEP-Inspired](https://en.wikipedia.org/wiki/Free_energy_principle))**
+## **Agent Process Outline (with Cell-Level Surprise Association) ([Free Energy-Inspired](https://en.wikipedia.org/wiki/Free_energy_principle))**
 
 ### **Steps**
 

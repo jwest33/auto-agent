@@ -1,0 +1,4 @@
+PyQt5==5.15
+torch==2.2
+numpy==1.26
+matplotlib==3.9
