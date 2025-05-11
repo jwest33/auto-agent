@@ -1,222 +1,130 @@
-## **Agent Process Outline (with Cell-Level Surprise Association) ([Free Energy-Inspired](https://en.wikipedia.org/wiki/Free_energy_principle))**
+## Cognitive Architecture Outline
 
-### **Steps**
+Simulates a **planning and learning system** inspired by memory-based cognition. It operates in cycles, using past experiences and predictions to guide exploration in a grid-based world. The core loop includes **planning, executing, learning, and updating** behaviors.
 
-#### **1\. Perceive Environment**
+---
 
-* Observe grid cells in the local vicinity (vision radius or full map).
+## 1. **Memory System (Learning from Experience)**
 
-* Observe agent’s current position, internal energy level, and cell energy cost.
+The agent maintains a `Memory` object, which includes:
 
-* Encode this into a belief state: a structured representation of internal and external variables for planning.
+### 🔹 **Step-Based Memory**
 
+* **StepExperience** records:
 
-### **2\. Infer Current Needs and Goals**
+  * `position`, `shade`, `expected_cost`, `actual_cost`, `surprise`, `timestamp`
+* Stored as raw experiences in a list for temporal tracking and statistical learning.
 
-* Compare expected internal energy state with current energy.
+### 🔹 **Cell-Based Memory**
 
-* If energy is full and the agent is at home, set the goal to **“explore further from origin”**.
+* Tracks per-cell stats using a dictionary of `CellStats`:
 
-* If energy is low, goal is automatically **fulfilled** (exploration ends).
+  * Running averages for cost, surprise, and reward.
+  * Updated using **online learning** (incremental updates per visit).
 
-* Goal is defined dynamically: **maximize Euclidean distance from origin before depletion**.
+### 🔹 **Cycle Summaries**
 
-#### **3\. Retrieve and Evaluate Candidate Policies**
+* After each exploration cycle, a `CycleSummary` is saved:
 
-* Retrieve prior plans based on full paths or **regionally overlapping sub-paths**.
+  * Total `reward`, `cost`, `surprise`, `energy_left`, and path `steps`.
+* Summaries are encoded and saved into a **HopfieldMemory** (vector-based key-value store) to guide future predictions.
 
-* Score plans by:
+---
 
-  * **total\_expected\_surprise \= sum(cell.expected\_surprise for cell in plan.steps)**
+## 2. **Planning (Imagining Future Paths)**
 
-  * **expected\_energy\_cost \= sum(cell.expected\_energy\_cost for cell in plan.steps)**
+### 🔹 **Plan Generation**
 
-  * **expected\_reward \= distance\_from\_origin \- total\_expected\_surprise**
+* If no prior plans exist, the agent generates one using:
 
-#### **4\. Plan Generation or Adaptation**
+  * A **greedy neighbor selection** process that balances:
 
-* Newly generated plans should estimate cell-wise surprise using memory.
+    * **Expected Free Energy (EFE)**: `cost + surprise - α * reward`
+  * Iteratively extends a plan until energy budget is exceeded.
 
-* Each step in the path includes:
+### 🔹 **Plan Retrieval**
 
-  * (x, y) coordinates
+* Retrieves viable plans (stored in memory) that:
 
-  * expected\_energy\_cost
+  * Begin at the current position.
+  * Cost less than or equal to current energy.
+* Selected based on highest **expected reward**.
 
-  * expected\_surprise\_at\_cell (looked up from memory or estimated as 0 if novel)
+### 🔹 **Plan Metrics**
 
-\`\`\`
+* Plans include cached expectations of:
 
-`plan.expected_energy_cost = sum(cell.expected_energy_cost for cell in plan.steps)`
+  * **Energy cost**, **surprise**, and **reward** (distance + novelty).
+* Metrics are recalculated using memory lookups and Euclidean distance.
 
-`plan.expected_surprise = sum(cell.expected_surprise_at_cell for cell in plan.steps)`
+---
 
-`plan.expected_reward = plan.distance_from_origin - plan.expected_surprise`
+## 3. **Execution (Acting in the World)**
 
-\`\`\`
+### 🔹 **Stepwise Execution**
 
-#### **5\. Execute Plan with Continuous Inference**
+* Executes each plan step-by-step:
 
-At each step:
+  * Transitions via `world.transition()` to determine actual cost and detect "restores".
+  * Computes **surprise** as `|expected_cost - actual_cost|`.
+  * Reduces energy or restores it under special conditions.
 
-* Deduct energy based on actual cell cost:
+### 🔹 **Experience Logging**
 
-  `agent.energy -= actual_cost`  
-* Track:
+* Each step appends a `StepExperience` to memory.
+* These are used to:
 
-  * `cell.observed_cost = actual_cost`
+  * Update per-cell statistics.
+  * Accumulate data for real-time visual analytics.
 
-  * `cell.surprise = abs(expected_cost - actual_cost)`
+---
 
-* Log each cell visit in an **experience buffer** for memory updates.
+## 4. **Learning and Adaptation**
 
-Interrupt execution if:
+### 🔹 **Cycle Finalization**
 
-* Agent's energy depletes
+* At cycle end:
 
-#### **6\. Post-Execution Evaluation**
+  * Computes final **reward** as `distance from origin + step count`.
+  * Stores a `CycleSummary` in both raw history and HopfieldMemory.
+  * Rewards per cell on the path are backpropagated to memory.
+  * Memory is serialized to file.
 
-* Teleport home.
+### 🔹 **Hopfield Memory Use**
 
-* Aggregate:
+* HopfieldMemory is a fixed-capacity, dot-product-based **associative memory**.
+* Used to **predict reward of new partial plans** by querying it with encoded path features (length, efficiency, neighbor stats, etc.).
 
-  * `actual_path_cost = sum(actual_costs)`
+---
 
-  * `total_surprise = sum(cell.surprise for cell in path)`
+## 5. **Motivation and Strategy**
 
-  * `reward = distance_from_origin - total_surprise`
-
-#### **7\. Memory Update**
-
-#### **For each visited cell:**
-
-* Store:
-
-  * `(x, y)`
-
-  * `shade`
-
-  * `expected_cost`
-
-  * `actual_cost`
-
-  * `surprise`
-
-  #### **For the plan:**
-
-* Store:
-
-  * Path steps
-
-  * Total surprise
-
-  * Context (start state, energy level)
-
-  #### **Update:**
-
-* `Cell Surprise Map`: for future per-cell surprise estimates.
-
-* `Cell Cost Map`: smoothed terrain expectations (average cost).
-
-* `Memory DB`: for plan recall and regional learning.
-
-#### **8\. Core Modules and Components**
-
-### **`Agent` Class**
-
-* `origin` (x, y)
-
-* `energy`
-
-* `max_energy`
-
-* `position`
-
-* `teleport_home()`
-
-* `calculate_distance_reward()`
-
-### **`GridWorld` Class**
-
-Represents the environment.
-
-**Attributes**:
-
-* `grid`: 2D matrix of cells  
-* Each `cell` includes:  
-  * `shade` (0–255)  
-  * `energy_cost`  
-  * `explored` (bool)
-
-**Methods**:
-
-* `get_neighbors(x, y)`  
-* `render(agent_position)`  
-* `calculate_path_cost(path)`  
-  `get_shade(x, y)`  
-* `get_energy_cost(x, y)`  
-* `set_observed_cost(x, y, cost)`
-
-  ### **`Plan` Class**
-
-Stores:
-
-* `steps`: list of (x, y) coordinates
-
-* `expected_energy_cost`
-
-* `expected_surprise`
-
-* `expected_reward` (distance from origin)
-
-
-  ### **`Memory` Class**
-
-  #### **Plan Memory:**
-
-* `plans: List[Plan]`
-
-  #### **Cell Memory:**
-
-* `cell_records: Dict[(x, y), List[CellExperience]]`
-
-
-  #### **`CellExperience` object:**
-
-* `position: (x, y)`
-
-* `shade: int`
-
-* `expected_cost: float`
-
-* `actual_cost: float`
-
-* `surprise: float`
-
-* `timestamp` or `visit_count` (optional for smoothing)
-
-## **GUI Integration Plan (PyQt)**
-
-Will visualize:
-
-* Grid view (grayscale) with agent position
-
-* Step-wise plan animation
-
-* Energy bar
-
-* Cell surprise overlay / heatmap
-
-* Memory viewer (plans \+ cell stats)
-
-* Summary of distance, reward, surprise
-
-## **Data Structures**
-
-* `World grid`: 2D NumPy array or list-of-lists
-
-* `Agent state`: `position`, `energy`, `memory`
-
-* `Memory DB`: TinyDB, JSON, or in-memory dict
-
-* `Plans`: stored with context hash and cell annotations
+### 🔹 **Exploration vs. Exploitation**
+
+* Balances known rewards and surprises to explore intelligently.
+* Prefers novel but promising directions by penalizing EFE and incentivizing potential rewards.
+
+### 🔹 **Energy-Constrained Navigation**
+
+* All planning and movement are constrained by a finite energy budget.
+* Encourages strategic, efficient movement.
+
+---
+
+## Summary Diagram
+
+```
+[CYCLE START]
+     ↓
+[PLAN RETRIEVAL or GENERATION]
+     ↓
+[EXECUTE PLAN STEP BY STEP]
+     ↓
+[LOG EXPERIENCE & UPDATE MEMORY]
+     ↓
+[CYCLE SUMMARY → HopfieldMemory]
+     ↓
+[CYCLE END → Reset]
+     ↓
+[REPEAT]
+```
