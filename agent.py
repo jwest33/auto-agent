@@ -317,13 +317,11 @@ class Agent:
         goal = (world.width - 1, world.height - 1)
 
         while self.energy >= BASE_CELL_COST:
-            # Need a (re)plan?
             if not plan.steps:
                 plan = self.choose_plan(world)
-                if not plan.steps:        # nothing feasible – finish the cycle
+                if not plan.steps:
                     break
 
-            # ――― pull the next step off the front ―――
             x, y = plan.steps.pop(0)
             exp_cost, _ = plan._cached_costs_surprises.pop(0)
 
@@ -354,6 +352,6 @@ class Agent:
                 repaint_cb(); QtWidgets.QApplication.processEvents()
 
             if self.energy < BASE_CELL_COST:
-                break        # out of juice – cycle ends here
+                break
 
         self.end_cycle(world)
