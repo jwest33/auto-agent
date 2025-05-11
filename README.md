@@ -23,20 +23,7 @@ python main.py
 
 ---
 
-## What You See
-
-| Pane / Widget        | Description                                                                                             |
-| -------------------- | ------------------------------------------------------------------------------------------------------- |
-| **World View**       | 5×‑scaled grid (default 150 × 150). Cell shade 0–9 → entry cost 1–5. Trails are colour‑coded per cycle. |
-| **Controls**         | *Cycles* spinner, **Run Cycles**, **Rebuild World**, **Reset Memory**.                                  |
-| **Cycle History**    | Table of *reward*, *cost*, *surprise*, *energy* for every completed cycle.                              |
-| **Analytics Charts** | Live Matplotlib plots: *Expected Cost*, *Surprise*, *Energy Left* per step.                             |
-
-A single click on **Run Cycles** steps the agent through *n* explore‑return cycles, updating the world‑view and charts as each move is taken.
-
----
-
-## How It Works
+## Overview
 
 ### 1. GridWorld (`world.py`)
 
@@ -46,12 +33,12 @@ A single click on **Run Cycles** steps the agent through *n* explore‑return c
 
 ### 2. Agent (`agent.py`)
 
-| Module           | Role                                                                                                     |
-| ---------------- | -------------------------------------------------------------------------------------------------------- |
-| `Memory`         | Stores `CellExperience` & `CycleSummary`, serialised to `.npy`.                                          |
-| `HopfieldMemory` | Fixed‑capacity, dot‑product associative memory predicting **future reward** from partial trajectories.   |
-| Planner          | Retrieves *cached* plans that still fit current energy or synthesises a new plan via random‑greedy walk. |
-| Executor         | Follows the plan, logs experiences, updates energy, and paints the UI.                                   |
+| Module           | Role                                                                                                                  |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------|
+| `Memory`         | Stores `CellExperience` & `CycleSummary`, serialised to `.npy`.                                                       |
+| `HopfieldMemory` | Fixed‑capacity, dot‑product associative memory predicting **future reward** from partial trajectories.                |
+| Planner          | Retrieves *cached* plans that still fit current energy or synthesises a new plan via EFE‑weighted greedy exploration. |
+| Executor         | Follows the plan, logs experiences, updates energy, and paints the UI.                                                |
 
 > **Expected Free Energy**
 > *EFE = expected\_cost + expected\_surprise*

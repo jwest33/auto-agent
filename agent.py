@@ -223,6 +223,23 @@ class Agent:
         if candidates:
             return max(candidates, key=lambda p: p.expected_reward)
         return self._generate_plan(world)
+    
+    def _choose_weighted_neighbour(self, world: GridWorld, x: int, y: int) -> Coord:
+        neighbours = world.get_neighbors(x, y)
+        scored, unknown = [], []
+        for nx, ny in neighbours:
+            exp_cost = self.memory.get_expected_cost((nx, ny))
+            exp_surprise = self.memory.get_expected_surprise((nx, ny))
+            if exp_cost is None:
+                unknown.append((nx, ny))
+            else:
+                efe = exp_cost + (exp_surprise or 0.0)
+                scored.append((efe, (nx, ny)))
+        if scored:
+            best_efe = min(efe for efe, _ in scored)
+            best = [coord for efe, coord in scored if math.isclose(efe, best_efe, rel_tol=1e-6)]
+            return random.choice(best) # tie‑break randomly
+        return random.choice(unknown)
 
     def _generate_plan(self, world: GridWorld) -> Plan:
         steps: List[Coord] = []
@@ -232,7 +249,7 @@ class Agent:
             neighbors = world.get_neighbors(x, y)
             if not neighbors:
                 break
-            nx, ny = random.choice(neighbors)
+            nx, ny = self._choose_weighted_neighbour(world, x, y)
             model_cost = world.get_energy_cost(nx, ny)
             exp_cost = self.memory.get_expected_cost((nx, ny)) or model_cost
             exp_surp = self.memory.get_expected_surprise((nx, ny)) or 0.0
