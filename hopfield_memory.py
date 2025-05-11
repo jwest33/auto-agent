@@ -2,8 +2,7 @@ from __future__ import annotations
 
 import math
 import torch
-from torch import nn  # still inherit from nn.Module
-
+from torch import nn
 
 class HopfieldMemory(nn.Module):
     """A fixed-capacity dot-product associative memory.
@@ -14,13 +13,12 @@ class HopfieldMemory(nn.Module):
         self.capacity = capacity
         self.key_dim = key_dim
         self.value_dim = value_dim
-        # non-trainable memory banks (buffers → saved on `state_dict`)
+        # non-trainable memory banks
         self.register_buffer("keys", torch.zeros(capacity, key_dim))
         self.register_buffer("values", torch.zeros(capacity, value_dim))
         self.item_count: int = 0
         self.scale = math.sqrt(float(key_dim))
 
-    # ───────────────────────── Write ───────────────────────── #
     @torch.no_grad()
     def write(self, key: torch.Tensor, value: torch.Tensor):
         assert key.shape[-1] == self.key_dim, "Key dimension mismatch"
@@ -30,8 +28,8 @@ class HopfieldMemory(nn.Module):
         self.values[idx] = value
         self.item_count += 1
 
-    # ───────────────────────── Read ────────────────────────── #
-    def forward(self, query: torch.Tensor) -> torch.Tensor:  # noqa: D401
+
+    def forward(self, query: torch.Tensor) -> torch.Tensor:
         """Associatively retrieve a value for query (shape: (key_dim,))."""
         if self.item_count == 0:
             return torch.zeros(self.value_dim, device=query.device)

@@ -101,8 +101,8 @@ class AgentWindow(QtWidgets.QMainWindow):
             return
 
         # 2. Prepare UI / agent for a fresh cycle
-        self.trails.append([])            # store coloured segments
-        self.step_history.append([])      # per‑step stats for charts
+        self.trails.append([])
+        self.step_history.append([])
         self.world.reset_cycle()
         self.agent.start_cycle()
         old_explored = self.world.explored.copy()

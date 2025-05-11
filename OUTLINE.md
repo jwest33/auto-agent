@@ -63,11 +63,12 @@ The agent maintains a `Memory` object, which includes:
 
 ### 🔹 **Stepwise Execution**
 
-* Executes each plan step-by-step:
+* Executes each plan step‑by‑step, **popping** the current step off the front of the plan so finished plans are never replayed:
 
   * Transitions via `world.transition()` to determine actual cost and detect "restores".
   * Computes **surprise** as `|expected_cost - actual_cost|`.
   * Reduces energy or restores it under special conditions.
+  * Resets `_prev_pos` at the start of every cycle to keep cost accounting consistent.
 
 ### 🔹 **Experience Logging**
 

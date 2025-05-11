@@ -28,17 +28,17 @@ python main.py
 ### 1. GridWorld (`world.py`)
 
 * **Shades 0–9** map linearly to an energy cost of **1 – 5 units**.
-* Moving from shade \* a -> b\* restores full energy **once per unique divisible pair** (*b % a == 0*).
+* Moving from shade *a → b* restores full energy **once per unique divisible pair** (*b % a == 0*).
 * The grid is persisted to `save/world.npy`; delete it (or click **Rebuild World**) to generate a new world.
 
 ### 2. Agent (`agent.py`)
 
-| Module           | Role                                                                                                                  |
-| ---------------- | ----------------------------------------------------------------------------------------------------------------------|
-| `Memory`         | Stores `CellExperience` & `CycleSummary`, serialised to `.npy`.                                                       |
-| `HopfieldMemory` | Fixed‑capacity, dot‑product associative memory predicting **future reward** from partial trajectories.                |
-| Planner          | Retrieves *cached* plans that still fit current energy or synthesises a new plan via EFE‑weighted greedy exploration. |
-| Executor         | Follows the plan, logs experiences, updates energy, and paints the UI.                                                |
+| Module           | Role                                                                                                                             |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `Memory`         | Stores `CellExperience` & `CycleSummary`, serialised to `.npy`.                                                                  |
+| `HopfieldMemory` | Fixed‑capacity, dot‑product associative memory predicting **future reward** from partial trajectories.                           |
+| Planner          | Retrieves *cached* plans that still fit current energy or synthesises a new plan via EFE‑weighted greedy exploration.            |
+| Executor         | Consumes plan steps as it moves (no replay), resets `_prev_pos` each cycle, logs experiences, updates energy, and paints the UI. |
 
 > **Expected Free Energy**
 > *EFE = expected\_cost + expected\_surprise*
