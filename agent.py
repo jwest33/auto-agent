@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-"""Agent module – complete behavioural rewrite (2025‑05‑11).
+"""Agent module – complete behavioural rewrite (2025-05-11).
 
 This version *keeps* the public interface that **main.py** expects (notably
 `Memory.add_experience`) while implementing the new memory/decision logic that
-uses a Modern‑Hopfield network per the user specification.
+uses a Modern-Hopfield network per the user specification.
 """
 
 import math
@@ -25,7 +25,7 @@ from world import BASE_CELL_COST, GridWorld
 Coord = Tuple[int, int]
 MEMORY_PATH = "save/memory.npy"
 CYCLE_PATH = "save/cycles.npy"
-ALPHA = 1.0 # reward‑vs‑cost weight
+ALPHA = 1.0 # reward-vs-cost weight
 CELL_KEY_DIM = 10 # length of encoded cell vectors
 CELL_CAPACITY = 4096 # hopfield slots for cell memories
 
@@ -85,10 +85,10 @@ class Plan:
         last = self.steps[-1] if self.steps else origin
         self.expected_reward = euclidean(origin, last) + unseen
         if self.backtrack:
-            self.expected_reward *= 0.8  # mildly de‑prioritise back‑tracks
+            self.expected_reward *= 0.8  # mildly de-prioritise back-tracks
 
 class Memory:
-    """Two‑tier memory (per‑cell & per‑cycle) plus planning store."""
+    """Two-tier memory (per-cell & per-cycle) plus planning store."""
 
     _cycle_dtype = np.dtype([
         ("reward", "f4"), ("cost", "f4"), ("surprise", "f4"),
@@ -102,9 +102,9 @@ class Memory:
     ])
 
     def __init__(self, key_dim: int = 10, hop_capacity: int = 1024):
-        # cycle‑level hopfield for reward prediction (legacy)
+        # cycle-level hopfield for reward prediction (legacy)
         self.cycle_hopfield = HopfieldMemory(key_dim, value_dim=1, capacity=hop_capacity)
-        # per‑cell hopfield for cost prediction
+        # per-cell hopfield for cost prediction
         self.cell_hopfield = HopfieldMemory(CELL_KEY_DIM, value_dim=1, capacity=CELL_CAPACITY)
 
         self.plans: List[Plan] = []
@@ -161,11 +161,11 @@ class Memory:
         if os.path.exists(CYCLE_PATH):
             self._array_to_cycles(np.load(CYCLE_PATH, allow_pickle=False))
 
-    # per‑cell hopfield helpers
+    # per-cell hopfield helpers
 
     @staticmethod
     def _encode_cell(origin: Coord, goal: Coord, self_pos: Coord, cell: Coord, shade: int) -> torch.Tensor:
-        """10‑d feature vector: 3 direction vectors (origin, goal, self) + shade."""
+        """10-d feature vector: 3 direction vectors (origin, goal, self) + shade."""
         dox, doy = norm_vec(origin[0] - cell[0], origin[1] - cell[1])
         dgx, dgy = norm_vec(goal[0] - cell[0], goal[1] - cell[1])
         dsx, dsy = norm_vec(cell[0] - self_pos[0], cell[1] - self_pos[1])
@@ -236,9 +236,21 @@ class Agent:
         self._cycle_surprise += surprise
 
     def end_cycle(self, world: GridWorld):
-        reward = euclidean(self.origin, self.position) + len(self._cycle_steps)
-        summary = CycleSummary(reward, self._cycle_cost, self._cycle_surprise, self.energy, self._cycle_steps.copy())
+        # compute straight‑line distance from origin to *final* position
+        dist        = euclidean(self.origin, self.position)           # raw displacement
+        max_dist    = math.hypot(world.width - 1, world.height - 1)   # grid diagonal
+        norm_dist   = dist / max_dist if max_dist else 0.0            # ∈ [0, 1]
+        reward = norm_dist
+
+        summary = CycleSummary(
+            reward,
+            self._cycle_cost,
+            self._cycle_surprise,
+            self.energy,
+            self._cycle_steps.copy()
+        )
         self.memory.add_cycle(summary, world)
+
         self.teleport_home()
         self.energy = self.max_energy
         self.start_cycle()

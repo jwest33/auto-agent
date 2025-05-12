@@ -226,6 +226,5 @@ class AgentWindow(QtWidgets.QMainWindow):
 def main():
     app = QtWidgets.QApplication(sys.argv); win = AgentWindow(grid_size=DEFAULT_SIZE, seed=DEFAULT_SEED); win.show(); sys.exit(app.exec_())
 
-
 if __name__ == "__main__":
     main()

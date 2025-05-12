@@ -14,67 +14,66 @@ pip install -r requirements.txt
 python main.py
 ```
 
-| Requirement | Tested Version |
-| ----------- | -------------- |
-| PyQt5       |  5.15          |
-| torch       |  2.2           |
-| numpy       |  1.26          |
-| matplotlib  |  3.9           |
+| Library    | Tested ver. |
+| ---------- | ----------- |
+| PyQt5      |  5.15       |
+| torch      |  2.2        |
+| numpy      |  1.26       |
+| matplotlib |  3.9        |
 
 ---
 
-## Overview
+## How It Works
 
-### 1. GridWorld (`world.py`)
+1. **GridWorld** assigns an energy cost (1‑5 u) to every cell. Moving between shades that divide evenly grants a **one‑time full‑energy restore**.
 
-* **Shades 0–9** map linearly to an energy cost of **1 – 5 units**.
-* Moving from shade *a → b* restores full energy **once per unique divisible pair** (*b % a == 0*).
-* The grid is persisted to `save/world.npy`; delete it (or click **Rebuild World**) to generate a new world.
+2. The **Agent** keeps two Hopfield memories: a per‑cell *cost* predictor and a per‑cycle *reward* predictor, plus tabular stats.
 
-### 2. Agent (`agent.py`)
+3. A greedy **Planner** expands candidate paths, scoring neighbours with
 
-| Module           | Role                                                                                                                             |
-| ---------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `Memory`         | Stores `CellExperience` & `CycleSummary`, serialised to `.npy`.                                                                  |
-| `HopfieldMemory` | Fixed‑capacity, dot‑product associative memory predicting **future reward** from partial trajectories.                           |
-| Planner          | Retrieves *cached* plans that still fit current energy or synthesises a new plan via EFE‑weighted greedy exploration.            |
-| Executor         | Consumes plan steps as it moves (no replay), resets `_prev_pos` each cycle, logs experiences, updates energy, and paints the UI. |
+   `score = (cost + surprise) − α·reward − 0.01·distance_to_goal`.
+   Alternative neighbours become one‑step “back‑track probes” to seed future re‑use.
 
-> **Expected Free Energy**
-> *EFE = expected\_cost + expected\_surprise*
-> The planner favours paths that balance energy consumption with epistemic gain.
+4. The **Executor** walks the chosen plan step‑by‑step. Actual cost, surprise, and energy are logged; the GUI repaints in real time.
 
-### 3. GUI (`main.py`)
+5. At cycle end the agent computes a reward proportional to **final distance scaled by efficiency** vs similar past cycles, writes a `CycleSummary`, and resets.
 
-PyQt 5 + Matplotlib embed provide:
-
-* Timed repaint every 200 ms for animation.
-* Live chart updates via a wrapped `Memory.add_experience` callback.
-* Persistent `cycle_history.json` analytics.
+All data are persisted so learning continues across sessions.
 
 ---
 
-## Data & Persistence
+## User Interface
 
-| File / Dir                | Purpose                          |
-| ------------------------- | -------------------------------- |
-| `save/world.npy`          | Current grid world.              |
-| `save/memory.npy`         | Per‑cell experiences.            |
-| `save/cycles.npy`         | Cycle summaries (Hopfield keys). |
-| `save/cycle_history.json` | GUI table cache.                 |
+| Control                               | Action                                                |
+| ------------------------------------- | ----------------------------------------------------- |
+| **Cycles:** spin box + **Run Cycles** | Run *n* full exploration cycles with live animation   |
+| **Rebuild World**                     | Delete the saved grid and generate a new random world |
+| **Reset Memory**                      | Wipe all experience, Hopfield memories, and analytics |
+
+Right‑hand panels show a sortable history table and three time‑series charts:
+
+* **Expected Cost per Step** (planner estimate)
+* **Surprise per Step** (`|expected − actual cost|`)
+* **Energy Left per Step**
 
 ---
 
 ## Configuration
 
-| Env Var / Arg | Default | Meaning                            |
-| ------------- | ------- | ---------------------------------- |
-| `GRID_SIZE`   |  150    | Width = Height (square world).     |
-| `WORLD_SEED`  | random  | RNG seed for deterministic worlds. |
-| `MAX_ENERGY`  |  100    | Agent’s starting energy per cycle. |
+You can override defaults with environment variables or CLI args (see `main.py`):
+
+| Name         | Default  | Meaning                                 |
+| ------------ | -------- | --------------------------------------- |
+| `GRID_SIZE`  |  150     | Width = height of the square world      |
+| `WORLD_SEED` | *random* | Seed for deterministic world generation |
+| `MAX_ENERGY` |  100     | Starting energy per cycle               |
 
 ---
 
+## Next Up
+
+- Multi-cycle plan quantization with Q scaling.
+
 ## License
 
-MIT © jwest33. See [`LICENSE`](LICENSE) for details.
+MIT © jwest33
