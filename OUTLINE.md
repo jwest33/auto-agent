@@ -26,8 +26,6 @@ The agent uses **rich step memory with directional vectors, surrounding cell inf
 
 ## 2  Decision Making
 
-Rather than using a complex planning system, the agent now uses:
-
 1. **Rich memory-based decision making** that evaluates potential moves based on:
    - Cost estimates from Hopfield memory
    - Expected surprise

@@ -85,4 +85,4 @@ You can use the following command line arguments:
 
 ## License
 
-MIT © jwest33
+MIT © [jwest33](https://github.com/jwest33)
