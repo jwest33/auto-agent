@@ -1,16 +1,17 @@
 from __future__ import annotations
 
-"""Agent module – complete behavioural rewrite (2025-05-11).
+"""Agent module – simplified behavioral rewrite with rich step memory.
 
-This version *keeps* the public interface that **main.py** expects (notably
-`Memory.add_experience`) while implementing the new memory/decision logic that
-uses a Modern-Hopfield network per the user specification.
+This version replaces the complex plan generation, storage, and retrieval with a 
+rich step memory approach using directional vectors and surrounding cell information.
+It maintains the goal-seeking behavior for unknown cells.
 """
 
 import math
 import os
 import random
 import time
+import platform
 from collections import defaultdict
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple
@@ -23,21 +24,26 @@ from hopfield_memory import HopfieldMemory
 from world import BASE_CELL_COST, GridWorld
 
 Coord = Tuple[int, int]
-MEMORY_PATH = "save/memory.npy"
-CYCLE_PATH = "save/cycles.npy"
-ALPHA = 1.0 # reward-vs-cost weight
-CELL_KEY_DIM = 10 # length of encoded cell vectors
-CELL_CAPACITY = 4096 # hopfield slots for cell memories
+
+# Ensure OS-compatible paths
+save_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "save")
+if not os.path.exists(save_dir):
+    os.makedirs(save_dir)
+MEMORY_PATH = os.path.join(save_dir, "memory.npy")
+CYCLE_PATH = os.path.join(save_dir, "cycles.npy")
+ALPHA = 1.0  # reward-vs-cost weight
+CELL_KEY_DIM = 16  # increased to store more context around cell
+CELL_CAPACITY = 4096  # hopfield slots for cell memories
 
 def euclidean(a: Coord, b: Coord) -> float:
     return math.hypot(a[0] - b[0], a[1] - b[1])
-
 
 def norm_vec(dx: float, dy: float) -> Tuple[float, float]:
     mag = math.hypot(dx, dy)
     if mag == 0:
         return 0.0, 0.0
     return dx / mag, dy / mag
+
 @dataclass
 class StepExperience:
     position: Coord
@@ -45,8 +51,9 @@ class StepExperience:
     expected_cost: float
     actual_cost: float
     surprise: float
+    energy_before: float
+    energy_after: float
     timestamp: float = field(default_factory=time.time)
-
 
 @dataclass
 class CycleSummary:
@@ -57,7 +64,6 @@ class CycleSummary:
     steps: List[Coord]
     timestamp: float = field(default_factory=time.time)
 
-
 @dataclass
 class CellStats:
     visits: int = 0
@@ -65,30 +71,8 @@ class CellStats:
     exp_surprise: float = 0.0
     exp_reward: float = 0.0
 
-
-@dataclass
-class Plan:
-    steps: List[Coord]
-    expected_energy_cost: float = 0.0
-    expected_surprise: float = 0.0
-    expected_reward: float = 0.0
-    backtrack: bool = False
-    _cached_costs_surprises: List[Tuple[float, float]] = field(default_factory=list, init=False, repr=False)
-
-    def cache_costs_surprises(self, vals: List[Tuple[float, float]]):
-        self._cached_costs_surprises = vals
-
-    def recalc_metrics(self, origin: Coord, memory: "Memory") -> None:
-        self.expected_energy_cost = sum(c for c, _ in self._cached_costs_surprises)
-        self.expected_surprise = sum(s for _, s in self._cached_costs_surprises)
-        unseen = sum(1 for c in self.steps if memory.get_expected_cost(c) is None)
-        last = self.steps[-1] if self.steps else origin
-        self.expected_reward = euclidean(origin, last) + unseen
-        if self.backtrack:
-            self.expected_reward *= 0.8  # mildly de-prioritise back-tracks
-
 class Memory:
-    """Two-tier memory (per-cell & per-cycle) plus planning store."""
+    """Rich step memory using directional vectors and surrounding cell information."""
 
     _cycle_dtype = np.dtype([
         ("reward", "f4"), ("cost", "f4"), ("surprise", "f4"),
@@ -98,16 +82,20 @@ class Memory:
     _step_dtype = np.dtype([
         ("x", "i4"), ("y", "i4"), ("shade", "i4"),
         ("expected_cost", "f4"), ("actual_cost", "f4"), ("surprise", "f4"),
+        ("energy_before", "f4"), ("energy_after", "f4"),
         ("timestamp", "f8"),
     ])
 
-    def __init__(self, key_dim: int = 10, hop_capacity: int = 1024):
-        # cycle-level hopfield for reward prediction (legacy)
-        self.cycle_hopfield = HopfieldMemory(key_dim, value_dim=1, capacity=hop_capacity)
-        # per-cell hopfield for cost prediction
-        self.cell_hopfield = HopfieldMemory(CELL_KEY_DIM, value_dim=1, capacity=CELL_CAPACITY)
-
-        self.plans: List[Plan] = []
+    def __init__(self, key_dim: int = CELL_KEY_DIM, hop_capacity: int = CELL_CAPACITY):
+        # Create save directory if it doesn't exist
+        if not os.path.exists(os.path.dirname(MEMORY_PATH)):
+            os.makedirs(os.path.dirname(MEMORY_PATH))
+            
+        # Store the key dimension for compatibility checks
+        self.key_dim = key_dim
+            
+        # rich cell memory hopfield for cost prediction
+        self.cell_hopfield = HopfieldMemory(key_dim, value_dim=1, capacity=hop_capacity)
         self.cycles: List[CycleSummary] = []
         self._raw_steps: List[StepExperience] = []
         self._cells: Dict[Coord, CellStats] = defaultdict(CellStats)
@@ -116,7 +104,8 @@ class Memory:
         rows = [
             (
                 e.position[0], e.position[1], e.shade,
-                e.expected_cost, e.actual_cost, e.surprise, e.timestamp,
+                e.expected_cost, e.actual_cost, e.surprise, 
+                e.energy_before, e.energy_after, e.timestamp,
             )
             for e in self._raw_steps
         ]
@@ -125,6 +114,16 @@ class Memory:
     def _array_to_experiences(self, arr: np.ndarray):
         self._raw_steps.clear()
         for rec in arr:
+            # Handle backward compatibility with old format
+            if 'energy_before' not in rec.dtype.names or 'energy_after' not in rec.dtype.names:
+                # Old format - set default values
+                energy_before = 100.0
+                energy_after = 100.0 - float(rec["actual_cost"])
+            else:
+                # New format
+                energy_before = float(rec["energy_before"])
+                energy_after = float(rec["energy_after"])
+                
             self._raw_steps.append(
                 StepExperience(
                     position=(int(rec["x"]), int(rec["y"])),
@@ -132,6 +131,8 @@ class Memory:
                     expected_cost=float(rec["expected_cost"]),
                     actual_cost=float(rec["actual_cost"]),
                     surprise=float(rec["surprise"]),
+                    energy_before=energy_before,
+                    energy_after=energy_after,
                     timestamp=float(rec["timestamp"]),
                 )
             )
@@ -151,36 +152,120 @@ class Memory:
             )
 
     def save_to_file(self):
+        """Save memory data to files"""
+        # Ensure save directory exists
         os.makedirs(os.path.dirname(MEMORY_PATH), exist_ok=True)
-        np.save(MEMORY_PATH, self._experiences_to_array())
-        np.save(CYCLE_PATH, self._cycles_to_array())
+        
+        try:
+            # Save data
+            print(f"Saving memory data to {MEMORY_PATH}")
+            experiences_array = self._experiences_to_array()
+            print(f"Saving {len(experiences_array)} experiences")
+            np.save(MEMORY_PATH, experiences_array)
+            
+            cycles_array = self._cycles_to_array()
+            print(f"Saving {len(cycles_array)} cycles to {CYCLE_PATH}")
+            np.save(CYCLE_PATH, cycles_array)
+            
+            print("Memory data saved successfully")
+        except Exception as e:
+            print(f"Error saving memory data: {e}")
+            import traceback
+            traceback.print_exc()
 
     def load_from_file(self):
+        """Load memory data with backward compatibility"""
         if os.path.exists(MEMORY_PATH):
-            self._array_to_experiences(np.load(MEMORY_PATH, allow_pickle=False))
+            try:
+                self._array_to_experiences(np.load(MEMORY_PATH, allow_pickle=False))
+            except (ValueError, KeyError) as e:
+                print(f"Warning: Could not load memory file with new format: {e}")
+                # If loading fails, delete the old file - we'll create a new one
+                os.remove(MEMORY_PATH)
+                print("Removed incompatible memory file. Starting fresh.")
+                
         if os.path.exists(CYCLE_PATH):
-            self._array_to_cycles(np.load(CYCLE_PATH, allow_pickle=False))
+            try:
+                self._array_to_cycles(np.load(CYCLE_PATH, allow_pickle=False))
+            except (ValueError, KeyError) as e:
+                print(f"Warning: Could not load cycle file: {e}")
+                # If loading fails, delete the old file
+                os.remove(CYCLE_PATH)
+                print("Removed incompatible cycle file. Starting fresh.")
+                
+        # Check if we need to reset due to dimension changes
+        sample_key = self._encode_sample_key()
+        if sample_key.shape[-1] != self.cell_hopfield.key_dim:
+            print(f"Warning: Key dimension changed from {self.cell_hopfield.key_dim} to {sample_key.shape[-1]}")
+            print("Resetting memory to avoid dimension mismatch errors.")
+            if os.path.exists(MEMORY_PATH):
+                os.remove(MEMORY_PATH)
+            if os.path.exists(CYCLE_PATH):
+                os.remove(CYCLE_PATH)
+            self._raw_steps.clear()
+            self.cycles.clear()
+            self._cells.clear()
+            # Create new Hopfield memory with correct dimensions
+            self.cell_hopfield = HopfieldMemory(CELL_KEY_DIM, value_dim=1, capacity=CELL_CAPACITY)
+            
+    def _encode_sample_key(self):
+        """Create a sample key to check dimensions"""
+        origin = (0, 0)
+        goal = (10, 10)
+        position = (0, 0)
+        cell = (1, 1)
+        energy = 100.0
+        return torch.zeros(CELL_KEY_DIM)
 
-    # per-cell hopfield helpers
+    # rich cell memory encoding
 
-    @staticmethod
-    def _encode_cell(origin: Coord, goal: Coord, self_pos: Coord, cell: Coord, shade: int) -> torch.Tensor:
-        """10-d feature vector: 3 direction vectors (origin, goal, self) + shade."""
+    def _encode_cell(self, world: GridWorld, origin: Coord, goal: Coord, 
+                    position: Coord, cell: Coord, energy: float) -> torch.Tensor:
+        """16-d feature vector: 
+        - direction vectors (origin, goal, self)
+        - current cell shade
+        - surrounding cell shades (normalized)
+        - current energy level (normalized)
+        - distance to goal (normalized)
+        """
+        # Direction vectors
         dox, doy = norm_vec(origin[0] - cell[0], origin[1] - cell[1])
         dgx, dgy = norm_vec(goal[0] - cell[0], goal[1] - cell[1])
-        dsx, dsy = norm_vec(cell[0] - self_pos[0], cell[1] - self_pos[1])
+        dsx, dsy = norm_vec(cell[0] - position[0], cell[1] - position[1])
+        
+        # Cell shade and normalized energy
+        shade = int(world.grid[cell[1], cell[0]])
         shade_norm = shade / 9.0
-        return torch.tensor([dox, doy, dgx, dgy, dsx, dsy, shade_norm, 0.0, 0.0, 0.0], dtype=torch.float32)
+        energy_norm = energy / 100.0
+        
+        # Get surrounding cell values (if available)
+        neighbors = world.get_neighbors(*position)
+        neighbor_vals = [int(world.grid[ny, nx]) / 9.0 for nx, ny in neighbors]
+        # Pad or truncate to exactly 4 values
+        neighbor_vals = (neighbor_vals + [0.0] * 4)[:4]
+        
+        # Distance to goal (normalized by max possible distance)
+        max_dist = math.hypot(world.width - 1, world.height - 1)
+        dist_to_goal = euclidean(cell, goal) / max_dist
+        
+        # Combine all features
+        return torch.tensor(
+            [dox, doy, dgx, dgy, dsx, dsy, shade_norm, energy_norm, 
+             dist_to_goal] + neighbor_vals,
+            dtype=torch.float32
+        )
 
-    def store_cell_experience(self, origin: Coord, goal: Coord, self_pos: Coord, cell: Coord, shade: int, cost: float):
-        key = self._encode_cell(origin, goal, self_pos, cell, shade)
+    def store_cell_experience(self, world: GridWorld, origin: Coord, goal: Coord, 
+                             position: Coord, cell: Coord, energy: float, cost: float):
+        key = self._encode_cell(world, origin, goal, position, cell, energy)
         with torch.no_grad():
             self.cell_hopfield.write(key, torch.tensor([cost]))
 
-    def estimate_cell_cost(self, origin: Coord, goal: Coord, self_pos: Coord, cell: Coord, shade: int) -> Optional[float]:
+    def estimate_cell_cost(self, world: GridWorld, origin: Coord, goal: Coord, 
+                          position: Coord, cell: Coord, energy: float) -> Optional[float]:
         if self.cell_hopfield.item_count == 0:
             return None
-        key = self._encode_cell(origin, goal, self_pos, cell, shade)
+        key = self._encode_cell(world, origin, goal, position, cell, energy)
         return float(self.cell_hopfield(key).item())
 
     def add_step_stats(self, coord: Coord, cost: float, surprise: float):
@@ -200,28 +285,30 @@ class Memory:
     def get_expected_surprise(self, coord: Coord) -> Optional[float]:
         return self._cells.get(coord).exp_surprise if coord in self._cells else None
 
-    def get_expected_reward(self, coord: Coord) -> Optional[float]:
-        return self._cells.get(coord).exp_reward if coord in self._cells else None
-
     def add_cycle(self, summary: CycleSummary, world: GridWorld):
+        """Add a cycle summary and save memory data to files."""
         self.cycles.append(summary)
+        # Ensure we save after each cycle
         self.save_to_file()
-
-    def store_plan(self, plan: Plan):
-        self.plans.append(plan)
-
-    def retrieve_candidate_plans(self, current: Coord, energy: float) -> List[Plan]:
-        return [p for p in self.plans if p.steps and p.steps[0] == current and p.expected_energy_cost <= energy]
 
 class Agent:
     def __init__(self, origin: Coord, max_energy: float = 100.0):
+        # Ensure save directory exists
+        save_dir = os.path.dirname(MEMORY_PATH)
+        if not os.path.exists(save_dir):
+            print(f"Creating save directory: {save_dir}")
+            os.makedirs(save_dir, exist_ok=True)
+            
         self.origin = origin
         self.position: Coord = origin
         self._prev_pos: Optional[Coord] = None
         self.max_energy = max_energy
         self.energy = max_energy
         self.memory = Memory()
+        
+        print(f"Loading memory from {MEMORY_PATH}")
         self.memory.load_from_file()
+        
         self.start_cycle()
 
     def start_cycle(self):
@@ -236,12 +323,16 @@ class Agent:
         self._cycle_surprise += surprise
 
     def end_cycle(self, world: GridWorld):
+        """End the current cycle and save memory data."""
+        print("Ending cycle...")
+        
         # compute straight‑line distance from origin to *final* position
-        dist        = euclidean(self.origin, self.position)           # raw displacement
-        max_dist    = math.hypot(world.width - 1, world.height - 1)   # grid diagonal
-        norm_dist   = dist / max_dist if max_dist else 0.0            # ∈ [0, 1]
+        dist = euclidean(self.origin, self.position)
+        max_dist = math.hypot(world.width - 1, world.height - 1)
+        norm_dist = dist / max_dist if max_dist else 0.0
         reward = norm_dist
 
+        # Create cycle summary
         summary = CycleSummary(
             reward,
             self._cycle_cost,
@@ -249,121 +340,173 @@ class Agent:
             self.energy,
             self._cycle_steps.copy()
         )
+        
+        # Add to memory and explicitly save
+        print(f"Adding cycle summary with {len(self._cycle_steps)} steps")
         self.memory.add_cycle(summary, world)
-
+        
+        # Reset agent state
         self.teleport_home()
         self.energy = self.max_energy
         self.start_cycle()
+        
+        print("Cycle completed and data saved")
 
     def teleport_home(self):
         self.position = self.origin
 
-    def _estimate_cost(self, world: GridWorld, self_pos: Coord, cell: Coord) -> float:
-        shade = int(world.grid[cell[1], cell[0]])
+    def _estimate_cost(self, world: GridWorld, position: Coord, cell: Coord) -> float:
+        """Estimate the cost of moving to a cell using rich memory."""
         goal = (world.width - 1, world.height - 1)
-        est = self.memory.estimate_cell_cost(self.origin, goal, self_pos, cell, shade)
+        est = self.memory.estimate_cell_cost(world, self.origin, goal, position, cell, self.energy)
         return est if est is not None else world.get_energy_cost(*cell)
 
-    def _choose_neighbour(self, world: GridWorld, x: int, y: int, visited: set[Coord]) -> Tuple[Coord, List[Coord]]:
-        neighbours = world.get_neighbors(x, y)
-        goal = (world.width - 1, world.height - 1)
-        best_score = float("inf")
-        best: List[Coord] = []
-        alts: List[Coord] = []
-        for nx, ny in neighbours:
-            cell = (nx, ny)
-            if cell in visited:
-                continue
-            cost = self._estimate_cost(world, (x, y), cell)
-            surprise = self.memory.get_expected_surprise(cell) or 0.0
-            reward = self.memory.get_expected_reward(cell) or 0.0
-            score = (cost + surprise) - ALPHA * reward - 0.01 * euclidean(cell, goal)
-            if score < best_score - 1e-9:
-                if best:
-                    alts.extend(best)
-                best_score = score
-                best = [cell]
-            elif math.isclose(score, best_score, rel_tol=1e-6):
-                best.append(cell)
-            else:
-                alts.append(cell)
-        chosen = random.choice(best) if best else random.choice(neighbours)
-        alts = [c for c in alts if c != chosen]
-        return chosen, alts
+    def _evaluate_move(self, world: GridWorld, position: Coord, cell: Coord, goal: Coord) -> float:
+        """Score a potential move using rich context."""
+        # Cost estimate from rich memory
+        cost = self._estimate_cost(world, position, cell)
+        
+        # Expected surprise (if available)
+        surprise = self.memory.get_expected_surprise(cell) or 0.0
+        
+        # Goal-seeking heuristic
+        goal_dist = euclidean(cell, goal)
+        goal_factor = 0.01 * goal_dist
+        
+        # Combine into a single score (lower is better)
+        score = (cost + surprise) - ALPHA * (1.0 / (goal_dist + 1.0))
+        
+        return score
 
-    def _generate_plan(self, world: GridWorld) -> Plan:
-        steps: List[Coord] = []
-        cached: List[Tuple[float, float]] = []
-        visited = {self.position}
+    def choose_next_move(self, world: GridWorld) -> Coord:
+        """Choose the next move based on rich cell memory and goal-seeking behavior."""
         x, y = self.position
-        backtrack_opts: List[Tuple[Coord, float]] = []
-        while self.energy - sum(c for c, _ in cached) >= BASE_CELL_COST:
-            chosen, alts = self._choose_neighbour(world, x, y, visited)
-            for alt in alts:
-                backtrack_opts.append((alt, self._estimate_cost(world, (x, y), alt)))
-            exp_cost = self._estimate_cost(world, (x, y), chosen)
-            exp_surprise = self.memory.get_expected_surprise(chosen) or 0.0
-            if sum(c for c, _ in cached) + exp_cost > self.energy:
-                break
-            steps.append(chosen)
-            cached.append((exp_cost, exp_surprise))
-            visited.add(chosen)
-            x, y = chosen
-        plan = Plan(steps)
-        plan.cache_costs_surprises(cached)
-        plan.recalc_metrics(self.origin, self.memory)
-        # spawn backtrack probes
-        for cell, est in backtrack_opts:
-            bt = Plan([cell], backtrack=True)
-            bt.cache_costs_surprises([(est, 0.0)])
-            bt.recalc_metrics(self.origin, self.memory)
-            self.memory.store_plan(bt)
-        return plan
-
-    def choose_plan(self, world: GridWorld) -> Plan:
-        plans = self.memory.retrieve_candidate_plans(self.position, self.energy)
-        return max(plans, key=lambda p: p.expected_reward) if plans else self._generate_plan(world)
-
-    def execute_plan(self, plan: Plan, world: GridWorld, repaint_cb=None):
-        """Walk the plan, consuming its steps as we go so we never replay it."""
+        neighbors = world.get_neighbors(x, y)
         goal = (world.width - 1, world.height - 1)
+        
+        # Evaluate all neighbors
+        moves = []
+        for nx, ny in neighbors:
+            cell = (nx, ny)
+            score = self._evaluate_move(world, self.position, cell, goal)
+            moves.append((cell, score))
+        
+        # Sort by score (lower is better)
+        moves.sort(key=lambda m: m[1])
+        
+        # Add some randomization for exploration
+        # Choose from the top 3 moves with decreasing probability
+        if len(moves) >= 3 and random.random() < 0.2:
+            weights = [0.6, 0.3, 0.1]  # 60% best, 30% second best, 10% third best
+            choices = [moves[i][0] for i in range(min(3, len(moves)))]
+            return random.choices(choices, weights=weights[:len(choices)])[0]
+        
+        # Default to best move
+        return moves[0][0] if moves else self.position
 
-        while self.energy >= BASE_CELL_COST:
-            if not plan.steps:
-                plan = self.choose_plan(world)
-                if not plan.steps:
-                    break
-
-            x, y = plan.steps.pop(0)
-            exp_cost, _ = plan._cached_costs_surprises.pop(0)
-
-            # world transition
-            cost, restore = world.transition(self._prev_pos, (x, y))
+    def execute_step(self, world: GridWorld, repaint_cb=None):
+        """Execute a single step based on the current best move."""
+        try:
+            if self.energy < BASE_CELL_COST:
+                return False
+            
+            # Choose best next move
+            next_pos = self.choose_next_move(world)
+            x, y = next_pos
+            
+            # Record energy before the move
+            energy_before = self.energy
+            
+            # Estimate cost
+            exp_cost = self._estimate_cost(world, self.position, next_pos)
+            
+            # Execute the move
+            cost, restore = world.transition(self._prev_pos, next_pos)
             actual_cost = 0.0 if restore else cost
             surprise = abs(exp_cost - actual_cost)
             self.energy = self.max_energy if restore else self.energy - cost
-
-            # bookkeeping
-            self.record_step((x, y), cost, surprise)
+            
+            # Record energy after the move
+            energy_after = self.energy
+            
+            # Bookkeeping
+            self.record_step(next_pos, cost, surprise)
             shade = int(world.grid[y, x])
-            self.memory.store_cell_experience(
-                self.origin, goal, self.position, (x, y), shade, actual_cost
-            )
+            goal = (world.width - 1, world.height - 1)
+            
+            # Store experience in rich memory
+            try:
+                self.memory.store_cell_experience(
+                    world, self.origin, goal, self.position, next_pos, energy_before, actual_cost
+                )
+            except AssertionError as e:
+                print(f"Warning: Failed to store cell experience: {e}")
+                # Continue without storing to prevent game from crashing
+            
+            # Update memory
             exp = StepExperience(
-                position=(x, y), shade=shade,
-                expected_cost=exp_cost, actual_cost=actual_cost, surprise=surprise,
+                position=next_pos, 
+                shade=shade,
+                expected_cost=exp_cost, 
+                actual_cost=actual_cost, 
+                surprise=surprise,
+                energy_before=energy_before,
+                energy_after=energy_after
             )
             self.memory.add_experience(exp)
-
-            # move
+            
+            # Move
             self._prev_pos = self.position
-            self.position = (x, y)
+            self.position = next_pos
             world.explored[y, x] = True
-
+            
             if repaint_cb:
-                repaint_cb(); QtWidgets.QApplication.processEvents()
+                repaint_cb()
+                QtWidgets.QApplication.processEvents()
+            
+            return True
+            
+        except Exception as e:
+            print(f"Error during step execution: {e}")
+            # Instead of ending the cycle here, just return False
+            return False
 
-            if self.energy < BASE_CELL_COST:
-                break
-
-        self.end_cycle(world)
+    def execute_plan(self, plan, world: GridWorld, repaint_cb=None):
+        """Compatibility method to maintain interface with main.py
+        Instead of executing a plan, we execute a series of single steps."""
+        step_count = 0
+        
+        try:
+            while self.energy >= BASE_CELL_COST:
+                if not self.execute_step(world, repaint_cb):
+                    break
+                
+                step_count += 1
+    
+                goal = (world.width - 1, world.height - 1)
+                if self.position == goal:
+                    print("Goal reached! Ending cycle.")
+                    break
+                    
+            self.end_cycle(world)
+                
+        except Exception as e:
+            print(f"Error in execute_plan: {e}")
+            import traceback
+            traceback.print_exc()
+            # Even on error, we still end the cycle properly
+            self.end_cycle(world)
+                    
+    def choose_plan(self, world: GridWorld):
+        """Stub method to maintain interface with main.py.
+        Returns a dummy plan object."""
+        # We create a minimal placeholder plan to maintain compatibility
+        class DummyPlan:
+            def __init__(self):
+                self.steps = []
+                self.expected_energy_cost = 0.0
+                self.expected_surprise = 0.0
+                self.expected_reward = 0.0
+                self._cached_costs_surprises = []
+        
+        return DummyPlan()

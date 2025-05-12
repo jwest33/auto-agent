@@ -3,11 +3,14 @@ import os
 import random
 import sys
 from typing import List, Optional
+import platform
+import argparse
 
 import colorsys
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-from agent import Agent, Plan, Memory, euclidean, MEMORY_PATH, StepExperience
+# Update imports to remove Plan
+from agent import Agent, Memory, euclidean, MEMORY_PATH, CYCLE_PATH, StepExperience
 from world import GridWorld, WORLD_PATH, BASE_CELL_COST, Coord
 
 import matplotlib.pyplot as plt
@@ -16,16 +19,45 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 # Constants
 DEFAULT_SIZE = 150
 DEFAULT_SEED = None
-CYCLE_HISTORY_PATH = "save/cycle_history.json"
+
+# Parse command line arguments
+parser = argparse.ArgumentParser(description='Hopfield Agent Pathfinder')
+parser.add_argument('--reset', action='store_true', help='Reset all memory files at startup')
+args, unknown_args = parser.parse_known_args()
+
+# Reset memory files if requested
+if args.reset:
+    print("Resetting all memory files...")
+    paths = [MEMORY_PATH, WORLD_PATH, CYCLE_PATH]
+    for path in paths:
+        if os.path.exists(path):
+            os.remove(path)
+            print(f"Removed {path}")
+
+# Ensure OS-compatible paths
+save_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "save")
+if not os.path.exists(save_dir):
+    os.makedirs(save_dir)
+CYCLE_HISTORY_PATH = os.path.join(save_dir, "cycle_history.json")
 APP_STYLES = """
-QWidget { font-family: Arial, sans-serif; background-color: #f9f9f9; }
+QWidget { font-family: Arial, sans-serif; background-color: #f9f9f9; color: #333333; }
 QPushButton { padding: 6px 12px; border-radius: 4px; background-color: #2E8B57; color: white; }
 QPushButton:hover { background-color: #3CB371; }
-QGroupBox { border: 1px solid #ccc; border-radius: 4px; margin-top: 10px; background-color: #fff; }
-QGroupBox::title { subcontrol-origin: margin; subcontrol-position: top center; padding: 0 3px; font-weight: bold; }
-QTableWidget { background-color: #fff; border: 1px solid #ccc; }
-QHeaderView::section { background-color: #f0f0f0; padding: 4px; border: 1px solid #ddd; }
+QGroupBox { border: 1px solid #ccc; border-radius: 4px; margin-top: 10px; background-color: #fff; color: #333333; }
+QGroupBox::title { subcontrol-origin: margin; subcontrol-position: top center; padding: 0 3px; font-weight: bold; color: #333333; }
+QTableWidget { background-color: #fff; border: 1px solid #ccc; color: #333333; }
+QTableWidget::item { color: #333333; }
+QHeaderView::section { background-color: #f0f0f0; padding: 4px; border: 1px solid #ddd; color: #333333; }
+
+/* Basic QSpinBox styling with clear button outlines */
+QSpinBox { 
+    border: 1px solid #999;
+    background-color: white;
+    color: #333333;
+    padding: 2px;
+}
 """
+
 
 class AgentWindow(QtWidgets.QMainWindow):
     def __init__(self, grid_size: int, seed: Optional[int]):
@@ -43,7 +75,39 @@ class AgentWindow(QtWidgets.QMainWindow):
         right_panel = QtWidgets.QVBoxLayout(); main_layout.addLayout(right_panel, stretch=2)
         # controls group
         ctrl_group = QtWidgets.QGroupBox("Controls"); ctrl_layout = QtWidgets.QHBoxLayout(); ctrl_group.setLayout(ctrl_layout)
-        self.spin_cycles = QtWidgets.QSpinBox(); self.spin_cycles.setMinimum(1); self.spin_cycles.setValue(1); self.spin_cycles.setPrefix("Cycles: ")
+
+        cycles_layout = QtWidgets.QHBoxLayout()
+        cycles_layout.setSpacing(5)
+
+        # Label for the cycles
+        cycles_label = QtWidgets.QLabel("Cycles:")
+        cycles_layout.addWidget(cycles_label)
+
+        # SpinBox with no buttons (we'll add our own)
+        self.spin_cycles = QtWidgets.QSpinBox()
+        self.spin_cycles.setMinimum(1)
+        self.spin_cycles.setMaximum(100)
+        self.spin_cycles.setValue(1)
+        self.spin_cycles.setFixedWidth(40)
+        self.spin_cycles.setButtonSymbols(QtWidgets.QAbstractSpinBox.NoButtons)  # Hide the default buttons
+        cycles_layout.addWidget(self.spin_cycles)
+
+        # Add explicit + and - buttons
+        minus_btn = QtWidgets.QPushButton("-")
+        minus_btn.setFixedSize(30, 25)
+        minus_btn.clicked.connect(lambda: self.spin_cycles.setValue(self.spin_cycles.value() - 1))
+        cycles_layout.addWidget(minus_btn)
+
+        plus_btn = QtWidgets.QPushButton("+")
+        plus_btn.setFixedSize(30, 25)
+        plus_btn.clicked.connect(lambda: self.spin_cycles.setValue(self.spin_cycles.value() + 1))
+        cycles_layout.addWidget(plus_btn)
+
+        # Create a container widget for the cycles layout
+        cycles_widget = QtWidgets.QWidget()
+        cycles_widget.setLayout(cycles_layout)
+        ctrl_layout.addWidget(cycles_widget)
+
         self.run_btn = QtWidgets.QPushButton("Run Cycles"); self.run_btn.clicked.connect(self.on_run_cycles)
         self.reset_world_btn = QtWidgets.QPushButton("Rebuild World"); self.reset_world_btn.clicked.connect(self.on_rebuild_world)
         self.reset_mem_btn = QtWidgets.QPushButton("Reset Memory"); self.reset_mem_btn.clicked.connect(self.on_reset_memory)
@@ -52,18 +116,30 @@ class AgentWindow(QtWidgets.QMainWindow):
         right_panel.addWidget(ctrl_group)
         # history table
         history_group = QtWidgets.QGroupBox("Cycle History"); hist_layout = QtWidgets.QVBoxLayout(); history_group.setLayout(hist_layout)
-        self.table = QtWidgets.QTableWidget(0, 5); self.table.setHorizontalHeaderLabels(["#", "Reward", "Cost", "Surprise", "Energy"])
+        self.table = QtWidgets.QTableWidget(0, 5); 
+        header_labels = ["#", "Reward", "Cost", "Surprise", "Energy"]
+        self.table.setHorizontalHeaderLabels(header_labels)
+        
+        # Style the table header
+        header = self.table.horizontalHeader()
+        header.setStyleSheet("QHeaderView::section { color: #333333; background-color: #f0f0f0; }")
+        
         hist_layout.addWidget(self.table); right_panel.addWidget(history_group)
         # charts
         charts = QtWidgets.QGroupBox("Analytics Charts"); ch_layout = QtWidgets.QVBoxLayout(); charts.setLayout(ch_layout)
-        self.figure = plt.Figure(); self.canvas_chart = FigureCanvas(self.figure)
-        self.ax_cost, self.ax_surprise, self.ax_energy = [self.figure.add_subplot(3, 1, i + 1) for i in range(3)]
+        self.figure = plt.Figure(figsize=(6, 8), facecolor='white'); self.canvas_chart = FigureCanvas(self.figure)
+        self.ax_cost, self.ax_surprise, self.ax_energy, self.ax_distance = [self.figure.add_subplot(4, 1, i + 1) for i in range(4)]
+        
+        # Set all subplot backgrounds to white
+        for ax in (self.ax_cost, self.ax_surprise, self.ax_energy, self.ax_distance):
+            ax.set_facecolor('white')
+            
         ch_layout.addWidget(self.canvas_chart); right_panel.addWidget(charts); right_panel.addStretch()
         # initialize world/agent
         self.world = GridWorld(grid_size, grid_size, random.Random(seed))
         self.agent = Agent((0, 0))
         self.cycles_run = 0
-        self.current_plan: Optional[Plan] = None
+        self.current_dummy_plan = None  # Updated to use a dummy placeholder instead of Plan
         self.cycle_history: List[dict] = []
         self.load_cycle_history()
         # viz helpers
@@ -74,12 +150,18 @@ class AgentWindow(QtWidgets.QMainWindow):
 
     def load_cycle_history(self):
         if os.path.exists(CYCLE_HISTORY_PATH):
-            with open(CYCLE_HISTORY_PATH, "r") as f:
-                self.cycle_history = json.load(f)
-                for s in self.cycle_history:
-                    self.add_history_row(s)
-                if self.cycle_history:
-                    self.cycles_run = self.cycle_history[-1]["cycle"]
+            try:
+                with open(CYCLE_HISTORY_PATH, "r") as f:
+                    self.cycle_history = json.load(f)
+                    for s in self.cycle_history:
+                        self.add_history_row(s)
+                    if self.cycle_history:
+                        self.cycles_run = self.cycle_history[-1]["cycle"]
+            except (json.JSONDecodeError, IOError, KeyError) as e:
+                print(f"Warning: Error loading cycle history: {e}")
+                os.remove(CYCLE_HISTORY_PATH)
+                print("Removed incompatible cycle history file. Starting fresh.")
+                self.cycle_history = []
 
     def save_cycle_history(self):
         os.makedirs(os.path.dirname(CYCLE_HISTORY_PATH), exist_ok=True)
@@ -89,7 +171,9 @@ class AgentWindow(QtWidgets.QMainWindow):
     def add_history_row(self, stats):
         r = self.table.rowCount(); self.table.insertRow(r)
         for i, k in enumerate(["cycle", "reward", "cost", "surprise", "energy"]):
-            self.table.setItem(r, i, QtWidgets.QTableWidgetItem(f"{stats[k]:.2f}" if k != "cycle" else str(stats[k])))
+            item = QtWidgets.QTableWidgetItem(f"{stats[k]:.2f}" if k != "cycle" else str(stats[k]))
+            item.setForeground(QtGui.QColor("#333333"))  # Set text color to dark gray
+            self.table.setItem(r, i, item)
 
     def on_run_cycles(self):
         self.trails.clear(); self.step_history.clear(); self.pending = self.spin_cycles.value(); self.run_next_cycle()
@@ -107,8 +191,8 @@ class AgentWindow(QtWidgets.QMainWindow):
         self.agent.start_cycle()
         old_explored = self.world.explored.copy()
 
-        # 3. Choose a plan
-        self.current_plan = self.agent.choose_plan(self.world)
+        # 3. Get a dummy plan object (for compatibility)
+        self.current_dummy_plan = self.agent.choose_plan(self.world)
 
         # 4. Wrap Memory.add_experience so we can tap each StepExperience
         orig_add = self.agent.memory.add_experience
@@ -118,20 +202,22 @@ class AgentWindow(QtWidgets.QMainWindow):
             orig_add(exp)
 
             # Log data the charts need
+            distance_from_start = euclidean(self.agent.origin, exp.position)
             self.step_history[-1].append(
                 {
                     "expected_cost": exp.expected_cost,
                     "actual_cost":   exp.actual_cost,
                     "surprise":      exp.surprise,
                     "energy":        self.agent.energy,
+                    "distance":      distance_from_start,
                 }
             )
 
         self.agent.memory.add_experience = wrapped
 
-        # 5. Execute the plan (updates UI via repaint_cb)
+        # 5. Execute the agent's steps (updates UI via repaint_cb)
         self.agent.execute_plan(
-            self.current_plan,
+            self.current_dummy_plan,  # This is now just a compatibility placeholder
             self.world,
             repaint_cb=self.repaint_and_update_charts,
         )
@@ -145,11 +231,15 @@ class AgentWindow(QtWidgets.QMainWindow):
         dist       = euclidean(self.agent.origin, self.agent.position)
         reward     = dist + new_cells
 
+        # Since we no longer have a plan with expected costs, we calculate from step history
+        total_cost = sum(entry["actual_cost"] for entry in self.step_history[-1]) if self.step_history[-1] else 0
+        total_surprise = sum(entry["surprise"] for entry in self.step_history[-1]) if self.step_history[-1] else 0
+
         stats = {
             "cycle":    self.cycles_run,
             "reward":   reward,
-            "cost":     self.current_plan.expected_energy_cost,
-            "surprise": self.current_plan.expected_surprise,
+            "cost":     total_cost,
+            "surprise": total_surprise,
             "energy":   self.agent.energy,
         }
         self.cycle_history.append(stats)
@@ -185,7 +275,7 @@ class AgentWindow(QtWidgets.QMainWindow):
 
     def reset_all(self):
         self.cycles_run = 0
-        self.current_plan = None
+        self.current_dummy_plan = None
         self.cycle_history.clear()
         self.table.setRowCount(0)
 
@@ -193,7 +283,7 @@ class AgentWindow(QtWidgets.QMainWindow):
         self.update_canvas(); self.update_charts()
 
     def update_canvas(self):
-        sz = self.world.width * 5; pm = QtGui.QPixmap(sz, sz); pm.fill(QtGui.QColor("#f0f0f0"))
+        sz = self.world.width * 5; pm = QtGui.QPixmap(sz, sz); pm.fill(QtGui.QColor("#ffffff")) # White background
         p = QtGui.QPainter(pm); csize = 5
         if self.trails: self.trails[-1].append(self.agent.position)
         for y in range(self.world.height):
@@ -212,16 +302,45 @@ class AgentWindow(QtWidgets.QMainWindow):
         ax, ay = self.agent.position; p.drawEllipse(ax * csize, ay * csize, csize, csize); p.end(); self.canvas.setPixmap(pm)
 
     def update_charts(self):
-        for ax in (self.ax_cost, self.ax_surprise, self.ax_energy): ax.clear()
+        for ax in (self.ax_cost, self.ax_surprise, self.ax_energy, self.ax_distance): ax.clear()
         n = len(self.step_history)
         for idx, hist in enumerate(self.step_history):
             if not hist: continue
             hue = (idx * 360 / n) / 360.0; rgb = colorsys.hsv_to_rgb(hue, 1, 0.78)
-            cols = [[d["expected_cost"] for d in hist], [d["surprise"] for d in hist], [d["energy"] for d in hist]]
+            cols = [
+                [d["expected_cost"] for d in hist],
+                [d["surprise"] for d in hist],
+                [d["energy"] for d in hist],
+                [d["distance"] for d in hist]
+            ]
             xs = list(range(len(hist)))
-            for ax, dat in zip((self.ax_cost, self.ax_surprise, self.ax_energy), cols):
+            for ax, dat in zip((self.ax_cost, self.ax_surprise, self.ax_energy, self.ax_distance), cols):
                 ax.plot(xs, dat, color=rgb)
-        self.ax_cost.set_title("Expected Cost per Step"); self.ax_surprise.set_title("Surprise per Step"); self.ax_energy.set_title("Energy Left per Step"); self.figure.tight_layout(); self.canvas_chart.draw()
+
+        # Set fixed Y-axis range for energy chart (0-100)
+        self.ax_energy.set_ylim(0, 100)
+
+        # Set title colors to dark gray
+        text_color = '#333333'
+        title_style = {'color': text_color}
+        
+        self.ax_cost.set_title("Expected Cost", **title_style)
+        self.ax_surprise.set_title("Surprise", **title_style)
+        self.ax_energy.set_title("Energy Remaining", **title_style)
+        self.ax_distance.set_title("Distance from Start", **title_style)
+        
+        # Set tick colors
+        for ax in (self.ax_cost, self.ax_surprise, self.ax_energy, self.ax_distance):
+            for tick in ax.get_xticklabels():
+                tick.set_color(text_color)
+            for tick in ax.get_yticklabels():
+                tick.set_color(text_color)
+            ax.spines['bottom'].set_color(text_color)
+            ax.spines['left'].set_color(text_color)
+            ax.tick_params(colors=text_color)
+        
+        self.figure.tight_layout()
+        self.canvas_chart.draw()
 
 def main():
     app = QtWidgets.QApplication(sys.argv); win = AgentWindow(grid_size=DEFAULT_SIZE, seed=DEFAULT_SEED); win.show(); sys.exit(app.exec_())
