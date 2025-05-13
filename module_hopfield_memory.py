@@ -1,13 +1,10 @@
 from __future__ import annotations
-
 import math
 import torch
 from torch import nn
 
 class HopfieldMemory(nn.Module):
-    """A fixed-capacity dot-product associative memory with dynamic resizing capability.
-    """
-
+    """A fixed-capacity dot-product associative memory with dynamic resizing capability."""
     def __init__(self, key_dim: int = 64, value_dim: int = 1, capacity: int = 1024):
         super().__init__()
         self.capacity = capacity

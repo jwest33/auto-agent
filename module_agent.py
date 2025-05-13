@@ -1,12 +1,4 @@
 from __future__ import annotations
-
-"""Agent module – simplified behavioral rewrite with rich step memory.
-
-This version replaces the complex plan generation, storage, and retrieval with a 
-rich step memory approach using directional vectors and surrounding cell information.
-It maintains the goal-seeking behavior for unknown cells.
-"""
-
 import math
 import os
 import random
@@ -20,8 +12,8 @@ import numpy as np
 import torch
 from PyQt5 import QtWidgets
 
-from hopfield_memory import HopfieldMemory
-from world import BASE_CELL_COST, GridWorld
+from module_hopfield_memory import HopfieldMemory
+from module_world import BASE_CELL_COST, GridWorld
 
 Coord = Tuple[int, int]
 
@@ -32,7 +24,7 @@ if not os.path.exists(save_dir):
 MEMORY_PATH = os.path.join(save_dir, "memory.npy")
 CYCLE_PATH = os.path.join(save_dir, "cycles.npy")
 ALPHA = 1.0  # reward-vs-cost weight
-CELL_KEY_DIM = 16  # increased to store more context around cell
+CELL_KEY_DIM = 13  # increased to store more context around cell
 CELL_CAPACITY = 4096  # hopfield slots for cell memories
 
 def euclidean(a: Coord, b: Coord) -> float:
@@ -72,7 +64,7 @@ class CellStats:
     exp_reward: float = 0.0
 
 class Memory:
-    """Rich step memory using directional vectors and surrounding cell information."""
+    """Step memory using directional vectors and surrounding cell information."""
 
     _cycle_dtype = np.dtype([
         ("reward", "f4"), ("cost", "f4"), ("surprise", "f4"),
@@ -94,7 +86,7 @@ class Memory:
         # Store the key dimension for compatibility checks
         self.key_dim = key_dim
             
-        # rich cell memory hopfield for cost prediction
+        # cell memory hopfield for cost prediction
         self.cell_hopfield = HopfieldMemory(key_dim, value_dim=1, capacity=hop_capacity)
         self.cycles: List[CycleSummary] = []
         self._raw_steps: List[StepExperience] = []
@@ -217,7 +209,7 @@ class Memory:
         energy = 100.0
         return torch.zeros(CELL_KEY_DIM)
 
-    # rich cell memory encoding
+    # cell memory encoding
 
     def _encode_cell(self, world: GridWorld, origin: Coord, goal: Coord, 
                     position: Coord, cell: Coord, energy: float) -> torch.Tensor:
@@ -239,7 +231,7 @@ class Memory:
         energy_norm = energy / 100.0
         
         # Get surrounding cell values (if available)
-        neighbors = world.get_neighbors(*position)
+        neighbors = world.get_neighbors(*cell)
         neighbor_vals = [int(world.grid[ny, nx]) / 9.0 for nx, ny in neighbors]
         # Pad or truncate to exactly 4 values
         neighbor_vals = (neighbor_vals + [0.0] * 4)[:4]
@@ -356,14 +348,14 @@ class Agent:
         self.position = self.origin
 
     def _estimate_cost(self, world: GridWorld, position: Coord, cell: Coord) -> float:
-        """Estimate the cost of moving to a cell using rich memory."""
+        """Estimate the cost of moving to a cell using memory."""
         goal = (world.width - 1, world.height - 1)
         est = self.memory.estimate_cell_cost(world, self.origin, goal, position, cell, self.energy)
         return est if est is not None else world.get_energy_cost(*cell)
 
     def _evaluate_move(self, world: GridWorld, position: Coord, cell: Coord, goal: Coord) -> float:
-        """Score a potential move using rich context."""
-        # Cost estimate from rich memory
+        """Score a potential move using context."""
+        # Cost estimate from memory
         cost = self._estimate_cost(world, position, cell)
         
         # Expected surprise (if available)
@@ -371,7 +363,6 @@ class Agent:
         
         # Goal-seeking heuristic
         goal_dist = euclidean(cell, goal)
-        goal_factor = 0.01 * goal_dist
         
         # Combine into a single score (lower is better)
         score = (cost + surprise) - ALPHA * (1.0 / (goal_dist + 1.0))
@@ -379,7 +370,7 @@ class Agent:
         return score
 
     def choose_next_move(self, world: GridWorld) -> Coord:
-        """Choose the next move based on rich cell memory and goal-seeking behavior."""
+        """Choose the next move based on cell memory and goal-seeking behavior."""
         x, y = self.position
         neighbors = world.get_neighbors(x, y)
         goal = (world.width - 1, world.height - 1)
@@ -434,7 +425,7 @@ class Agent:
             shade = int(world.grid[y, x])
             goal = (world.width - 1, world.height - 1)
             
-            # Store experience in rich memory
+            # Store experience in memory
             try:
                 self.memory.store_cell_experience(
                     world, self.origin, goal, self.position, next_pos, energy_before, actual_cost
@@ -472,7 +463,7 @@ class Agent:
             return False
 
     def execute_plan(self, plan, world: GridWorld, repaint_cb=None):
-        """Compatibility method to maintain interface with main.py
+        """Compatibility method to maintain interface with app_main.py
         Instead of executing a plan, we execute a series of single steps."""
         step_count = 0
         
@@ -498,7 +489,7 @@ class Agent:
             self.end_cycle(world)
                     
     def choose_plan(self, world: GridWorld):
-        """Stub method to maintain interface with main.py.
+        """Stub method to maintain interface with app_main.py.
         Returns a dummy plan object."""
         # We create a minimal placeholder plan to maintain compatibility
         class DummyPlan:

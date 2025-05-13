@@ -1,8 +1,8 @@
 # Hop to it! Hopfield Memory Pathfinder
 
-**Hopfield Memory Pathfinder** is an interactive desktop playground (PyQt 5) where a single agent explores a procedurally generated grid world using a rich memory-based approach. Watch the agent learn the environment, make decisions based on past experiences, and refine a Hopfield associative memory — all visualized in real time.
+**Hopfield Memory Pathfinder** is an interactive desktop playground (PyQt 5) where a single agent explores a procedurally generated grid world using a memory-based approach. Watch the agent learn the environment, make decisions based on past experiences, and refine a Hopfield associative memory — all visualized in real time.
 
-![App example](app-example.jpg)
+![App example](example_app.jpg)
 
 ---
 
@@ -11,10 +11,10 @@
 ```bash
 python -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
-python main.py
+python app_main.py
 
 # Optional: Reset all memory files at startup
-python main.py --reset
+python app_main.py --reset
 ```
 
 | Library    | Tested ver. |
@@ -32,7 +32,7 @@ python main.py --reset
 
 2. The **Agent** keeps a Hopfield memory for cell cost prediction and tabular statistics to learn from experiences.
 
-3. **Decision Making** uses a rich 16-dimensional feature vector that includes direction vectors, cell shade information, surrounding cell data, and energy levels to evaluate potential moves.
+3. **Decision Making** uses a 16-dimensional feature vector that includes direction vectors, cell shade information, surrounding cell data, and energy levels to evaluate potential moves.
 
 4. For each step, the agent:
    - Evaluates all neighboring cells based on memory and goal-seeking behavior
@@ -75,11 +75,21 @@ You can use the following command line arguments:
 
 ## Technical Details
 
-- **Rich Memory Encoding**: Uses a 16-dimensional feature vector to remember cell contexts
+- **Memory Encoding**: Uses a 16-dimensional feature vector to remember cell contexts
 - **Adaptive Learning**: Continuously improves cost predictions through Hopfield memory
 - **Exploration vs. Exploitation**: Balances between following the best path and exploring alternatives
 - **Energy Management**: Strategically seeks energy restores by moving between divisible shade values
 - **Visualization**: Real-time display of exploration trails, analytics, and decision-making process
+
+---
+
+## Analysis
+
+```bash
+python app_analysis.py
+```
+
+![Analysis example](example_memory_analysis.jpg)
 
 ---
 

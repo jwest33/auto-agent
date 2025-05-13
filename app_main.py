@@ -9,9 +9,8 @@ import argparse
 import colorsys
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-# Update imports to remove Plan
-from agent import Agent, Memory, euclidean, MEMORY_PATH, CYCLE_PATH, StepExperience
-from world import GridWorld, WORLD_PATH, BASE_CELL_COST, Coord
+from module_agent import Agent, Memory, euclidean, MEMORY_PATH, CYCLE_PATH, StepExperience
+from module_world import GridWorld, WORLD_PATH, BASE_CELL_COST, Coord
 
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -48,7 +47,6 @@ QGroupBox::title { subcontrol-origin: margin; subcontrol-position: top center; p
 QTableWidget { background-color: #fff; border: 1px solid #ccc; color: #333333; }
 QTableWidget::item { color: #333333; }
 QHeaderView::section { background-color: #f0f0f0; padding: 4px; border: 1px solid #ddd; color: #333333; }
-
 /* Basic QSpinBox styling with clear button outlines */
 QSpinBox { 
     border: 1px solid #999;
@@ -57,7 +55,6 @@ QSpinBox {
     padding: 2px;
 }
 """
-
 
 class AgentWindow(QtWidgets.QMainWindow):
     def __init__(self, grid_size: int, seed: Optional[int]):
@@ -119,22 +116,23 @@ class AgentWindow(QtWidgets.QMainWindow):
         self.table = QtWidgets.QTableWidget(0, 5); 
         header_labels = ["#", "Reward", "Cost", "Surprise", "Energy"]
         self.table.setHorizontalHeaderLabels(header_labels)
-        
         # Style the table header
         header = self.table.horizontalHeader()
         header.setStyleSheet("QHeaderView::section { color: #333333; background-color: #f0f0f0; }")
-        
-        hist_layout.addWidget(self.table); right_panel.addWidget(history_group)
+        hist_layout.addWidget(self.table)
+        # Give the history table more vertical space
+        right_panel.addWidget(history_group)
         # charts
         charts = QtWidgets.QGroupBox("Analytics Charts"); ch_layout = QtWidgets.QVBoxLayout(); charts.setLayout(ch_layout)
         self.figure = plt.Figure(figsize=(6, 8), facecolor='white'); self.canvas_chart = FigureCanvas(self.figure)
-        self.ax_cost, self.ax_surprise, self.ax_energy, self.ax_distance = [self.figure.add_subplot(4, 1, i + 1) for i in range(4)]
-        
+        # Remove Expected Cost and use 3 subplots: Surprise, Energy, Distance
+        self.ax_surprise, self.ax_energy, self.ax_distance = [self.figure.add_subplot(3, 1, i + 1) for i in range(3)]
         # Set all subplot backgrounds to white
-        for ax in (self.ax_cost, self.ax_surprise, self.ax_energy, self.ax_distance):
+        for ax in (self.ax_surprise, self.ax_energy, self.ax_distance):
             ax.set_facecolor('white')
-            
-        ch_layout.addWidget(self.canvas_chart); right_panel.addWidget(charts); right_panel.addStretch()
+        ch_layout.addWidget(self.canvas_chart)
+        right_panel.addWidget(charts, stretch=1)
+        right_panel.addStretch()
         # initialize world/agent
         self.world = GridWorld(grid_size, grid_size, random.Random(seed))
         self.agent = Agent((0, 0))
@@ -172,69 +170,46 @@ class AgentWindow(QtWidgets.QMainWindow):
         r = self.table.rowCount(); self.table.insertRow(r)
         for i, k in enumerate(["cycle", "reward", "cost", "surprise", "energy"]):
             item = QtWidgets.QTableWidgetItem(f"{stats[k]:.2f}" if k != "cycle" else str(stats[k]))
-            item.setForeground(QtGui.QColor("#333333"))  # Set text color to dark gray
+            item.setForeground(QtGui.QColor("#333333"))
             self.table.setItem(r, i, item)
 
     def on_run_cycles(self):
         self.trails.clear(); self.step_history.clear(); self.pending = self.spin_cycles.value(); self.run_next_cycle()
 
     def run_next_cycle(self):
-        # 1. Finished?
         if self.pending <= 0:
             self.save_cycle_history()
             return
-
-        # 2. Prepare UI / agent for a fresh cycle
         self.trails.append([])
         self.step_history.append([])
         self.world.reset_cycle()
         self.agent.start_cycle()
         old_explored = self.world.explored.copy()
-
-        # 3. Get a dummy plan object (for compatibility)
         self.current_dummy_plan = self.agent.choose_plan(self.world)
-
-        # 4. Wrap Memory.add_experience so we can tap each StepExperience
         orig_add = self.agent.memory.add_experience
-
         def wrapped(exp: StepExperience):
-            # Forward to the real recorder
             orig_add(exp)
-
-            # Log data the charts need
             distance_from_start = euclidean(self.agent.origin, exp.position)
-            self.step_history[-1].append(
-                {
-                    "expected_cost": exp.expected_cost,
-                    "actual_cost":   exp.actual_cost,
-                    "surprise":      exp.surprise,
-                    "energy":        self.agent.energy,
-                    "distance":      distance_from_start,
-                }
-            )
-
+            self.step_history[-1].append({
+                "expected_cost": exp.expected_cost,
+                "actual_cost":   exp.actual_cost,
+                "surprise":      exp.surprise,
+                "energy":        self.agent.energy,
+                "distance":      distance_from_start,
+            })
         self.agent.memory.add_experience = wrapped
-
-        # 5. Execute the agent's steps (updates UI via repaint_cb)
         self.agent.execute_plan(
-            self.current_dummy_plan,  # This is now just a compatibility placeholder
+            self.current_dummy_plan,
             self.world,
             repaint_cb=self.repaint_and_update_charts,
         )
-
-        # 6. Restore original method
         self.agent.memory.add_experience = orig_add
-
-        # 7. Summarise the cycle
         self.cycles_run += 1
         new_cells = int((~old_explored & self.world.explored).sum())
         dist       = euclidean(self.agent.origin, self.agent.position)
         reward     = dist + new_cells
-
-        # Since we no longer have a plan with expected costs, we calculate from step history
         total_cost = sum(entry["actual_cost"] for entry in self.step_history[-1]) if self.step_history[-1] else 0
         total_surprise = sum(entry["surprise"] for entry in self.step_history[-1]) if self.step_history[-1] else 0
-
         stats = {
             "cycle":    self.cycles_run,
             "reward":   reward,
@@ -245,8 +220,6 @@ class AgentWindow(QtWidgets.QMainWindow):
         self.cycle_history.append(stats)
         self.add_history_row(stats)
         self.update_charts()
-
-        # 8. Queue the next cycle
         self.pending -= 1
         QtCore.QTimer.singleShot(100, self.run_next_cycle)
         
@@ -283,7 +256,7 @@ class AgentWindow(QtWidgets.QMainWindow):
         self.update_canvas(); self.update_charts()
 
     def update_canvas(self):
-        sz = self.world.width * 5; pm = QtGui.QPixmap(sz, sz); pm.fill(QtGui.QColor("#ffffff")) # White background
+        sz = self.world.width * 5; pm = QtGui.QPixmap(sz, sz); pm.fill(QtGui.QColor("#ffffff"))
         p = QtGui.QPainter(pm); csize = 5
         if self.trails: self.trails[-1].append(self.agent.position)
         for y in range(self.world.height):
@@ -302,35 +275,34 @@ class AgentWindow(QtWidgets.QMainWindow):
         ax, ay = self.agent.position; p.drawEllipse(ax * csize, ay * csize, csize, csize); p.end(); self.canvas.setPixmap(pm)
 
     def update_charts(self):
-        for ax in (self.ax_cost, self.ax_surprise, self.ax_energy, self.ax_distance): ax.clear()
+        for ax in (self.ax_surprise, self.ax_energy, self.ax_distance): ax.clear()
         n = len(self.step_history)
         for idx, hist in enumerate(self.step_history):
             if not hist: continue
             hue = (idx * 360 / n) / 360.0; rgb = colorsys.hsv_to_rgb(hue, 1, 0.78)
             cols = [
-                [d["expected_cost"] for d in hist],
                 [d["surprise"] for d in hist],
                 [d["energy"] for d in hist],
                 [d["distance"] for d in hist]
             ]
             xs = list(range(len(hist)))
-            for ax, dat in zip((self.ax_cost, self.ax_surprise, self.ax_energy, self.ax_distance), cols):
+            for ax, dat in zip((self.ax_surprise, self.ax_energy, self.ax_distance), cols):
                 ax.plot(xs, dat, color=rgb)
 
         # Set fixed Y-axis range for energy chart (0-100)
         self.ax_energy.set_ylim(0, 100)
 
-        # Set title colors to dark gray
+        # Title styling
         text_color = '#333333'
         title_style = {'color': text_color}
         
-        self.ax_cost.set_title("Expected Cost", **title_style)
+        # Update titles
         self.ax_surprise.set_title("Surprise", **title_style)
         self.ax_energy.set_title("Energy Remaining", **title_style)
         self.ax_distance.set_title("Distance from Start", **title_style)
         
-        # Set tick colors
-        for ax in (self.ax_cost, self.ax_surprise, self.ax_energy, self.ax_distance):
+        # Style ticks and spines
+        for ax in (self.ax_surprise, self.ax_energy, self.ax_distance):
             for tick in ax.get_xticklabels():
                 tick.set_color(text_color)
             for tick in ax.get_yticklabels():

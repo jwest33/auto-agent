@@ -1,7 +1,7 @@
 # Cognitive Architecture Outline
 
 Simulates an **energy‑constrained explorer** that learns, navigates, and visualizes its behavior in a grid world.  
-The agent uses **rich step memory with directional vectors, surrounding cell information, and a Hopfield associative memory** to optimize exploration and goal-seeking behavior.
+The agent uses **step memory with directional vectors, surrounding cell information, and a Hopfield associative memory** to optimize exploration and goal-seeking behavior.
 
 ---
 
@@ -11,7 +11,7 @@ The agent uses **rich step memory with directional vectors, surrounding cell inf
 | --- | --- | --- |
 | **Step memory** | Raw `StepExperience` events (position ➜ cost, surprise, energy before/after) | In‑RAM list, auto‑serialized to `save/memory.npy` |
 | **Cell stats** | Running averages of cost, surprise, reward for each `(x,y)` | `Memory._cells : Dict[Coord, CellStats]` |
-| **Per‑cell Hopfield** | Predicts **energy cost** of arbitrary cells given rich context features | `cell_hopfield` (key dim = 16, cap = 4096) |
+| **Per‑cell Hopfield** | Predicts **energy cost** of arbitrary cells given context features | `cell_hopfield` (key dim = 16, cap = 4096) |
 | **Cycle summaries** | Aggregate reward / cost / surprise per exploration cycle | `save/cycles.npy` |
 
 ### 1.1 Key Encodings  
@@ -26,7 +26,7 @@ The agent uses **rich step memory with directional vectors, surrounding cell inf
 
 ## 2  Decision Making
 
-1. **Rich memory-based decision making** that evaluates potential moves based on:
+1. **Memory-based decision making** that evaluates potential moves based on:
    - Cost estimates from Hopfield memory
    - Expected surprise
    - Goal-seeking heuristic
