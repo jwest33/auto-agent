@@ -213,7 +213,7 @@ class Memory:
 
     def _encode_cell(self, world: GridWorld, origin: Coord, goal: Coord, 
                     position: Coord, cell: Coord, energy: float) -> torch.Tensor:
-        """16-d feature vector: 
+        """13-d feature vector: 
         - direction vectors (origin, goal, self)
         - current cell shade
         - surrounding cell shades (normalized)
