@@ -20,7 +20,7 @@ DEFAULT_SIZE = 150
 DEFAULT_SEED = None
 
 # Parse command line arguments
-parser = argparse.ArgumentParser(description='Hopfield Agent Pathfinder')
+parser = argparse.ArgumentParser(description='Hopfield Memory Pathfinder')
 parser.add_argument('--reset', action='store_true', help='Reset all memory files at startup')
 args, unknown_args = parser.parse_known_args()
 
@@ -59,7 +59,7 @@ QSpinBox {
 class AgentWindow(QtWidgets.QMainWindow):
     def __init__(self, grid_size: int, seed: Optional[int]):
         super().__init__()
-        self.setWindowTitle("Hopfield Agent Pathfinder")
+        self.setWindowTitle("Hopfield Memory Pathfinder")
         self.resize(1200, 800)
         self.central = QtWidgets.QWidget(); self.setCentralWidget(self.central)
         self.central.setStyleSheet(APP_STYLES)
