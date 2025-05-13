@@ -11,11 +11,11 @@ The agent uses **step memory with directional vectors, surrounding cell informat
 | --- | --- | --- |
 | **Step memory** | Raw `StepExperience` events (position ➜ cost, surprise, energy before/after) | In‑RAM list, auto‑serialized to `save/memory.npy` |
 | **Cell stats** | Running averages of cost, surprise, reward for each `(x,y)` | `Memory._cells : Dict[Coord, CellStats]` |
-| **Per‑cell Hopfield** | Predicts **energy cost** of arbitrary cells given context features | `cell_hopfield` (key dim = 13, cap = 4096) |
+| **Per‑cell Hopfield** | Predicts **energy cost** of arbitrary cells given context features | `cell_hopfield` (key dim = 12, cap = 4096) |
 | **Cycle summaries** | Aggregate reward / cost / surprise per exploration cycle | `save/cycles.npy` |
 
 ### 1.1 Key Encodings  
-*Cell cost keys* encode a 13-dimensional feature vector including:
+*Cell cost keys* encode a 12-dimensional feature vector including:
 - Direction vectors (origin→cell, goal→cell, self→cell)
 - Current cell shade (normalized)
 - Surrounding cell shades (normalized)

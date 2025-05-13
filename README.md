@@ -32,7 +32,7 @@ python app_main.py --reset
 
 2. The **Agent** keeps a Hopfield memory for cell cost prediction and tabular statistics to learn from experiences.
 
-3. **Decision Making** uses a 13-dimensional feature vector that includes direction vectors, cell shade information, surrounding cell data, and energy levels to evaluate potential moves.
+3. **Decision Making** uses a 12-dimensional feature vector that includes direction vectors, cell shade information, surrounding cell data, and energy levels to evaluate potential moves.
 
 4. For each step, the agent:
    - Evaluates all neighboring cells based on memory and goal-seeking behavior
@@ -75,7 +75,7 @@ You can use the following command line arguments:
 
 ## Technical Details
 
-- **Memory Encoding**: Uses a 13-dimensional feature vector to remember cell contexts
+- **Memory Encoding**: Uses a 12-dimensional feature vector to remember cell contexts
 - **Adaptive Learning**: Continuously improves cost predictions through Hopfield memory
 - **Exploration vs. Exploitation**: Balances between following the best path and exploring alternatives
 - **Energy Management**: Strategically seeks energy restores by moving between divisible shade values

@@ -24,7 +24,7 @@ if not os.path.exists(save_dir):
 MEMORY_PATH = os.path.join(save_dir, "memory.npy")
 CYCLE_PATH = os.path.join(save_dir, "cycles.npy")
 ALPHA = 1.0  # reward-vs-cost weight
-CELL_KEY_DIM = 13  # increased to store more context around cell
+CELL_KEY_DIM = 12  # increased to store more context around cell
 CELL_CAPACITY = 4096  # hopfield slots for cell memories
 BACKTRACK_PENALTY = 10.0   # strong penalty for stepping straight back
 RECENT_VISIT_PENALTY =  2.0   # per‑occurrence penalty inside sliding window
@@ -216,7 +216,7 @@ class Memory:
 
     def _encode_cell(self, world: GridWorld, origin: Coord, goal: Coord, 
                     position: Coord, cell: Coord, energy: float) -> torch.Tensor:
-        """13-d feature vector: 
+        """12-d feature vector: 
         - direction vectors (origin, goal, self)
         - current cell shade
         - surrounding cell shades (normalized)
@@ -230,7 +230,6 @@ class Memory:
         
         # Cell shade and normalized energy
         shade = int(world.grid[cell[1], cell[0]])
-        shade_norm = shade / 9.0
         energy_norm = energy / 100.0
         
         # Get surrounding cell values (if available)
@@ -245,7 +244,7 @@ class Memory:
         
         # Combine all features
         return torch.tensor(
-            [dox, doy, dgx, dgy, dsx, dsy, shade_norm, energy_norm, 
+            [dox, doy, dgx, dgy, dsx, dsy, energy_norm, 
              dist_to_goal] + neighbor_vals,
             dtype=torch.float32
         )
