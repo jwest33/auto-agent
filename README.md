@@ -36,7 +36,7 @@ python app_main.py --reset
 
 4. For each step, the agent:
    - Evaluates all neighboring cells based on memory and goal-seeking behavior
-   - Chooses the move that minimizes `(cost + surprise) - α·(1.0/(goal_distance + 1.0))`
+   - Chooses the move that minimizes `(cost + surprise + oscillation) - α·(1.0/(goal_distance + 1.0))`
    - Occasionally selects from the top 3 moves with decreasing probability for exploration
    - Records the actual cost and surprise, updating its memory
 

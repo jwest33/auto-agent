@@ -26,6 +26,9 @@ CYCLE_PATH = os.path.join(save_dir, "cycles.npy")
 ALPHA = 1.0  # reward-vs-cost weight
 CELL_KEY_DIM = 13  # increased to store more context around cell
 CELL_CAPACITY = 4096  # hopfield slots for cell memories
+BACKTRACK_PENALTY = 10.0   # strong penalty for stepping straight back
+RECENT_VISIT_PENALTY =  2.0   # per‑occurrence penalty inside sliding window
+RECENT_WINDOW = 20   # how many recent steps to look at
 
 def euclidean(a: Coord, b: Coord) -> float:
     return math.hypot(a[0] - b[0], a[1] - b[1])
@@ -356,17 +359,26 @@ class Agent:
     def _evaluate_move(self, world: GridWorld, position: Coord, cell: Coord, goal: Coord) -> float:
         """Score a potential move using context."""
         # Cost estimate from memory
-        cost = self._estimate_cost(world, position, cell)
-        
-        # Expected surprise (if available)
+        cost     = self._estimate_cost(world, position, cell)
         surprise = self.memory.get_expected_surprise(cell) or 0.0
-        
-        # Goal-seeking heuristic
+
         goal_dist = euclidean(cell, goal)
-        
-        # Combine into a single score (lower is better)
-        score = (cost + surprise) - ALPHA * (1.0 / (goal_dist + 1.0))
-        
+
+        oscillation_penalty = 0.0
+
+        if self._prev_pos and cell == self._prev_pos:
+            oscillation_penalty += BACKTRACK_PENALTY
+
+        recent_visits  = self._cycle_steps[-RECENT_WINDOW:]
+        revisit_count  = sum(1 for p in recent_visits if p == cell)
+        oscillation_penalty += RECENT_VISIT_PENALTY * revisit_count
+
+        score = (
+            cost
+            + surprise
+            + oscillation_penalty # discourage oscillation
+            - ALPHA * (1.0 / (goal_dist + 1.0)) # encourage progress
+        )
         return score
 
     def choose_next_move(self, world: GridWorld) -> Coord:

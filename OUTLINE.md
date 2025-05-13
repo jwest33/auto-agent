@@ -33,7 +33,7 @@ The agent uses **step memory with directional vectors, surrounding cell informat
    
 2. **Move evaluation formula**:  
    ```
-   score = (cost + surprise) - ALPHA * (1.0 / (goal_dist + 1.0))
+   score = (cost + surprise + oscillation) - ALPHA * (1.0 / (goal_dist + 1.0))
    ```
    (ALPHA = 1.0 by default)
 

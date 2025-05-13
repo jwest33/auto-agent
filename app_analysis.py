@@ -131,30 +131,43 @@ class AnalyticsWindow(QtWidgets.QMainWindow):
         self.resize(1400, 800)
         self.data = data
 
-        central = QtWidgets.QWidget(); self.setCentralWidget(central)
+        central = QtWidgets.QWidget()
+        self.setCentralWidget(central)
         hbox = QtWidgets.QHBoxLayout(central)
 
-        self.cycle_table = CycleTable(); hbox.addWidget(self.cycle_table, 1)
+        self.cycle_table = CycleTable()
+        hbox.addWidget(self.cycle_table, 1)
 
         right_splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
-        self.step_table = StepTable(); right_splitter.addWidget(self.step_table)
+        self.step_table = StepTable()
+        right_splitter.addWidget(self.step_table)
 
-        fig = matplotlib.figure.Figure(figsize=(5, 4))
-        self.canvas = FigureCanvas(fig); right_splitter.addWidget(self.canvas)
-        self.ax_cost    = fig.add_subplot(4, 1, 1)
-        self.ax_surpr   = fig.add_subplot(4, 1, 2)
-        self.ax_energy  = fig.add_subplot(4, 1, 3)
-        self.ax_dist    = fig.add_subplot(4, 1, 4)
+        # Determine memory dimensions
+        if self.data.steps is not None:
+            self.step_dims = list(self.data.steps.dtype.names)
+        else:
+            self.step_dims = [
+                "x", "y", "shade", "expected_cost", "actual_cost",
+                "surprise", "energy_before", "energy_after", "timestamp"
+            ]
+
+        # Create dynamic plots for every memory dimension
+        fig = matplotlib.figure.Figure(figsize=(5, max(4, len(self.step_dims) * 1.5)))
+        self.canvas = FigureCanvas(fig)
+        self.axes: List[matplotlib.axes.Axes] = []
+        for i, dim in enumerate(self.step_dims):
+            ax = fig.add_subplot(len(self.step_dims), 1, i + 1)
+            ax.set_title(dim.replace("_", " ").title())
+            self.axes.append(ax)
         fig.tight_layout()
+        right_splitter.addWidget(self.canvas)
 
         hbox.addWidget(right_splitter, 3)
 
         if self.data.cycles is not None and self.data.steps is not None:
             self.cycle_table.populate(self.data.cycles)
-            # select first cycle by default
             if self.data.cycles.size:
                 self.select_cycle(0)
-            # connect selection signal
             self.cycle_table.itemSelectionChanged.connect(self._on_cycle_select)
         else:
             self._show_warning("No memory records found in the save directory.")
@@ -176,7 +189,7 @@ class AnalyticsWindow(QtWidgets.QMainWindow):
         self._update_plots(steps)
 
     def _update_plots(self, steps: np.ndarray):
-        for ax in (self.ax_cost, self.ax_surpr, self.ax_energy, self.ax_dist):
+        for ax in self.axes:
             ax.clear()
 
         if not steps.size:
@@ -184,24 +197,13 @@ class AnalyticsWindow(QtWidgets.QMainWindow):
             return
 
         xs = np.arange(len(steps))
-        # cost
-        self.ax_cost.plot(xs, steps["expected_cost"], label="expected")
-        self.ax_cost.plot(xs, steps["actual_cost"],  label="actual")
-        self.ax_cost.set_title("Cost")
-        self.ax_cost.legend()
-        # surprise
-        self.ax_surpr.plot(xs, steps["surprise"], label="surprise")
-        self.ax_surpr.set_title("Surprise")
-        # energy
-        self.ax_energy.plot(xs, steps["energy_after"], label="energy after move")
-        self.ax_energy.set_title("Energy")
-        self.ax_energy.set_ylim(0, 100)
-        # distance
-        dists = np.sqrt((steps["x"] - ORIGIN[0]) ** 2 + (steps["y"] - ORIGIN[1]) ** 2)
-        self.ax_dist.plot(xs, dists, label="distance")
-        self.ax_dist.set_title("Distance from origin")
+        for ax, dim in zip(self.axes, self.step_dims):
+            data = steps[dim]
+            ax.plot(xs, data, label=dim)
+            ax.legend()
 
         self.canvas.draw()
+
 
 def main():
     app = QtWidgets.QApplication(sys.argv)
