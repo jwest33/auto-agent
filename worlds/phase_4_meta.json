@@ -1,0 +1,21 @@
+{
+  "K1": {
+    "oid": "K1",
+    "ktype": "A",
+    "cls": "Key"
+  },
+  "D1": {
+    "oid": "D1",
+    "dtype": "A",
+    "is_locked": true,
+    "cls": "Door"
+  },
+  "S1": {
+    "oid": "S1",
+    "target_ids": [
+      "D1"
+    ],
+    "state": false,
+    "cls": "Switch"
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "K1": {
+    "oid": "K1",
+    "ktype": "1",
+    "cls": "Key"
+  },
+  "D1": {
+    "oid": "D1",
+    "dtype": "1",
+    "is_locked": true,
+    "cls": "Door"
+  },
+  "S1": {
+    "oid": "S1",
+    "target_ids": [
+      "D1"
+    ],
+    "state": false,
+    "cls": "Switch"
+  },
+  "K2": {
+    "oid": "K2",
+    "ktype": "2",
+    "cls": "Key"
+  },
+  "D2": {
+    "oid": "D2",
+    "dtype": "2",
+    "is_locked": true,
+    "cls": "Door"
+  },
+  "S2": {
+    "oid": "S2",
+    "target_ids": [
+      "D2"
+    ],
+    "state": false,
+    "cls": "Switch"
+  },
+  "K3": {
+    "oid": "K3",
+    "ktype": "3",
+    "cls": "Key"
+  },
+  "D3": {
+    "oid": "D3",
+    "dtype": "3",
+    "is_locked": true,
+    "cls": "Door"
+  },
+  "S3": {
+    "oid": "S3",
+    "target_ids": [
+      "D3"
+    ],
+    "state": false,
+    "cls": "Switch"
+  }
+}
