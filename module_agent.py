@@ -29,6 +29,7 @@ CELL_CAPACITY = 4096  # hopfield slots for cell memories
 BACKTRACK_PENALTY = 10.0   # strong penalty for stepping straight back
 RECENT_VISIT_PENALTY =  2.0   # per‑occurrence penalty inside sliding window
 RECENT_WINDOW = 20   # how many recent steps to look at
+CURIOSITY_WEIGHT = 2
 
 def euclidean(a: Coord, b: Coord) -> float:
     return math.hypot(a[0] - b[0], a[1] - b[1])
@@ -355,28 +356,29 @@ class Agent:
         est = self.memory.estimate_cell_cost(world, self.origin, goal, position, cell, self.energy)
         return est if est is not None else world.get_energy_cost(*cell)
 
-    def _evaluate_move(self, world: GridWorld, position: Coord, cell: Coord, goal: Coord) -> float:
-        """Score a potential move using context."""
-        # Cost estimate from memory
-        cost     = self._estimate_cost(world, position, cell)
+    def _evaluate_move(self, world, position, cell, goal):
+        # Existing calculations...
+        cost = self._estimate_cost(world, position, cell)
         surprise = self.memory.get_expected_surprise(cell) or 0.0
-
         goal_dist = euclidean(cell, goal)
-
         oscillation_penalty = 0.0
-
         if self._prev_pos and cell == self._prev_pos:
             oscillation_penalty += BACKTRACK_PENALTY
-
-        recent_visits  = self._cycle_steps[-RECENT_WINDOW:]
-        revisit_count  = sum(1 for p in recent_visits if p == cell)
+        recent_visits = self._cycle_steps[-RECENT_WINDOW:]
+        revisit_count = sum(1 for p in recent_visits if p == cell)
         oscillation_penalty += RECENT_VISIT_PENALTY * revisit_count
-
+        
+        # **Curiosity bonus**
+        query = self.memory._encode_cell(world, self.origin, goal, position, cell, self.energy)
+        uncertainty = self.memory.cell_hopfield.hopfield_uncertainty(query)
+        curiosity_bonus = CURIOSITY_WEIGHT * uncertainty
+        
         score = (
             cost
             + surprise
-            + oscillation_penalty # discourage oscillation
-            - ALPHA * (1.0 / (goal_dist + 1.0)) # encourage progress
+            + oscillation_penalty
+            - ALPHA * (1.0 / (goal_dist + 1.0))
+            - curiosity_bonus  # **subtract to favor moves to uncertain contexts**
         )
         return score
 

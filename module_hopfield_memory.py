@@ -61,3 +61,14 @@ class HopfieldMemory(nn.Module):
         sims = torch.mv(active_k, query) / self.scale  # (N,)
         weights = torch.softmax(sims, dim=0)  # (N,)
         return (weights.unsqueeze(-1) * self.values[: self.item_count]).sum(0)
+
+    def hopfield_uncertainty(self, query: torch.Tensor):
+        if self.item_count == 0:
+            return 1.0
+        active_k = self.keys[:self.item_count]
+        active_v = self.values[:self.item_count].squeeze(-1)
+        sims = torch.mv(active_k, query) / self.scale
+        weights = torch.softmax(sims, dim=0)
+        pred = (weights * active_v).sum()
+        variance = (weights * (active_v - pred).pow(2)).sum()
+        return variance.item()
