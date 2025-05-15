@@ -89,11 +89,11 @@ You can use the following command line arguments:
 python app_analysis.py
 ```
 
-![Analysis Cycle Summary Example](example_memory_analysis-1.jpg)
+![Analysis Cycle Summary Example](example_memory_analysis_1.jpg)
 
-![Analysis Memory Query Example](example_memory_analysis-2.jpg)
+![Analysis Memory Query Example](example_memory_analysis_2.jpg)
 
-![Analysis Heatmap Example](example_memory_analysis-3.jpg)
+![Analysis Heatmap Example](example_memory_analysis_3.jpg)
 
 ---
 
