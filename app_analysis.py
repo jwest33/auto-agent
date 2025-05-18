@@ -1072,65 +1072,46 @@ class MemoryNetworkWidget(QtWidgets.QWidget):
         self.figure.tight_layout()
         self.canvas.draw()
 
-class AnalyticsWindow(QtWidgets.QMainWindow):
-    def __init__(self, data: MemoryData):
-        super().__init__()
-        self.setWindowTitle("Advanced Memory Analytics Viewer")
-        self.resize(1500, 900)
+class AnalyticsPanel(QtWidgets.QWidget):
+    def __init__(self, data: MemoryData, parent=None):
+        super().__init__(parent)
         self.data = data
-        
-        # Apply professional stylesheet
+
+        # Apply consistent UI style if desired
         self.setStyleSheet(APP_STYLES)
-        
-        # Configure matplotlib for better chart appearance
-        self.configure_matplotlib_style()
-        
-        # Create central widget with tab layout
-        central = QtWidgets.QWidget()
-        self.setCentralWidget(central)
-        main_layout = QtWidgets.QVBoxLayout(central)
-        
-        # Top panel with memory metrics
+
+        # Main layout
+        layout = QtWidgets.QVBoxLayout(self)
+
+        # Top panel: memory metrics summary
         self.metrics_widget = MemoryMetricsWidget()
-        main_layout.addWidget(self.metrics_widget)
-        
-        # Tab widget for different views
+        layout.addWidget(self.metrics_widget)
+
+        # Central tab view for analytics
         self.tabs = QtWidgets.QTabWidget()
-        main_layout.addWidget(self.tabs)
-        
-        # Tab 1: Data Explorer
+        layout.addWidget(self.tabs)
+
+        # Create tab contents
         self.create_data_explorer_tab()
-        
-        # Tab 2: Memory Heatmap
         self.create_memory_heatmap_tab()
-        
-        # Tab 3: Memory Network
         self.create_memory_network_tab()
-        
-        # Tab 4: Memory Query Analysis
         self.create_memory_query_tab()
-        
-        # Load data
+
+        # Populate memory metrics and tables if data is available
         if self.data.cycles is not None and self.data.steps is not None:
             self.cycle_table.populate(self.data.cycles, self.data.cycle_indices)
-            
-            # Display first cycle if available
+
             if self.data.cycles.size:
                 self.select_cycle(0)
-            
-            # Update metrics
+
             metrics = self.data.get_memory_metrics()
             self.metrics_widget.update_metrics(metrics)
-            
-            # Set data for other tabs
+
             self.heatmap_widget.set_data(self.data)
             self.network_widget.set_data(self.data)
             self.query_panel.set_data(self.data)
-            
-            # Connect signal
+
             self.cycle_table.itemSelectionChanged.connect(self._on_cycle_select)
-        else:
-            self._show_warning("No memory records found in the save directory.")
 
     def configure_matplotlib_style(self):
         """Configure matplotlib for a modern, professional look"""
@@ -1249,9 +1230,10 @@ class AnalyticsWindow(QtWidgets.QMainWindow):
         # Update the status bar with cycle info
         if idx < len(self.data.cycles):
             cycle = self.data.cycles[idx]
-            self.statusBar().showMessage(
-                f"Cycle {idx+1}: Reward={cycle['reward']:.2f}, Cost={cycle['cost']:.2f}, "
-                f"Surprise={cycle['surprise']:.2f}, Energy Left={cycle['energy_left']:.1f}"
+            print(
+                f"[Analytics] Cycle {idx+1}: Reward={cycle['reward']:.2f}, "
+                f"Cost={cycle['cost']:.2f}, Surprise={cycle['surprise']:.2f}, "
+                f"Energy Left={cycle['energy_left']:.1f}"
             )
 
     def _update_plots(self, steps: np.ndarray):
@@ -1310,7 +1292,7 @@ class AnalyticsWindow(QtWidgets.QMainWindow):
 def main():
     app = QtWidgets.QApplication([])
     data = MemoryData()
-    win = AnalyticsWindow(data)
+    win = AnalyticsPanel(data)
     win.show()
     sys.exit(app.exec_())
 

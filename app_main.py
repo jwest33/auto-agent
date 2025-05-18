@@ -11,6 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 from module_agent import Agent, Memory, euclidean, MEMORY_PATH, CYCLE_PATH, StepExperience
 from module_world import GridWorld, WORLD_PATH, BASE_CELL_COST, Coord
+from app_analysis import AnalyticsPanel, MemoryData
 
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -137,9 +138,18 @@ class AgentWindow(QtWidgets.QMainWindow):
         self.setCentralWidget(self.central)
         
         # Main layout
-        main_layout = QtWidgets.QHBoxLayout(self.central)
+        self.tabs = QtWidgets.QTabWidget()
+        main_layout = QtWidgets.QVBoxLayout(self.central)
+        main_layout.addWidget(self.tabs)
         main_layout.setSpacing(15)
         main_layout.setContentsMargins(15, 15, 15, 15)
+        
+        agent_tab = QtWidgets.QWidget()
+        agent_layout = QtWidgets.QHBoxLayout(agent_tab)
+        agent_layout.setSpacing(15)
+        agent_layout.setContentsMargins(15, 15, 15, 15)
+        
+        self.tabs.addTab(agent_tab, "Agent")
         
         # Left panel containing the grid canvas
         left_panel = QtWidgets.QVBoxLayout()
@@ -180,12 +190,12 @@ class AgentWindow(QtWidgets.QMainWindow):
         status_layout.addWidget(self.cycles_run_label)
         
         left_panel.addWidget(self.status_bar)
-        main_layout.addLayout(left_panel, stretch=5)
+        agent_layout.addLayout(left_panel, stretch=5)
         
         # Right panel
         right_panel = QtWidgets.QVBoxLayout()
         right_panel.setSpacing(10)
-        main_layout.addLayout(right_panel, stretch=4)
+        agent_layout.addLayout(right_panel, stretch=4)
         
         # Controls group
         ctrl_group = QtWidgets.QGroupBox("Controls")
@@ -254,6 +264,11 @@ class AgentWindow(QtWidgets.QMainWindow):
         hist_layout = QtWidgets.QVBoxLayout()
         history_group.setLayout(hist_layout)
         
+        table_container = QtWidgets.QWidget()
+        table_layout = QtWidgets.QVBoxLayout(table_container)
+        table_layout.setContentsMargins(4, 8, 4, 4)  # Add top margin to prevent overlap
+        table_layout.setSpacing(4)  # Add some space between widgets
+
         self.table = QtWidgets.QTableWidget(0, 5)
         header_labels = ["Cycle #", "Reward", "Cost", "Surprise", "Energy"]
         self.table.setHorizontalHeaderLabels(header_labels)
@@ -261,27 +276,58 @@ class AgentWindow(QtWidgets.QMainWindow):
         self.table.setAlternatingRowColors(True)
         self.table.verticalHeader().setVisible(False)
         self.table.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
-        
-        hist_layout.addWidget(self.table)
-        right_panel.addWidget(history_group)
-        
-        # Charts with improved styling
-        charts = QtWidgets.QGroupBox("Analytics")
+
+        table_layout.addWidget(self.table)
+        # Create a tab widget to hold history and analytics
+        info_tabs = QtWidgets.QTabWidget()
+
+        # --- Cycle History Tab ---
+        history_tab = QtWidgets.QWidget()
+        hist_layout = QtWidgets.QVBoxLayout(history_tab)
+        history_group = QtWidgets.QGroupBox("Cycle History")
+        hist_group_layout = QtWidgets.QVBoxLayout()
+        history_group.setLayout(hist_group_layout)
+
+        # Table setup
+        table_container = QtWidgets.QWidget()
+        table_layout = QtWidgets.QVBoxLayout(table_container)
+        table_layout.setContentsMargins(4, 8, 4, 4)
+        table_layout.setSpacing(4)
+
+        self.table = QtWidgets.QTableWidget(0, 5)
+        header_labels = ["Cycle #", "Reward", "Cost", "Surprise", "Energy"]
+        self.table.setHorizontalHeaderLabels(header_labels)
+        self.table.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
+        self.table.setAlternatingRowColors(True)
+        self.table.verticalHeader().setVisible(False)
+        self.table.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+
+        table_layout.addWidget(self.table)
+        hist_group_layout.addWidget(table_container)
+        hist_layout.addWidget(history_group)
+        info_tabs.addTab(history_tab, "Cycle History")
+
+        # --- Analytics Tab ---
+        analytics_tab = QtWidgets.QWidget()
+        analytics_layout = QtWidgets.QVBoxLayout(analytics_tab)
+        charts = QtWidgets.QGroupBox("History")
         ch_layout = QtWidgets.QVBoxLayout()
         charts.setLayout(ch_layout)
-        
-        # Use a larger figure with better proportions and white background
+
         self.figure = plt.Figure(figsize=(6, 9), dpi=100, facecolor='white')
         self.canvas_chart = FigureCanvas(self.figure)
         self.canvas_chart.setStyleSheet("background-color: white;")
-        
-        # Create subplots with better spacing
+
         self.ax_surprise = self.figure.add_subplot(3, 1, 1)
         self.ax_energy = self.figure.add_subplot(3, 1, 2)
         self.ax_distance = self.figure.add_subplot(3, 1, 3)
-        
+
         ch_layout.addWidget(self.canvas_chart)
-        right_panel.addWidget(charts, stretch=2)
+        analytics_layout.addWidget(charts)
+        info_tabs.addTab(analytics_tab, "History")
+
+        # Add the new tab widget to the right panel
+        right_panel.addWidget(info_tabs, stretch=2)
         
         # Initialize world/agent
         self.world = GridWorld(grid_size, grid_size, random.Random(seed))
@@ -291,6 +337,12 @@ class AgentWindow(QtWidgets.QMainWindow):
         self.cycle_history: List[dict] = []
         self.load_cycle_history()
         
+        # Analysis tab
+        self.memory_data = MemoryData()
+        self.analytics_tab = AnalyticsPanel(self.memory_data)
+        
+        self.tabs.addTab(self.analytics_tab, "Memory Analytics")
+                
         # Visualization helpers
         self.trails: List[List[Coord]] = []
         self.step_history: List[list] = []
