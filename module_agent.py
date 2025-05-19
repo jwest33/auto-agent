@@ -23,7 +23,7 @@ if not os.path.exists(save_dir):
     os.makedirs(save_dir)
 MEMORY_PATH = os.path.join(save_dir, "memory.npy")
 CYCLE_PATH = os.path.join(save_dir, "cycles.npy")
-ALPHA = 1.0  # reward-vs-cost weight
+ALPHA = 5  # reward-vs-cost weight
 CELL_KEY_DIM = 12  # increased to store more context around cell
 CELL_CAPACITY = 4096  # hopfield slots for cell memories
 BACKTRACK_PENALTY = 10.0   # strong penalty for stepping straight back
