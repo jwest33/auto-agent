@@ -69,7 +69,7 @@ All state is automatically saved between runs:
 * Recent-visit penalty
 * Curiosity bonus
 
-![Hyper evo example](example_app_hyper-param-evo.jpg)
+![Hyper evo example](example_app_hyper_param_evo.jpg)
 
 ---
 
