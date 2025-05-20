@@ -7,7 +7,9 @@ import platform
 from collections import defaultdict
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple
+from copy import deepcopy
 
+import json
 import numpy as np
 import torch
 from PyQt5 import QtWidgets
@@ -23,11 +25,14 @@ if not os.path.exists(save_dir):
     os.makedirs(save_dir)
 MEMORY_PATH = os.path.join(save_dir, "memory.npy")
 CYCLE_PATH = os.path.join(save_dir, "cycles.npy")
+HYPER_PATH = os.path.join(save_dir, "hyper.json")
+
 ALPHA = 5  # reward-vs-cost weight
 CELL_KEY_DIM = 12  # increased to store more context around cell
 CELL_CAPACITY = 4096  # hopfield slots for cell memories
 BACKTRACK_PENALTY = 10.0   # strong penalty for stepping straight back
 RECENT_VISIT_PENALTY =  2.0   # per‑occurrence penalty inside sliding window
+
 RECENT_WINDOW = 20   # how many recent steps to look at
 CURIOSITY_WEIGHT = 2
 
@@ -188,7 +193,7 @@ class Memory:
                 # If loading fails, delete the old file
                 os.remove(CYCLE_PATH)
                 print("Removed incompatible cycle file. Starting fresh.")
-                
+
         # Check if we need to reset due to dimension changes
         sample_key = self._encode_sample_key()
         if sample_key.shape[-1] != self.cell_hopfield.key_dim:
@@ -514,3 +519,139 @@ class Agent:
                 self._cached_costs_surprises = []
         
         return DummyPlan()
+    
+class HyperScheduler:
+    """
+    Simple gradient-free hill-climber that *always* nudges the four
+    hyper-parameters each cycle, accepts the change if it improves the
+    real (not simulated) cycle score, and automatically shrinks or
+    enlarges the step size.
+
+      - `params`  : current values used by the Agent
+      - `step`    : per-parameter learning-rate (decays when a move hurts)
+      - `momentum`: keeps successful moves moving in the same direction
+      - `bounds`  : hard limits so values never explode
+    """
+    def __init__(self):
+        self.params = dict(
+            ALPHA                = 5.0,
+            BACKTRACK_PENALTY    = 10.0,
+            RECENT_VISIT_PENALTY =  2.0,
+            CURIOSITY_WEIGHT     =  2.0,
+        )
+        self.step      = {k: 0.10 for k in self.params} # initial delta
+        self.momentum  = 0.8
+        self.bounds    = {
+            "ALPHA":                (0.5, 20),
+            "BACKTRACK_PENALTY":    (0.0, 20),
+            "RECENT_VISIT_PENALTY": (0.0, 10),
+            "CURIOSITY_WEIGHT":     (0.0, 10),
+        }
+
+        self.best_score  = None        # score of the best param-set so far
+        self.best_params = deepcopy(self.params)
+
+        # allow warm-start from disk
+        if os.path.exists(HYPER_PATH):
+            try:
+                with open(HYPER_PATH) as f:
+                    saved = json.load(f)
+                self.params.update(saved["params"])
+                self.step.update(saved["step"])
+                self.best_score  = saved["best_score"]
+                self.best_params = deepcopy(self.params)
+            except (OSError, json.JSONDecodeError, KeyError):
+                pass
+            
+    @staticmethod
+    def _cycle_score(stats: dict, p: dict) -> float:
+        """
+        Higher = better.  *Every* knob is allowed to make the four terms
+        more or less important, so moving a knob always has a measurable
+        effect on real cycle performance.
+        """
+        return (
+            + p["ALPHA"]                * stats["reward"]
+            - p["BACKTRACK_PENALTY"]    * stats["cost"]
+            - p["RECENT_VISIT_PENALTY"] * stats["surprise"]
+            + p["CURIOSITY_WEIGHT"]     * stats["energy"]
+        )
+
+    def _clip(self, v, name):
+        lo, hi = self.bounds[name]
+        return max(lo, min(hi, v))
+
+    def update(self, last_cycle_stats: dict):
+        """Call this once **after** every completed cycle."""
+        current_score = self._cycle_score(last_cycle_stats, self.params)
+
+        # first cycle sets the baseline
+        if self.best_score is None:
+            self.best_score  = current_score
+            self.best_params = deepcopy(self.params)
+            return
+        
+        for name in self.params:
+            delta   = self.step[name]
+            current = self.params[name]
+
+            # probe in both directions
+            trial_plus  = deepcopy(self.params)
+            trial_plus[name] = self._clip(current + delta, name)
+            plus_score  = self._cycle_score(last_cycle_stats, trial_plus)
+
+            trial_minus = deepcopy(self.params)
+            trial_minus[name] = self._clip(current - delta, name)
+            minus_score = self._cycle_score(last_cycle_stats, trial_minus)
+
+            # decide what to do
+            if plus_score > current_score or minus_score > current_score:
+                # choose the better direction and keep some momentum
+                if plus_score >= minus_score:
+                    direction = +1
+                    chosen_score = plus_score
+                else:
+                    direction = -1
+                    chosen_score = minus_score
+
+                # momentum makes successful directions accelerate a bit
+                delta *= (1 + self.momentum)
+                self.params[name] = self._clip(current + direction * delta, name)
+                self.step[name]   = delta
+                current_score     = chosen_score
+            else:
+                self.step[name] = max(delta * 0.5, 1e-3)   # never go to zero
+
+        if current_score > self.best_score:
+            self.best_score  = current_score
+            self.best_params = deepcopy(self.params)
+
+        self._save()
+
+    def _save(self):
+        with open(HYPER_PATH, "w") as f:
+            json.dump(
+                dict(
+                    params      = self.params,
+                    step        = self.step,
+                    best_score  = self.best_score,
+                ),
+                f,
+                indent=2,
+            )
+
+    def load(self):
+        if not os.path.exists(HYPER_PATH):
+            return  # first run – nothing to load
+
+        try:
+            with open(HYPER_PATH) as f:
+                saved = json.load(f)
+
+            self.params.update(saved["params"])
+            self.step.update(saved["step"])
+            self.best_score  = saved.get("best_score", self.best_score)
+            self.best_params = saved["params"].copy()
+        except (OSError, json.JSONDecodeError, KeyError):
+            # corrupt or missing fields – just ignore and keep running
+            pass

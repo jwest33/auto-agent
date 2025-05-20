@@ -9,9 +9,11 @@ import argparse
 import colorsys
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-from module_agent import Agent, Memory, euclidean, MEMORY_PATH, CYCLE_PATH, StepExperience
+import module_agent
+from module_agent import Agent, Memory, euclidean, MEMORY_PATH, CYCLE_PATH, StepExperience, HyperScheduler
 from module_world import GridWorld, WORLD_PATH, BASE_CELL_COST, Coord
 from app_analysis import AnalyticsPanel, MemoryData
+from module_hyperparam_evo import HyperParamEvolutionWidget
 
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -281,13 +283,24 @@ class AgentWindow(QtWidgets.QMainWindow):
         # Create a tab widget to hold history and analytics
         info_tabs = QtWidgets.QTabWidget()
 
-        # --- Cycle History Tab ---
+        # Cycle History Tab
         history_tab = QtWidgets.QWidget()
         hist_layout = QtWidgets.QVBoxLayout(history_tab)
         history_group = QtWidgets.QGroupBox("Cycle History")
         hist_group_layout = QtWidgets.QVBoxLayout()
         history_group.setLayout(hist_group_layout)
+        
+        self.scheduler = module_agent.HyperScheduler()
+        self.scheduler.load()
+        
+        # Hyper-parameter tab
+        hyper_tab = QtWidgets.QWidget()
+        hyper_layout = QtWidgets.QVBoxLayout(hyper_tab)
+        self.hyper_widget = HyperParamEvolutionWidget()
+        hyper_layout.addWidget(self.hyper_widget)
 
+        self.hyper_widget.add_cycle(0, self.scheduler.params.copy())
+        
         # Table setup
         table_container = QtWidgets.QWidget()
         table_layout = QtWidgets.QVBoxLayout(table_container)
@@ -305,7 +318,6 @@ class AgentWindow(QtWidgets.QMainWindow):
         table_layout.addWidget(self.table)
         hist_group_layout.addWidget(table_container)
         hist_layout.addWidget(history_group)
-        info_tabs.addTab(history_tab, "Cycle History")
 
         # --- Analytics Tab ---
         analytics_tab = QtWidgets.QWidget()
@@ -324,7 +336,11 @@ class AgentWindow(QtWidgets.QMainWindow):
 
         ch_layout.addWidget(self.canvas_chart)
         analytics_layout.addWidget(charts)
-        info_tabs.addTab(analytics_tab, "History")
+        
+        # Add tabs to UI
+        info_tabs.addTab(analytics_tab, "Cycle Charts")
+        info_tabs.addTab(history_tab, "Cycle History")
+        info_tabs.addTab(hyper_tab, "Hyper-params")
 
         # Add the new tab widget to the right panel
         right_panel.addWidget(info_tabs, stretch=2)
@@ -458,14 +474,14 @@ class AgentWindow(QtWidgets.QMainWindow):
             self.status_label.setText("Completed")
             self.update_status_labels()
             return
-        
+
         self.trails.append([])
         self.step_history.append([])
         self.world.reset_cycle()
         self.agent.start_cycle()
         old_explored = self.world.explored.copy()
         self.current_dummy_plan = self.agent.choose_plan(self.world)
-        
+
         # Wrap the agent's experience recording to capture metrics
         orig_add = self.agent.memory.add_experience
         def wrapped(exp: StepExperience):
@@ -479,26 +495,22 @@ class AgentWindow(QtWidgets.QMainWindow):
                 "distance":      distance_from_start,
             })
         self.agent.memory.add_experience = wrapped
-        
-        # Execute the plan with visual updates
+
         self.agent.execute_plan(
             self.current_dummy_plan,
             self.world,
             repaint_cb=self.repaint_and_update_charts,
         )
-        
-        # Restore original function
+
         self.agent.memory.add_experience = orig_add
-        
-        # Update cycle statistics
+
         self.cycles_run += 1
         new_cells = int((~old_explored & self.world.explored).sum())
         dist = euclidean(self.agent.origin, self.agent.position)
         reward = dist + new_cells
         total_cost = sum(entry["actual_cost"] for entry in self.step_history[-1]) if self.step_history[-1] else 0
         total_surprise = sum(entry["surprise"] for entry in self.step_history[-1]) if self.step_history[-1] else 0
-        
-        # Record cycle statistics
+
         stats = {
             "cycle":    self.cycles_run,
             "reward":   reward,
@@ -508,15 +520,22 @@ class AgentWindow(QtWidgets.QMainWindow):
         }
         self.cycle_history.append(stats)
         self.add_history_row(stats)
-        
-        # Update UI
+
+        self.scheduler.update(stats)
+        module_agent.ALPHA = self.scheduler.params["ALPHA"]
+        module_agent.BACKTRACK_PENALTY = self.scheduler.params["BACKTRACK_PENALTY"]
+        module_agent.RECENT_VISIT_PENALTY = self.scheduler.params["RECENT_VISIT_PENALTY"]
+        module_agent.CURIOSITY_WEIGHT = self.scheduler.params["CURIOSITY_WEIGHT"]
+        if hasattr(self, "hyper_widget"):
+            self.hyper_widget.add_cycle(self.cycles_run,
+                                        self.scheduler.params.copy())
+            
         self.update_charts()
         self.update_status_labels()
         self.pending -= 1
-        
-        # Continue to next cycle
+
         QtCore.QTimer.singleShot(100, self.run_next_cycle)
-    
+        
     def on_rebuild_world(self):
         """Reset the world to a fresh state"""
         if os.path.exists(WORLD_PATH): 
@@ -547,6 +566,9 @@ class AgentWindow(QtWidgets.QMainWindow):
         self.current_dummy_plan = None
         self.cycle_history.clear()
         self.table.setRowCount(0)
+        if hasattr(self, "hyper_widget"):
+            self.hyper_widget.clear()
+            self.hyper_widget.add_cycle(0, self.scheduler.params.copy())
         self.update_status_labels()
 
     def repaint_and_update_charts(self):
@@ -563,9 +585,22 @@ class AgentWindow(QtWidgets.QMainWindow):
         csize = 5
         
         # Add current position to trail if exists
-        if self.trails: 
-            self.trails[-1].append(self.agent.position)
-        
+        if self.trails:
+            current = self.agent.position
+            trail    = self.trails[-1]
+
+            if not trail:
+                # first point of this trail
+                trail.append(current)
+            else:
+                last = trail[-1]
+                # if the move is to an adjacent cell (Chebyshev distance ≤ 1) keep drawing;
+                # otherwise we must have teleported → start a new trail segment
+                if max(abs(last[0] - current[0]), abs(last[1] - current[1])) <= 1:
+                    trail.append(current)
+                else:
+                    self.trails.append([current])  # break the line here
+                
         # Draw grid cells with improved coloring
         for y in range(self.world.height):
             for x in range(self.world.width):

@@ -1,95 +1,103 @@
 # Cognitive Architecture Outline
 
-Simulates an **energy‑constrained explorer** that learns, navigates, and visualizes its behavior in a grid world.  
-The agent uses **step memory with directional vectors, surrounding cell information, and a Hopfield associative memory** to optimize exploration and goal-seeking behavior.
+Simulates an **energy‑constrained autonomous agent** navigating a grid world.  
+The agent learns from experience, predicts energy costs using associative memory, and visualizes decision-making and performance in real time.
 
 ---
 
-## 1  Memory System
+## 1. Memory System
 
-| Layer | Purpose | Medium |
-| --- | --- | --- |
-| **Step memory** | Raw `StepExperience` events (position ➜ cost, surprise, energy before/after) | In‑RAM list, auto‑serialized to `save/memory.npy` |
-| **Cell stats** | Running averages of cost, surprise, reward for each `(x,y)` | `Memory._cells : Dict[Coord, CellStats]` |
-| **Per‑cell Hopfield** | Predicts **energy cost** of arbitrary cells given context features | `cell_hopfield` (key dim = 12, cap = 4096) |
-| **Cycle summaries** | Aggregate reward / cost / surprise per exploration cycle | `save/cycles.npy` |
+| Layer              | Purpose                                                      | Storage Medium                           |
+|-------------------|--------------------------------------------------------------|------------------------------------------|
+| **Step memory**    | Records detailed step data (position, cost, energy, surprise) | RAM → `save/memory.npy` (NumPy array)    |
+| **Cycle summaries**| Tracks performance stats per cycle (reward, cost, surprise)  | RAM → `save/cycles.npy` (NumPy array)    |
+| **Cell stats**     | Maintains running averages of cost and surprise per cell     | In-memory: `Dict[Coord, CellStats]`      |
+| **Hopfield memory**| Predicts energy cost of unseen cells based on 12-d features  | Torch buffer: `HopfieldMemory` (4096 cap)|
 
-### 1.1 Key Encodings  
-*Cell cost keys* encode a 12-dimensional feature vector including:
-- Direction vectors (origin→cell, goal→cell, self→cell)
-- Current cell shade (normalized)
-- Surrounding cell shades (normalized)
-- Current energy level (normalized)
-- Distance to goal (normalized)
+### 1.1 Memory Key Encoding
 
----
+Each cell is encoded as a 12D vector with:
 
-## 2  Decision Making
-
-1. **Memory-based decision making** that evaluates potential moves based on:
-   - Cost estimates from Hopfield memory
-   - Expected surprise
-   - Goal-seeking heuristic
-   
-2. **Move evaluation formula**:  
-   ```
-   score = (cost + surprise + oscillation) - ALPHA * (1.0 / (goal_dist + 1.0))
-   ```
-   (ALPHA = 1.0 by default)
-
-3. **Randomized exploration** with a 20% chance of selecting from the top 3 moves (with decreasing probability: 60%, 30%, 10%) instead of always selecting the best move.
+- Direction vectors from origin, goal, and agent to the cell (6D)
+- Normalized energy (1D)
+- Distance to goal (1D)
+- Cell shade and 4 neighboring shades (4D)
 
 ---
 
-## 3  Execution
+## 2. Decision Making
 
-* Agent chooses the next best move based on memory and goal-seeking behavior.
-* Calls `world.transition(prev, curr)` to obtain `cost` and discover **one‑time full‑energy restores** when moving between shades where `curr % prev == 0`.
-* Logs a `StepExperience`, updates per-cell stats, and writes the true cost back into the per-cell Hopfield.
-* Repaints the GUI after each step.
-* Limited to a maximum of 100 steps per cycle for safety.
+The agent evaluates all neighboring cells using:
 
-Energy is reset and the agent teleports home at cycle end.
+- **Predicted cost** from Hopfield memory
+- **Expected surprise** (from tabular cell stats)
+- **Goal-seeking heuristic** (inverse goal distance)
+- **Oscillation penalty** (backtracking or repeat visits)
+- **Curiosity bonus** (uncertainty in Hopfield prediction)
 
----
+### Move Scoring Formula:
+score = cost + surprise + penalty - ALPHA * (1.0 / (goal_dist + 1.0)) - CURIOSITY_WEIGHT * uncertainty
 
-## 4  Learning & Reward
-
-At cycle completion the agent:
-
-1. Computes reward based on straight-line distance from origin to final position.
-2. Stores a `CycleSummary`, serializes memories, and appends analytics rows for the GUI.
-3. Resets energy, teleports home, and begins a new exploration cycle.
+Includes **20% chance of randomized exploration** from the top 3 scored moves.
 
 ---
 
-## 5  World Dynamics
+## 3. Execution Loop
 
-* 0‑9 shades map linearly to energy costs.
-* *Restore rule*: full‑energy recharge happens **once per unique divisible pair** of successive shade values.
-* The world persists to `save/world.npy`; delete or press **Rebuild World** to regenerate.
-
----
-
-## 6  User Interface & Analytics
-
-* **PyQt 5** window with side panel: Run Cycles, Rebuild World, Reset Memory.
-* Grid canvas renders elevation + coloured trail per cycle; agent is a red dot.
-* Live Matplotlib charts (expected cost, surprise, energy, distance) update after each move.
-* Cycle stats table auto‑saves to `save/cycle_history.json`.
+1. Choose the best move based on the scoring formula
+2. Call `world.transition(prev, curr)` to move and get:
+   - Actual cost
+   - Potential full-energy restore if shade divisibility rule applies
+3. Update agent position, memory, and GUI
+4. Repeat until energy depletes or goal reached
+5. Log `StepExperience` and append `CycleSummary`
+6. Teleport to origin and reset energy for the next cycle
 
 ---
 
-```
+## 4. Learning & Adaptation
+
+- All step/cycle data are serialized for persistence
+- A **HyperScheduler** optimizes four parameters via hill-climbing:
+  - `ALPHA`, `BACKTRACK_PENALTY`, `RECENT_VISIT_PENALTY`, `CURIOSITY_WEIGHT`
+- Evolution history visualized in the analytics UI
+
+---
+
+## 5. GridWorld Dynamics
+
+- Each cell has a shade (0–9) → cost from 1.0 to 5.0
+- One-time **energy restore** when stepping into a cell where `new % prev == 0`
+- Grid is saved in `save/world.npy` and reused between runs
+
+---
+
+## 6. User Interface (PyQt5)
+
+- **Left Panel**: Grid canvas + control buttons
+- **Right Panel**:
+  - Cycle controls
+  - Cycle history table
+  - Live charts (surprise, energy, distance)
+  - Hyper-parameter evolution
+- **Analytics Tab**:
+  - Cycle & step tables
+  - Metric heatmaps
+  - Memory network graph
+  - Detailed memory queries by position
+
+---
+
 [CYCLE START]
-       ↓
-[CHOOSE NEXT MOVE based on memory]
-       ↓
-[EXECUTE STEP ⇢ log exp. / update mem]
-       ↓
-[REPEAT UNTIL ENERGY DEPLETED OR MAX STEPS]
-       ↓
-[CYCLE SUMMARY → Save to disk]
-       ↓
-[RESET & REPEAT]
-```
+↓
+[EVALUATE MOVES from current position]
+↓
+[CHOOSE NEXT CELL using memory + goal + curiosity]
+↓
+[EXECUTE MOVE → update memory, UI, energy]
+↓
+[REPEAT UNTIL ENERGY DEPLETED or GOAL]
+↓
+[SAVE CYCLE SUMMARY + MEMORY]
+↓
+[RESET → TELEPORT HOME → NEXT CYCLE]
