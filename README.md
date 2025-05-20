@@ -1,4 +1,4 @@
-# Hopfield Memory Pathfinder
+# Hop to it! Hopfield Memory Pathfinder
 
 **Hopfield Memory Pathfinder** is an interactive PyQt5-based simulation where an autonomous agent explores a procedurally generated grid world using memory-guided decision-making. The agent adapts over time by storing experiences, predicting future costs, and optimizing behavior through curiosity, surprise, and reward-driven learning.
 
