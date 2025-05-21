@@ -42,7 +42,6 @@ score = cost + surprise + penalty - α(1/(goal_dist + 1)) - curiosity_bonus
 
 * Curiosity = variance in Hopfield prediction
 * Penalty = backtracking or repeated visits
-* Random exploration = 20% chance to pick from top 3 moves
 
 ### Restore Rule
 

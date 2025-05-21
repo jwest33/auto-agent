@@ -38,8 +38,6 @@ The agent evaluates all neighboring cells using:
 ### Move Scoring Formula:
 score = cost + surprise + penalty - ALPHA * (1.0 / (goal_dist + 1.0)) - CURIOSITY_WEIGHT * uncertainty
 
-Includes **20% chance of randomized exploration** from the top 3 scored moves.
-
 ---
 
 ## 3. Execution Loop

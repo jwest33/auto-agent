@@ -27,14 +27,16 @@ MEMORY_PATH = os.path.join(save_dir, "memory.npy")
 CYCLE_PATH = os.path.join(save_dir, "cycles.npy")
 HYPER_PATH = os.path.join(save_dir, "hyper.json")
 
-ALPHA = 5  # reward-vs-cost weight
+ALPHA = 20 # reward-vs-cost weight
+BACKTRACK_PENALTY = 5 # strong penalty for stepping straight back
+RECENT_VISIT_PENALTY = 5 # per‑occurrence penalty inside sliding window
+CURIOSITY_WEIGHT = 2
+
+
 CELL_KEY_DIM = 12  # increased to store more context around cell
 CELL_CAPACITY = 4096  # hopfield slots for cell memories
-BACKTRACK_PENALTY = 10.0   # strong penalty for stepping straight back
-RECENT_VISIT_PENALTY =  2.0   # per‑occurrence penalty inside sliding window
-
 RECENT_WINDOW = 20   # how many recent steps to look at
-CURIOSITY_WEIGHT = 2
+
 
 def euclidean(a: Coord, b: Coord) -> float:
     return math.hypot(a[0] - b[0], a[1] - b[1])
@@ -365,13 +367,20 @@ class Agent:
         # Existing calculations...
         cost = self._estimate_cost(world, position, cell)
         surprise = self.memory.get_expected_surprise(cell) or 0.0
+        
         goal_dist = euclidean(cell, goal)
-        oscillation_penalty = 0.0
-        if self._prev_pos and cell == self._prev_pos:
-            oscillation_penalty += BACKTRACK_PENALTY
+        prev_dist = euclidean(self._prev_pos, goal) if self._prev_pos else 0.0
+        retreat_penalty = 0.0
+        
+        if self._prev_pos:
+            if cell == self._prev_pos:
+                retreat_penalty += (BACKTRACK_PENALTY * 1)
+            if prev_dist < goal_dist:
+                retreat_penalty += (BACKTRACK_PENALTY * 1)
+            
         recent_visits = self._cycle_steps[-RECENT_WINDOW:]
         revisit_count = sum(1 for p in recent_visits if p == cell)
-        oscillation_penalty += RECENT_VISIT_PENALTY * revisit_count
+        retreat_penalty += RECENT_VISIT_PENALTY * revisit_count
         
         # **Curiosity bonus**
         query = self.memory._encode_cell(world, self.origin, goal, position, cell, self.energy)
@@ -381,7 +390,7 @@ class Agent:
         score = (
             cost
             + surprise
-            + oscillation_penalty
+            + retreat_penalty
             - ALPHA * (1.0 / (goal_dist + 1.0))
             - curiosity_bonus  # **subtract to favor moves to uncertain contexts**
         )
@@ -392,25 +401,17 @@ class Agent:
         x, y = self.position
         neighbors = world.get_neighbors(x, y)
         goal = (world.width - 1, world.height - 1)
-        
+
         # Evaluate all neighbors
         moves = []
         for nx, ny in neighbors:
             cell = (nx, ny)
             score = self._evaluate_move(world, self.position, cell, goal)
             moves.append((cell, score))
-        
+
         # Sort by score (lower is better)
         moves.sort(key=lambda m: m[1])
         
-        # Add some randomization for exploration
-        # Choose from the top 3 moves with decreasing probability
-        if len(moves) >= 3 and random.random() < 0.2:
-            weights = [0.6, 0.3, 0.1]  # 60% best, 30% second best, 10% third best
-            choices = [moves[i][0] for i in range(min(3, len(moves)))]
-            return random.choices(choices, weights=weights[:len(choices)])[0]
-        
-        # Default to best move
         return moves[0][0] if moves else self.position
 
     def execute_step(self, world: GridWorld, repaint_cb=None):
@@ -534,18 +535,18 @@ class HyperScheduler:
     """
     def __init__(self):
         self.params = dict(
-            ALPHA                = 5.0,
-            BACKTRACK_PENALTY    = 10.0,
-            RECENT_VISIT_PENALTY =  2.0,
-            CURIOSITY_WEIGHT     =  2.0,
+            ALPHA = ALPHA,
+            BACKTRACK_PENALTY = BACKTRACK_PENALTY,
+            RECENT_VISIT_PENALTY = RECENT_VISIT_PENALTY,
+            CURIOSITY_WEIGHT = CURIOSITY_WEIGHT,
         )
         self.step      = {k: 0.10 for k in self.params} # initial delta
         self.momentum  = 0.8
         self.bounds    = {
-            "ALPHA":                (0.5, 20),
-            "BACKTRACK_PENALTY":    (0.0, 20),
-            "RECENT_VISIT_PENALTY": (0.0, 10),
-            "CURIOSITY_WEIGHT":     (0.0, 10),
+            "ALPHA":                (1.0, 50),
+            "BACKTRACK_PENALTY":    (1.0, 50),
+            "RECENT_VISIT_PENALTY": (1.0, 50),
+            "CURIOSITY_WEIGHT":     (1.0, 50),
         }
 
         self.best_score  = None        # score of the best param-set so far

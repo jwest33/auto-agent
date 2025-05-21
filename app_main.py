@@ -364,7 +364,7 @@ class AgentWindow(QtWidgets.QMainWindow):
         self.step_history: List[list] = []
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.update_canvas)
-        self.timer.start(200)
+        self.timer.start(100)
         
         self.update_canvas()
         self.update_charts()

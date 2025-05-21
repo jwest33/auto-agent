@@ -23,7 +23,7 @@ class HyperParamEvolutionWidget(QtWidgets.QWidget):
         self.axes.grid(True, linestyle="--", alpha=0.6)
 
         self.axes.set_xlim(0, 10) # Default X-axis range
-        self.axes.set_ylim(0, 15) # Default Y-axis range
+        self.axes.set_ylim(0, 20) # Default Y-axis range
         self.axes.xaxis.set_major_locator(ticker.MaxNLocator(integer=True))
         self.canvas.draw_idle()
 
@@ -71,5 +71,5 @@ class HyperParamEvolutionWidget(QtWidgets.QWidget):
             line.set_data([], [])
         # restore default limits so the next point is visible
         self.axes.set_xlim(0, 10)
-        self.axes.set_ylim(0, 15)
+        self.axes.set_ylim(0, 20)
         self.canvas.draw_idle()
