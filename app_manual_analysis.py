@@ -4,86 +4,74 @@ from typing import Dict, List, Tuple, Optional
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-from module_world import GridWorld, value_to_cost  # consistent with agent
+from module_world import GridWorld, value_to_cost
 
 Coord = Tuple[int, int]
-
 
 class ManualNavigator(QtWidgets.QWidget):
     """Interactive explorer that mirrors the agent's movement & energy logic.
 
     Controls
     --------
-    ▸ **W A S D** – manual step
-    ▸ **Right‑click** a cell – auto‑walk there (shortest energy path)
-    ▸ **Reset Cycle** button or **C** – clear cycle & energy
-    ▸ **Q** – quit
+    •  Mouse RIGHT-click ─ auto-walk to a cell
+    •  W A S D           ─ manual movement
+    •  + / – / 0         ─ zoom in / out / reset
+    •  “Goto x,y”        ─ type a coordinate and press ↵ or Go
     """
 
     MOVE_KEYS = {
         QtCore.Qt.Key_W: (0, -1),
-        QtCore.Qt.Key_S: (0, 1),
+        QtCore.Qt.Key_S: (0,  1),
         QtCore.Qt.Key_A: (-1, 0),
-        QtCore.Qt.Key_D: (1, 0),
+        QtCore.Qt.Key_D: (1,  0),
     }
 
     def __init__(self, world: GridWorld, start: Coord = (0, 0)):
         super().__init__()
+
         self.world = world
         self.position = list(start)
         self.prev_pos: Optional[Coord] = None
         self.energy = 100.0
-        self.visited: List[Tuple[int, int, float, float]] = []  # (x, y, cost, energy)
+        self.visited: List[Tuple[int, int, float, float]] = []   # (x, y, cost, energy)
         self.auto_path: List[Coord] = []
-        self._cell_size: int = 4  # pixels per cell (int)
-        self._zoom_factor = 1.0  # Added zoom factor for scaling
 
-        # used for click‑to‑cell translation
-        self._pix_left = 0  # top‑left where pixmap starts inside label
+        self._cell_size = 4
+        self._zoom_factor = 1.0
+
+        self._pix_left = 0
         self._pix_top = 0
 
         self.setWindowTitle("Manual World Navigator")
         self.setFocusPolicy(QtCore.Qt.StrongFocus)
 
-        # ── UI elements ───────────────────────────────────────────────
-        # Replace QLabel with QScrollArea containing QLabel for scrollable view
         self.scroll_area = QtWidgets.QScrollArea()
         self.scroll_area.setWidgetResizable(True)
         self.scroll_area.setAlignment(QtCore.Qt.AlignCenter)
-        
-        # Create container widget to hold the canvas
-        self.canvas_container = QtWidgets.QWidget()
-        self.canvas_container_layout = QtWidgets.QVBoxLayout(self.canvas_container)
-        self.canvas_container_layout.setContentsMargins(0, 0, 0, 0)
-        
-        self.canvas = QtWidgets.QLabel(alignment=QtCore.Qt.AlignCenter)
-        self.canvas.setMinimumSize(600, 600)  # Increase minimum size
-        self.canvas_container_layout.addWidget(self.canvas)
-        
-        self.scroll_area.setWidget(self.canvas_container)
 
-        # Add zoom controls
+        self.canvas = QtWidgets.QLabel(alignment=QtCore.Qt.AlignCenter)
+        self.canvas.setMinimumSize(600, 600)  # starting viewport
+        self.scroll_area.setWidget(self.canvas)
+
         zoom_layout = QtWidgets.QHBoxLayout()
-        self.zoom_out_btn = QtWidgets.QPushButton("-")
-        self.zoom_out_btn.setMaximumWidth(40)
+
+        self.zoom_out_btn  = QtWidgets.QPushButton("-"); self.zoom_out_btn.setMaximumWidth(40)
+        self.zoom_in_btn   = QtWidgets.QPushButton("+"); self.zoom_in_btn.setMaximumWidth(40)
+        self.zoom_reset_btn = QtWidgets.QPushButton("Reset"); self.zoom_reset_btn.setMaximumWidth(40)
+
         self.zoom_out_btn.clicked.connect(self._zoom_out)
-        
-        self.zoom_in_btn = QtWidgets.QPushButton("+")
-        self.zoom_in_btn.setMaximumWidth(40)
         self.zoom_in_btn.clicked.connect(self._zoom_in)
-        
-        self.zoom_reset_btn = QtWidgets.QPushButton("Reset Zoom")
         self.zoom_reset_btn.clicked.connect(self._zoom_reset)
-        
-        zoom_layout.addWidget(QtWidgets.QLabel("Zoom:"))
+
         zoom_layout.addWidget(self.zoom_out_btn)
         zoom_layout.addWidget(self.zoom_in_btn)
         zoom_layout.addWidget(self.zoom_reset_btn)
-        zoom_layout.addStretch()
+        
+        zoom_layout.addStretch() # push everything left
 
-        self.info_box = QtWidgets.QTextEdit(readOnly=True)
-        self.info_box.setFixedHeight(110)
-
+        # info + history panes
+        self.info_box = QtWidgets.QTextEdit(readOnly=True, minimumHeight=60, maximumHeight=80)
+        
         self.reset_btn = QtWidgets.QPushButton("Reset Cycle")
         self.reset_btn.clicked.connect(self._reset_cycle)
 
@@ -93,103 +81,62 @@ class ManualNavigator(QtWidgets.QWidget):
         self.history_table.verticalHeader().setVisible(False)
         self.history_table.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
 
+        # layout
         lay = QtWidgets.QVBoxLayout(self)
-        lay.addWidget(self.scroll_area, 1)  # Give scroll area a stretch factor
+        lay.addWidget(self.scroll_area, 1)
         lay.addLayout(zoom_layout)
         lay.addWidget(self.info_box)
-        row = QtWidgets.QHBoxLayout(); row.addStretch(); row.addWidget(self.reset_btn); row.addStretch(); lay.addLayout(row)
-        lay.addWidget(QtWidgets.QLabel("Move History")); lay.addWidget(self.history_table)
+        row = QtWidgets.QHBoxLayout(); row.addStretch(); row.addWidget(self.reset_btn); row.addStretch()
+        lay.addLayout(row)
+        lay.addWidget(QtWidgets.QLabel("Move History"))
+        lay.addWidget(self.history_table)
 
-        # Add status bar
+        # status bar & timer
         self.status_bar = QtWidgets.QStatusBar()
         self.status_bar.showMessage("Ready")
         lay.addWidget(self.status_bar)
 
-        # timer for auto‑walk
-        self.timer = QtCore.QTimer(self); self.timer.timeout.connect(self._advance_auto_path)
+        self.timer = QtCore.QTimer(self)
+        self.timer.timeout.connect(self._advance_auto_path)
 
         self._update_status()
 
-    # ── Zoom controls ───────────────────────────────────────────────
-    def _zoom_in(self):
-        self._zoom_factor *= 1.2
-        self._update_status()
-        
-    def _zoom_out(self):
-        self._zoom_factor = max(0.1, self._zoom_factor / 1.2)
-        self._update_status()
-        
-    def _zoom_reset(self):
-        self._zoom_factor = 1.0
-        self._update_status()
+    #  zoom helpers
+    def _zoom_in(self):    self._zoom_factor *= 1.2; self.update()
+    def _zoom_out(self):   self._zoom_factor /= 1.2; self.update()
+    def _zoom_reset(self): self._zoom_factor = 1.0;  self.update()
 
-    # ── High‑level handlers ─────────────────────────────────────────
+    #  keyboard    
     def keyPressEvent(self, ev: QtGui.QKeyEvent):
         k = ev.key()
-        if k == QtCore.Qt.Key_Q:
-            self.close(); return
-        if k == QtCore.Qt.Key_C:
-            self._reset_cycle(); return
-        if k in self.MOVE_KEYS:
-            if self.auto_path:
-                self.auto_path.clear(); self.timer.stop()
-            self._attempt_move(self.MOVE_KEYS[k]); return
-        # Add zoom keyboard shortcuts
-        if k == QtCore.Qt.Key_Plus or k == QtCore.Qt.Key_Equal:
-            self._zoom_in(); return
-        if k == QtCore.Qt.Key_Minus:
-            self._zoom_out(); return
-        if k == QtCore.Qt.Key_0:
-            self._zoom_reset(); return
+        if k in self.MOVE_KEYS: self._attempt_move(self.MOVE_KEYS[k]); return
+        if k == QtCore.Qt.Key_Plus:  self._zoom_in();   return
+        if k == QtCore.Qt.Key_Minus: self._zoom_out();  return
+        if k == QtCore.Qt.Key_0:     self._zoom_reset();return
         super().keyPressEvent(ev)
 
+    #  mouse -> cell
     def mousePressEvent(self, ev: QtGui.QMouseEvent):
         if ev.button() == QtCore.Qt.RightButton:
-            # Adjust for scroll area offsets
-            viewport_pos = self.scroll_area.viewport().mapFrom(self, ev.pos())
-            scroll_pos = self.scroll_area.widget().mapFrom(self.scroll_area.viewport(), viewport_pos)
-            
-            cell = self._pixel_to_grid(scroll_pos)
-            if cell: 
+            # translate click straight into QLabel-coords, then grid
+            canvas_pt = self.canvas.mapFrom(self, ev.pos())
+            cell = self._pixel_to_grid(canvas_pt)
+            if cell:
                 self._start_auto_path(cell)
                 self.status_bar.showMessage(f"Autowalking to {cell}")
         super().mousePressEvent(ev)
 
-    # ── Click → cell conversion (fixes border miss‑clicks) ───────────
     def _pixel_to_grid(self, pt: QtCore.QPoint) -> Optional[Coord]:
-        # Convert from widget-coord to canvas-coord
-        canvas_pos = self.canvas.pos()
-        canvas_geom = self.canvas.geometry()
-        
-        # Get position relative to the canvas
-        x_in_canvas = pt.x() - canvas_pos.x()
-        y_in_canvas = pt.y() - canvas_pos.y()
-        
-        # Calculate scaled positions
-        scaled_cell_size = self._cell_size * self._zoom_factor
-        
-        # Adjust for the pixmap centering in the label
-        x_pix = x_in_canvas - self._pix_left
-        y_pix = y_in_canvas - self._pix_top
-        
-        if x_pix < 0 or y_pix < 0:
+        """Return (gx, gy) for a point already inside the QLabel."""
+        scaled = int(self._cell_size * self._zoom_factor)
+        if scaled <= 0:
             return None
-            
-        gx = int(x_pix / scaled_cell_size)
-        gy = int(y_pix / scaled_cell_size)
-        
+        gx, gy = pt.x() // scaled, pt.y() // scaled
         if 0 <= gx < self.world.width and 0 <= gy < self.world.height:
             return int(gx), int(gy)
         return None
 
-    # ── Cycle reset ─────────────────────────────────────────────────
-    def _reset_cycle(self):
-        self.world.reset_cycle(); self.position = [0, 0]; self.prev_pos = None
-        self.energy = 100.0; self.visited.clear(); self.auto_path.clear(); self.timer.stop()
-        self.history_table.setRowCount(0); self._update_status()
-        self.status_bar.showMessage("Cycle reset")
-
-    # ── Movement & recording ────────────────────────────────────────
+    #  cycle & movement helpers
     def _attempt_move(self, delta: Coord):
         nx, ny = self.position[0] + delta[0], self.position[1] + delta[1]
         if not (0 <= nx < self.world.width and 0 <= ny < self.world.height):
@@ -205,14 +152,19 @@ class ManualNavigator(QtWidgets.QWidget):
             
         self.prev_pos = tuple(self.position); self.position = [nx, ny]; self.energy = new_energy
         self._record_history(cost)
-        self._update_status()
         
-        if restore:
-            self.status_bar.showMessage(f"Energy restored! Found divisible pair.")
-        else:
-            self.status_bar.showMessage(f"Moved to ({nx}, {ny}). Cost: {cost:.2f}, Energy: {self.energy:.2f}")
-
-    # ── Auto‑pathing ────────────────────────────────────────────────
+    def _reset_cycle(self):
+        self.world.reset_cycle()
+        self.position = [0, 0]
+        self.prev_pos = None
+        self.energy = 100.0
+        self.visited.clear()
+        self.auto_path.clear()
+        self.timer.stop()
+        self.history_table.setRowCount(0)
+        self._update_status()
+        self.status_bar.showMessage("Cycle reset")
+        
     def _start_auto_path(self, goal: Coord):
         if goal == tuple(self.position): return
         path = self._dijkstra_path(tuple(self.position), goal)
@@ -231,7 +183,7 @@ class ManualNavigator(QtWidgets.QWidget):
         self._attempt_move((dx, dy))
         if not self.auto_path: self.timer.stop()
 
-    # Dijkstra (energy‑aware, with restore‑pair rule) -----------------
+    # Dijkstra (energy‑aware, with restore‑pair rule)
     def _dijkstra_path(self, start: Coord, goal: Coord) -> List[Coord]:
         W, H = self.world.width, self.world.height
         dist: Dict[Coord, float] = {start: 0.0}; prev: Dict[Coord, Optional[Coord]] = {start: None}
@@ -258,7 +210,6 @@ class ManualNavigator(QtWidgets.QWidget):
         while n is not None: path.append(n); n = prev[n]
         return list(reversed(path))
 
-    # ── Info & history ──────────────────────────────────────────────
     def _update_status(self):
         x, y = self.position; cost = value_to_cost(int(self.world.grid[y, x]))
         self.info_box.setPlainText(
@@ -278,7 +229,6 @@ class ManualNavigator(QtWidgets.QWidget):
             self.history_table.setItem(row, col, itm)
         self.history_table.scrollToBottom()
 
-    # ── Rendering (sets _pix_left/_pix_top) ─────────────────────────-
     def paintEvent(self, _):
         # Calculate base cell size to ensure grid fits
         base_size = max(2, min(
@@ -407,8 +357,6 @@ class ManualNavigator(QtWidgets.QWidget):
         # Update status with grid dimensions
         self.status_bar.showMessage(f"Grid: {self.world.width}x{self.world.height} | Cell size: {scaled_cell_size}px | Energy: {self.energy:.1f}")
 
-
-# ── Entry point ─────────────────────────────────────────────────────
 def main():
     QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
     QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
