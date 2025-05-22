@@ -1,10 +1,13 @@
 import sys
 import heapq
 from typing import Dict, List, Tuple, Optional
-
+import numpy as np
+import os
+import time
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 from module_world import GridWorld, value_to_cost
+from module_agent import Memory, StepExperience, CycleSummary
 
 Coord = Tuple[int, int]
 
@@ -15,7 +18,7 @@ class ManualNavigator(QtWidgets.QWidget):
     --------
     •  Mouse RIGHT-click ─ auto-walk to a cell
     •  W A S D           ─ manual movement
-    •  + / – / 0         ─ zoom in / out / reset
+    •  + / - / 0         ─ zoom in / out / reset
     •  “Goto x,y”        ─ type a coordinate and press ↵ or Go
     """
 
@@ -29,6 +32,22 @@ class ManualNavigator(QtWidgets.QWidget):
     def __init__(self, world: GridWorld, start: Coord = (0, 0)):
         super().__init__()
 
+        # --- Hopfield Memory for the manual plan ---
+        # ensure the same 'save' directory exists
+        save_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "save")
+        os.makedirs(save_dir, exist_ok=True)
+
+        # keep track of origin so that encode_cell works the same as the agent
+        self.origin = start
+        # instantiate the Memory wrapper (default key_dim=12, capacity=4096)
+        self.memory = Memory()
+        # load any existing state (or start fresh)
+        self.memory._raw_steps.clear()
+        self.memory.cycles.clear()
+        self._manual_cycle_steps: List[Coord] = []
+        
+        # where to dump only the Hopfield keys/values for this manual run
+        self.plan_hopfield_path = os.path.join(save_dir, "memory_dijkstra.npy")
         self.world = world
         self.position = list(start)
         self.prev_pos: Optional[Coord] = None
@@ -142,17 +161,121 @@ class ManualNavigator(QtWidgets.QWidget):
         if not (0 <= nx < self.world.width and 0 <= ny < self.world.height):
             self.status_bar.showMessage(f"Cannot move outside grid boundaries")
             return
-            
+
+        # Estimate energy before modifying state
+        energy_before = self.energy
         cost, restore = self.world.transition(self.prev_pos, (nx, ny))
         new_energy = 100.0 if restore else self.energy - cost
-        
-        if new_energy < 0.0:  # Using 0.0 threshold like manual app, not 1.0 like agent
+
+        if new_energy < 0.0:
             self.status_bar.showMessage(f"Not enough energy for that move")
+            self._finalize_cycle("Out of energy")
             return
-            
-        self.prev_pos = tuple(self.position); self.position = [nx, ny]; self.energy = new_energy
+
+        # --- Hopfield memory and step recording ---
+        goal = (self.world.width - 1, self.world.height - 1)
+        pos_before = tuple(self.position)
+        cell = (nx, ny)
+
+        # Store experience in Hopfield memory
+        self.memory.store_cell_experience(
+            self.world,
+            self.origin,
+            goal,
+            pos_before,
+            cell,
+            energy_before,
+            cost
+        )
+
+        # Record full step experience
+        shade = int(self.world.grid[ny, nx])
+        exp_cost = self.memory.estimate_cell_cost(
+            self.world, self.origin, goal, pos_before, cell, energy_before
+        )
+        surprise = abs(exp_cost - cost) if exp_cost is not None else 0.0
+
+        step_exp = StepExperience(
+            position=cell,
+            shade=shade,
+            expected_cost=exp_cost if exp_cost is not None else cost,
+            actual_cost=cost,
+            surprise=surprise,
+            energy_before=energy_before,
+            energy_after=new_energy
+        )
+        self.memory.add_experience(step_exp)
+        
+        self._manual_cycle_steps.append(tuple(self.position))
+        
+        # Persist full memory
+        self.save_to_file_dijkstra()
+
+        # Apply state change
+        self.prev_pos = tuple(self.position)
+        self.position = [nx, ny]
+        self.energy = new_energy
         self._record_history(cost)
         
+    def _finalize_cycle(self, reason: str = "Cycle ended"):
+        if self._manual_cycle_steps:
+            total_cost = sum(s.actual_cost for s in self.memory._raw_steps)
+            total_surprise = sum(s.surprise for s in self.memory._raw_steps)
+
+            summary = CycleSummary(
+                reward=0.0,  # or compute normalized distance to goal
+                cost=total_cost,
+                surprise=total_surprise,
+                energy_left=self.energy,
+                steps=self._manual_cycle_steps.copy(),
+                timestamp=time.time()
+            )
+            self.memory.cycles.append(summary)
+
+            print(f"[Dijkstra] Cycle finalized: {reason}")
+            self.save_to_file_dijkstra()
+
+        # Clear state for next cycle
+        self._manual_cycle_steps.clear()
+        self.memory._raw_steps.clear()
+
+    def save_to_file_dijkstra(self):
+        """Save step memory and cycles to alternate filenames to avoid collisions."""
+        alt_memory_path = os.path.join("save", "memory_dijkstra.npy")
+        alt_cycle_path = os.path.join("save", "cycles_dijkstra.npy")
+
+        try:
+            #print(f"[Dijkstra] Saving memory data to {alt_memory_path}")
+            experiences_array = self.memory._experiences_to_array()
+            #print(f"[Dijkstra] Saving {len(experiences_array)} experiences")
+            np.save(alt_memory_path, experiences_array)
+
+            cycles_array = self.memory._cycles_to_array()
+            #print(f"[Dijkstra] Saving {len(cycles_array)} cycles to {alt_cycle_path}")
+            np.save(alt_cycle_path, cycles_array)
+
+            #print("[Dijkstra] Memory data saved successfully")
+
+        except Exception as e:
+            #print(f"[Dijkstra] Error saving memory data: {e}")
+            import traceback
+            traceback.print_exc()
+            
+    def _experiences_to_array(self) -> np.ndarray:
+        rows = [
+            (
+                e.position[0], e.position[1], e.shade,
+                e.expected_cost, e.actual_cost, e.surprise, 
+                e.energy_before, e.energy_after, e.timestamp,
+            )
+            for e in self._raw_steps
+        ]
+        return np.array(rows, dtype=self._step_dtype) if rows else np.empty((0,), self._step_dtype)
+    
+    def _cycles_to_array(self) -> np.ndarray:
+        rows = [(c.reward, c.cost, c.surprise, c.energy_left, c.timestamp) for c in self.cycles]
+        return np.array(rows, dtype=self._cycle_dtype) if rows else np.empty((0,), self._cycle_dtype)
+
     def _reset_cycle(self):
         self.world.reset_cycle()
         self.position = [0, 0]
@@ -176,12 +299,16 @@ class ManualNavigator(QtWidgets.QWidget):
 
     def _advance_auto_path(self):
         if not self.auto_path: 
-            self.timer.stop()
-            self.status_bar.showMessage("Auto-path complete")
+            self._finalize_cycle("Auto-path complete")
             return
-        nx, ny = self.auto_path.pop(0); dx = nx - self.position[0]; dy = ny - self.position[1]
+
+        nx, ny = self.auto_path.pop(0)
+        dx = nx - self.position[0]
+        dy = ny - self.position[1]
         self._attempt_move((dx, dy))
-        if not self.auto_path: self.timer.stop()
+
+        if not self.auto_path:
+            self._finalize_cycle("Auto-path complete")
 
     # Dijkstra (energy‑aware, with restore‑pair rule)
     def _dijkstra_path(self, start: Coord, goal: Coord) -> List[Coord]:

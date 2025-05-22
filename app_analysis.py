@@ -1301,5 +1301,7 @@ if __name__ == "__main__":
         QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
     if hasattr(QtCore.Qt, 'AA_UseHighDpiPixmaps'):
         QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
+    MEMORY_PATH = SAVE_DIR / "memory_dijkstra.npy"
+    CYCLE_PATH = SAVE_DIR / "cycles_dijkstra.npy"
     
     main()
